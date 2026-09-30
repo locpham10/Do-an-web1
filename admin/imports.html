@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Nhập hàng - Admin Portal</title>
+    <!-- Nhúng file CSS bên ngoài -->
+    <link rel="stylesheet" href="css/imports.css">
+</head>
+<body>
+
+    <!-- 1. SIDEBAR BÊN TRÁI -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">ADMIN DASHBOARD</div>
+        <ul class="sidebar-menu">
+            <li><a href="#">Thống kê tổng quan</a></li>
+            <li><a href="#">Quản lý Khách hàng</a></li>
+            <li><a href="#">Quản lý Sản phẩm</a></li>
+            <li class="active"><a href="#">Quản lý Nhập hàng</a></li>
+            <li><a href="#">Quản lý Giá bán</a></li>
+            <li><a href="#">Quản lý Đơn hàng</a></li>
+            <li><a href="#">Báo cáo Tồn kho</a></li>
+        </ul>
+    </aside>
+
+    <!-- 2. KHU VỰC NỘI DUNG CHÍNH -->
+    <div class="main-container">
+        
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-title">Hệ thống Quản trị Web E-commerce</div>
+            <div class="topbar-user">
+                <span>Xin chào, <strong>Admin</strong></span>
+                <button class="btn-logout" onclick="alert('Đã đăng xuất!')">Đăng xuất</button>
+            </div>
+        </header>
+
+        <!-- NỘI DUNG TRANG NHẬP HÀNG -->
+        <main class="content">
+            <div class="page-header">
+                <h1 class="page-title">Danh mục Phiếu Nhập Hàng</h1>
+                <div class="header-actions">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo mã phiếu..." onkeyup="searchImports()">
+                    <button class="btn-create" onclick="openAddModal()">+ Lập Phiếu Mới</button>
+                </div>
+            </div>
+
+            <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
+            <div class="card-table">
+                <table id="importTable">
+                    <thead>
+                        <tr>
+                            <th>Mã phiếu</th>
+                            <th>Ngày nhập</th>
+                            <th>Tổng tiền nhập</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dòng 1: Đã hoàn thành -->
+                        <tr>
+                            <td><strong>PN-001</strong></td>
+                            <td>2026-09-10</td>
+                            <td>12.500.000 đ</td>
+                            <td><span class="badge badge-completed">Đã hoàn thành</span></td>
+                            <td>
+                                <button class="btn-action btn-edit-disabled" disabled title="Phiếu đã hoàn thành, không thể sửa">Sửa</button>
+                            </td>
+                        </tr>
+
+                        <!-- Dòng 2: Chưa hoàn thành -->
+                        <tr>
+                            <td><strong>PN-002</strong></td>
+                            <td>2026-09-28</td>
+                            <td>4.200.000 đ</td>
+                            <td><span class="badge badge-pending">Chưa hoàn thành</span></td>
+                            <td>
+                                <button class="btn-action btn-edit-active" onclick="openEditModal('PN-002', '2026-09-28', '4.200.000 đ')">Sửa</button>
+                                <button class="btn-action btn-complete" onclick="completeImport(this)">Hoàn thành</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL THÊM / SỬA PHIẾU NHẬP -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Lập Phiếu Nhập Mới</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            
+            <div class="form-group">
+                <label>Mã phiếu:</label>
+                <input type="text" id="modalCode" readonly style="background-color: #e9ecef;">
+            </div>
+
+            <div class="form-group">
+                <label>Ngày nhập hàng:</label>
+                <input type="date" id="modalDate">
+            </div>
+
+            <div class="form-group">
+                <label>Tổng giá trị ước tính (VNĐ):</label>
+                <input type="text" id="modalTotal" placeholder="VD: 5.000.000 đ">
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Đóng</button>
+                <button class="btn-action btn-create" onclick="saveForm()">Lưu dữ liệu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nhúng file JS bên ngoài -->
+    <script src="js/imports.js"></script>
+</body>
+</html>
