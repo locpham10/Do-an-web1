@@ -4,44 +4,48 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Quản lý Nhập hàng - Admin Portal</title>
-        <!-- Nhúng file CSS bên ngoài -->
-        <link rel="stylesheet" href="css/imports.css">
+        <link rel="stylesheet" href="assets/css/admin.css">
     </head>
     <body>
-        <asside class = "sidebar">
-            <div class = "sidebar-brand">DASHBOARD</div>
+        <!-- ĐÃ SỬA: <asside> thành <aside> -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">DASHBOARD</div>
             <ul class="sidebar-menu">
-                <li><a herf="#">Quản lý khách hàng</a></li>
-                <li><a herf="#">Quản lý sản phẩm</a></li>
-                <li class="active"><a herf="#">Quản lý nhập hàng</a></li>
-                <li><a herf="#">Quản lý giá bán</a></li>
-                <li><a herf="#">Quản lý đơn hàng</a></li>
-                <li><a herf="#">Báo cáo tồn kho</a></li>
+                <!-- ĐÃ SỬA: herf thành href -->
+                <li><a href="#">Quản lý khách hàng</a></li>
+                <li><a href="#">Quản lý sản phẩm</a></li>
+                <li class="active"><a href="#">Quản lý nhập hàng</a></li>
+                <li><a href="#">Quản lý giá bán</a></li>
+                <li><a href="#">Quản lý đơn hàng</a></li>
+                <li><a href="#">Báo cáo tồn kho</a></li>
             </ul>
-        </asside>
+        </aside>
 
-        <!--KHU NỘI DUNG CHÍNH BÊN PHẢI-->
-
+        <!-- KHU NỘI DUNG CHÍNH BÊN PHẢI -->
         <div class="main-container">
-            <headrer class="Topbar">
+            <!-- ĐÃ SỬA: <headrer> thành <header> -->
+            <header class="Topbar">
                 <div class="Topbar-title">Hệ thống quản trị [tên web]</div>
                 <div class="Topbar-user">
                     <span>Xin chào, <strong>Admin</strong></span>
-                    <button class="btn-logout" onlick="alert('Đã dăng xuất!')">Đăng xuất</button>
+                    <!-- ĐÃ SỬA: onlick thành onclick -->
+                    <button class="btn-logout" onclick="alert('Đã dăng xuất!')">Đăng xuất</button>
                 </div>
             </header>
 
-            <!--KHU NỘI DUNG NHẬP HÀNG-->
+            <!-- KHU NỘI DUNG NHẬP HÀNG -->
             <main class="content">
                 <div class="page-header">
-                    <h1 class="age-title">Danh mục phiếu nhập hàng</h1>
+                    <!-- ĐÃ SỬA: age-title thành page-title -->
+                    <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
                     <div class="header-actions">
                         <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo mã phiếu" onkeyup="searchImport()">
-                        <button class="btn-create" onlick="openAddModel()">+ Lập phiếu mới</button>
+                        <!-- ĐÃ SỬA: onlick thành onclick -->
+                        <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
                     </div>
                 </div>
 
-                <!--BẢNG DANH MỤC PHIẾU NHẬP-->
+                <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
                 <div class="card-table">
                     <table id="importTable">
                         <thead>
@@ -60,29 +64,80 @@
             </main>
         </div>
 
-        <!--MODAL THÊM/SỬA PHIẾU NHẬP-->
+        <!-- MODAL THÊM/SỬA PHIẾU NHẬP -->
         <div id="importModal" class="modal">
-            <div class="modal-content">
+            <div class="modal-content modal-lg">
                 <div class="modal-header">
-                    <h3 class="modal-title" id="modalTitle">Lập phiếu nhập mới</h3>
+                    <h3 class="modal-title" id="modalTitle">Lập phiếu nhập hàng</h3>
                     <button class="modal-close" onclick="closeModal()">&times;</button>
                 </div>
 
-                <div class="form-group">
-                    <label>Mã phiếu:</label>
-                    <input type="text" id="modalCode" style="background-color: #e9ecef;">
-                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-half">
+                            <!-- ĐÃ SỬA: <lable> thành <label> -->
+                            <label>Mã phiếu:</label>
+                            <input type="text" id="modalCode">
+                        </div>
+                        <div class="form-group col-half">
+                            <label>Ngày nhập hàng:</label>
+                            <input type="date" id="modalDate">
+                        </div>
+                    </div> <!-- ĐÃ SỬA: THÊM THẺ ĐÓNG </div> TẠI ĐÂY CHO .form-row -->
 
-                <div class="form-group">
-                    <label>Ngày nhập hàng:</label>
-                    <input type="date" id="modalDate">
-                </div>
+                    <div class="add-item-box" id="addItemControls">
+                        <!-- ĐÃ SỬA: flex 2 thành flex-2 -->
+                        <div class="form-group flex-2">
+                            <label>Tên mặt hàng:</label>
+                            <input type="text" id="itemProduct">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>Số lượng:</label>
+                            <input type="number" id="itemQuantity" min="1" value="1">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label>Đơn giá nhập (VNĐ):</label>
+                            <input type="number" id="itemPrice" min="0" step="1">
+                        </div>
+                        <div class="form-group btn-add-wrapper">
+                            <!-- ĐÃ SỬA: onlick thành onclick -->
+                            <button type="button" class="btn-add-item" onclick="addItemToDraft()">+ Thêm hàng</button>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label>Tổng giá trị ước tính (VNĐ):</label>
-                    
+                    <!-- BẢNG DANH SÁCH CHI TIẾT CÁC MÓN ĐƯỢC NHẬP -->
+                    <div class="detail-table-wrapper">
+                        <table class="detail-table">
+                            <!-- ĐÃ SỬA: <thread> thành <thead> -->
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên mặt hàng</th>
+                                    <th style="text-align: center;">Số lượng</th>
+                                    <th style="text-align: right;">Đơn giá nhập</th>
+                                    <th style="text-align: right;">Thành tiền</th>
+                                    <th style="text-align: center;" id="actionHeader">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailTableBody">
+                                <!-- JS đổ ds phiếu nhập tại đây -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TỔNG TIỀN -->
+                    <div class="modal-total-summary">
+                        Tổng giá trị: <span id="modalTotalDisplay">0 đ</span>
+                    </div>
+                </div> <!-- Hết .modal-body -->
+                
+                <div class="modal-footer" id="modalFooter">
+                    <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Đóng (Hủy)</button>
+                    <button class="btn-action btn-create" id="btnSaveDraft" onclick="saveForm('pending')">Lưu tạm</button>
+                    <button class="btn-action btn-complete" id="btnSaveComplete" onclick="saveForm('completed')">Hoàn thành</button>
                 </div>
-            </div>
-        </div>
+            </div> 
+        </div> 
+        <script src="assets/js/admin.js"></script>
     </body>
 </html>
