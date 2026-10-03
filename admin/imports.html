@@ -4,11 +4,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Quản lý Nhập hàng - Admin Portal</title>
-        <link rel="stylesheet" href="css/imports.css">
+        <link rel="stylesheet" href="../assets/css/admin-layout.css">
+        <link rel="stylesheet" href="../assets/css/imports.css">
     </head>
     <body>
         <!-- SIDEBAR BÊN TRÁI -->
-        <aside class="sidebar">
+        <aside class="sidebar collapsed" id="sidebar">
             <div class="sidebar-brand">DASHBOARD</div>
             <ul class="sidebar-menu">
                 <li><a href="#">Quản lý khách hàng</a></li>
@@ -24,7 +25,11 @@
         <div class="main-container">
             <!-- TOPBAR -->
             <header class="topbar">
-                <div class="topbar-title">Hệ thống quản trị [tên web]</div>
+                <div class="topbar-left">
+                    <button id="sidebarToggle" class="btn-toggle-menu">☰</button>
+                    <div class="topbar-title">Hệ thống quản trị [tên web]</div>
+                </div>
+        
                 <div class="topbar-user">
                     <span>Xin chào, <strong>Admin</strong></span>
                     <button class="btn-logout" onclick="alert('Đã đăng xuất!')">Đăng xuất</button>
@@ -146,6 +151,7 @@
         </div>
         
         <!-- File JS -->
-        <script src="js/imports.js"></script>
+        <script src="../assets/js/admin-core.js"></script>
+        <script src="../assets/js/imports.js"></script>
     </body>
 </html>

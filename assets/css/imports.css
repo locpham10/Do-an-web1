@@ -1,0 +1,144 @@
+/* =========================
+  TRANG QUẢN LÝ NHẬP HÀNG
+============================ */
+.add-item-box {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    background-color: #f8f9fa;
+    padding: 12px;
+    border: 1px dashed #ced4da;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.flex-2 {
+    flex: 2;
+}
+
+.btn-add-wrapper {
+    margin-bottom: 15px;
+}
+
+.btn-add-item {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    height: 35px;
+    white-space: nowrap;
+}
+
+.btn-add-item:hover {
+    background-color: #138496;
+}
+
+.detail-table-wrapper {
+    margin-top: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detail-table th {
+    background-color: #e9ecef;
+    padding: 10px;
+    font-size: 13px;
+}
+
+.detail-table td {
+    padding: 10px;
+    font-size: 13px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.btn-remove-item {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.btn-remove-item:hover {
+    color: #a71d2a;
+}
+
+.modal-total-summary {
+    text-align: right;
+    font-size: 15px;
+    font-weight: 700;
+    margin-top: 15px;
+    color: #212529;
+}
+
+.modal-total-summary span {
+    color: #d9534f;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.file-input {
+    padding: 5px !important;
+    background: #fff;
+    cursor: pointer;
+}
+
+.product-thumb {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.position-relative {
+    position: relative;
+}
+
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #80bdff;
+    border-radius: 4px;
+    max-height: 160px;
+    overflow-y: auto;
+    z-index: 1000;
+    list-style: none;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    margin-top: 4px;
+    padding: 0;
+}
+
+.suggestions-list li {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 13.5px;
+    border-bottom: 1px solid #f1f3f5;
+    color: #333;
+}
+
+.suggestions-list li:hover {
+    background-color: #e9ecef;
+    color: #0056b3;
+    font-weight: 600;
+}
