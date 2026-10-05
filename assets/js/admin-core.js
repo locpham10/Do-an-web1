@@ -315,6 +315,30 @@ function searchImport() {
     }
 }
 
+// --- HÀM 1: LƯU DỮ LIỆU VÀO TRÌNH DUYỆT ---
+function saveToLocalStorage() {
+    // 1. Biến mảng importList thành chuỗi văn bản (JSON) và lưu vào kho có tên 'saved_imports'
+    localStorage.setItem('saved_imports', JSON.stringify(importList));
+    
+    // 2. Lưu luôn kho gợi ý sản phẩm. Lưu ý: productCatalog đang là kiểu Set, 
+    // phải ép về Array thì JSON mới hiểu được.
+    localStorage.setItem('saved_catalog', JSON.stringify(Array.from(productCatalog)));
+}
+
+// --- HÀM 2: TẢI DỮ LIỆU TỪ TRÌNH DUYỆT LÊN GIAO DIỆN ---
+function loadFromLocalStorage() {
+    // 1. Lấy chuỗi dữ liệu phiếu nhập ra
+    const storedImports = localStorage.getItem('saved_imports');
+    if (storedImports) {
+        importList = JSON.parse(storedImports); // Dịch ngược chuỗi thành mảng
+    }
+
+    // 2. Lấy chuỗi dữ liệu kho gợi ý sản phẩm ra
+    const storedCatalog = localStorage.getItem('saved_catalog');
+    if (storedCatalog) {
+        productCatalog = new Set(JSON.parse(storedCatalog)); // Dịch ngược và ép lại thành kiểu Set
+    }
+}
 
 /* =========================================================
    PHẦN 3: BỘ KHỞI CHẠY (BOOTSTRAP & UI EVENT LẮNG NGHE)
