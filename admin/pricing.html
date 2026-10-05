@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Giá bán & Lợi nhuận - Admin Panel</title>
+    <link rel="stylesheet" href="css/admin-layout.css">
+    <link rel="stylesheet" href="css/pricing.css">
+    </head>
+    <body>
+        <aside id="sidebar" class="sidebar collapsed">
+            <div class="sidebar-brand">DASHBOARD</div>
+            <ul class="sidebar-menu">
+                <li><a href="users.html">Quản lý khách hàng</a></li>
+                <li><a href="products.html">Quản lý sản phẩm</a></li>
+                <li><a href="imports.html">Quản lý nhập hàng</a></li>
+                <li class="active"><a href="pricing.html">Quản lý giá bán</a></li>
+                <li><a href="orders.html">Quản lý đơn hàng</a></li>
+                <li><a href="inventory.html">Quản lý tồn kho</a></li>
+            </ul>
+        </aside>
+        <div class="main-container">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="btn-toggle-menu" id="sidebarToggle">☰</button>
+                    <div class="topbar-title">Hệ thống quản trị [tên web]</div>
+                </div>
+
+                <div class="topbar-user">
+                    <span>Xin chào, <strong>Admin</strong></span>
+                    <button class="btn-logout" onclick="alert('Đã đăng xuất!')">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
