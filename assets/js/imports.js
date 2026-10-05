@@ -8,13 +8,7 @@ let currentDraftItems = [];
 let editIndex = null;
 let currentImageBase64 = "";
 
-let productCatalog = new Set([
-    "Áo thun Polo trơn", 
-    "Áo sơ mi Oxford", 
-    "Quần Jean Slimfit", 
-    "Giày thể thao Nike", 
-    "Balo chống nước"
-]);
+let productCatalog = new Set([]);
 
 const DEFAULT_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Crect width='60' height='60' fill='%23e9ecef'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='10' fill='%236c757d'%3ECh%C6%B0a c%C3%B3 %E1%BA%A3nh%3C/text%3E%3C/svg%3E";
 
