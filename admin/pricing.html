@@ -19,7 +19,7 @@
                 <li><a href="inventory.html">Quản lý tồn kho</a></li>
             </ul>
         </aside>
-        <div class="main-container">
+        <main class="main-container">
             <div class="topbar">
                 <div class="topbar-left">
                     <button class="btn-toggle-menu" id="sidebarToggle">☰</button>
@@ -31,6 +31,91 @@
                     <button class="btn-logout" onclick="alert('Đã đăng xuất!')">Đăng xuất</button>
                 </div>
             </div>
-        </div>
+
+            <div class="content">
+                <div class="page-header">
+                    <h1 class="page-title">Thiết lập giá bán</h1>
+                </div>
+                <div class="card-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã SP</th>
+                                <th>Ảnh</th>
+                                <th>Tên SP</th>
+                                <th style="text-align: right;">Giá nhập</th>
+                                <th style="text-align: right;">Giá bán niêm yết</th>
+                                <th style="text-align: center;">Lợi nhuận (%)</th>
+                                <th style="text-align: center;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pricingTableBody">
+                            <!--JS ghi bảng-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <div id="pricingModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="modalTitle">Thiết lập Giá Bán</h2>
+                        <button class="modal-close" onclick="closeModal()">&times;</button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-half">
+                                <label>Mã sản phẩm</label>
+                                <input type="text" id="modalProdCode" readonly style="background-color: #e9ecef; font-weight: bold;">
+                            </div>
+                            <div class="form-group col-half">
+                                <label>Tên sản phẩm</label>
+                                <input type="text" id="modalProdName" readonly style="background-color: #e9ecef;">
+                            </div>
+                        </div>
+
+                        <!-- Khu vực tính toán giá gắn Class từ pricing.css -->
+                        <div class="calculator-box">
+                            <div class="form-row">
+                                <div class="form-group col-half">
+                                    <label>Giá nhập bình quân (VNĐ)</label>
+                                    <input type="text" id="modalImportPrice" class="price-input-cost" readonly>
+                                </div>
+                                <div class="form-group col-half">
+                                    <label>Giá bán mong muốn (VNĐ)</label>
+                                    <input type="number" id="modalRetailPrice" class="price-input-retail" placeholder="Nhập giá bán..." oninput="calculateMargin()">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row" style="margin-bottom: 0;">
+                                <div class="form-group col-half">
+                                    <label>Hoặc tăng theo tỷ lệ lợi nhuận (%)</label>
+                                    <div style="display: flex; gap: 10px;">
+                                        <input type="number" id="modalMarginPercent" placeholder="VD: 30" oninput="calculateRetailPrice()">
+                                        <button class="btn-quick-margin" onclick="applyQuickMargin(50)">+ 50%</button>
+                                    </div>
+                                </div>
+                                <div class="form-group col-half">
+                                    <div class="profit-display-container">
+                                        <div class="profit-label">Lợi nhuận dự kiến</div>
+                                        <div id="expectedProfit" class="profit-amount">0 đ / SP</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Hủy bỏ</button>
+                        <button class="btn-create" onclick="savePricing()">Lưu Bảng Giá</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gọi JS -->
+            <script src="js/admin-core.js"></script>
+            <script src="js/pricing.js"></script>
     </body>
 </html>
