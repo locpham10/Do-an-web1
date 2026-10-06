@@ -80,11 +80,11 @@
                         <div class="calculator-box">
                             <div class="form-row">
                                 <div class="form-group col-half">
-                                    <label>Giá nhập bình quân (VNĐ)</label>
+                                    <label>Giá nhập (VNĐ)</label>
                                     <input type="text" id="modalImportPrice" class="price-input-cost" readonly>
                                 </div>
                                 <div class="form-group col-half">
-                                    <label>Giá bán mong muốn (VNĐ)</label>
+                                    <label>Giá bán (VNĐ)</label>
                                     <input type="number" id="modalRetailPrice" class="price-input-retail" placeholder="Nhập giá bán..." oninput="calculateMargin()">
                                 </div>
                             </div>
@@ -94,7 +94,6 @@
                                     <label>Hoặc tăng theo tỷ lệ lợi nhuận (%)</label>
                                     <div style="display: flex; gap: 10px;">
                                         <input type="number" id="modalMarginPercent" placeholder="VD: 30" oninput="calculateRetailPrice()">
-                                        <button class="btn-quick-margin" onclick="applyQuickMargin(50)">+ 50%</button>
                                     </div>
                                 </div>
                                 <div class="form-group col-half">
