@@ -40,12 +40,19 @@
             <main class="content">
                 <div class="page-header">
                     <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
-                    <div class="header-actions">
+                </div>
+                <div class="header-actions">
+                    <div class="date-filter">
+                        <label>Lọc từ ngày: </label>
+                        <input type="date">
+                        <label>đến</label>
+                        <input type="date">
+                    </div>
+                    <div class="search-action">
                         <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo mã phiếu" onkeyup="searchImport()">
                         <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
                     </div>
                 </div>
-
                 <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
                 <div class="card-table">
                     <table id="importTable">

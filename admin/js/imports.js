@@ -9,7 +9,7 @@ let currentDraftItems = [];
 let editIndex = null;
 let currentImageBase64 = "";
 
-const DEFAULT_IMAGE = "../assets/images/default-image.svg"; // Ảnh mặc định
+const DEFAULT_IMAGE = "../assets/images/default-image.jpeg"; // Ảnh mặc định
 
 // 2. HÀM CỐT LÕI: LƯU & TẢI TỪ TRÌNH DUYỆT (LOCAL STORAGE)
 function saveToLocalStorage() {
