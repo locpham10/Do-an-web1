@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đăng nhập - Shop</title>
+
+    <link rel="stylesheet" href="assets/css/auth.css">
+</head>
+
+<body>
+
+<main class="auth-page">
+
+    <section class="auth-card">
+
+        <h1>Đăng nhập / Đăng ký</h1>
+
+        <p class="sub">
+            Mua sắm nhanh chóng và quản lý đơn hàng của bạn
+        </p>
+
+        <div class="tabs">
+
+            <button id="loginTab" class="tab active">
+                Đăng nhập
+            </button>
+
+            <button id="registerTab" class="tab">
+                Đăng ký
+            </button>
+
+        </div>
+
+
+        <!-- ĐĂNG NHẬP -->
+
+        <form id="loginForm">
+
+            <label>Số điện thoại hoặc email</label>
+
+            <input
+                id="loginAccount"
+                type="text"
+                placeholder="Nhập số điện thoại hoặc email"
+                required
+            >
+
+            <label>Mật khẩu</label>
+
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Nhập mật khẩu"
+                required
+            >
+
+            <div class="form-row">
+
+                <label class="check">
+                    <input type="checkbox" id="remember">
+                    Ghi nhớ đăng nhập
+                </label>
+
+                <button
+                    type="button"
+                    id="forgotPassword"
+                    class="forgot-btn"
+                >
+                    Quên mật khẩu?
+                </button>
+
+            </div>
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Đăng nhập
+            </button>
+
+            <p class="switch-text">
+
+                Chưa có tài khoản?
+
+                <button
+                    type="button"
+                    id="goRegister"
+                >
+                    Đăng ký ngay
+                </button>
+
+            </p>
+
+        </form>
+
+
+        <!-- QUÊN MẬT KHẨU -->
+
+        <form id="forgotForm" class="hidden">
+
+            <label>Email</label>
+
+            <input
+                id="forgotEmail"
+                type="email"
+                placeholder="Nhập email đã đăng ký"
+                required
+            >
+
+            <label>Số điện thoại</label>
+
+            <input
+                id="forgotPhone"
+                type="tel"
+                placeholder="Nhập số điện thoại đã đăng ký"
+                required
+            >
+
+            <label>Mật khẩu mới</label>
+
+            <input
+                id="newPassword"
+                type="password"
+                placeholder="Nhập mật khẩu mới"
+                required
+            >
+
+            <label>Xác nhận mật khẩu mới</label>
+
+            <input
+                id="confirmNewPassword"
+                type="password"
+                placeholder="Nhập lại mật khẩu mới"
+                required
+            >
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Đổi mật khẩu
+            </button>
+
+            <p class="switch-text">
+
+                <button
+                    type="button"
+                    id="backToLogin"
+                >
+                    Quay lại đăng nhập
+                </button>
+
+            </p>
+
+        </form>
+
+
+        <!-- ĐĂNG KÝ -->
+
+        <form id="registerForm" class="hidden">
+
+            <label>Họ và tên</label>
+
+            <input
+                id="registerName"
+                type="text"
+                placeholder="Nhập họ và tên"
+                required
+            >
+
+            <label>Số điện thoại</label>
+
+            <input
+                id="registerPhone"
+                type="tel"
+                placeholder="Nhập số điện thoại"
+                required
+            >
+
+            <label>Email</label>
+
+            <input
+                id="registerEmail"
+                type="email"
+                placeholder="Nhập email"
+                required
+            >
+
+            <label>Mật khẩu</label>
+
+            <input
+                id="registerPassword"
+                type="password"
+                placeholder="Tạo mật khẩu"
+                required
+            >
+
+            <label>Xác nhận mật khẩu</label>
+
+            <input
+                id="confirmPassword"
+                type="password"
+                placeholder="Nhập lại mật khẩu"
+                required
+            >
+
+            <button
+                class="primary"
+                type="submit"
+            >
+                Đăng ký
+            </button>
+
+            <p class="switch-text">
+
+                Đã có tài khoản?
+
+                <button
+                    type="button"
+                    id="goLogin"
+                >
+                    Đăng nhập
+                </button>
+
+            </p>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="assets/js/auth.js"></script>
+
+</body>
+
+</html>

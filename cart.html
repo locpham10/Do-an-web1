@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - Shop</title>
+    <link rel="stylesheet" href="assets/css/cart.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="header-inner">
+        <a class="brand" href="cart.html"><span class="brand-mark">S</span><b>SHOP</b></a>
+        <button class="category">☰ <span>Danh mục</span></button>
+        <div class="search"><input placeholder="Nhập tên điện thoại, laptop, phụ kiện... cần tìm"><button>⌕</button></div>
+        <a class="head-icon" href="auth.html">●</a>
+        <a class="cart-head" href="cart.html">🛒 <b>Giỏ hàng</b></a>
+    </div>
+    <div class="keywords">iphone 18 &nbsp; iphone duo &nbsp; laptop &nbsp; samsung &nbsp; macbook &nbsp; tivi &nbsp; phần mềm &nbsp; z fold 8</div>
+</header>
+
+<div class="notice">⚡ Điện máy - Gia dụng giảm đến 50% <span>🎟️ Nhận nhiều ưu đãi khi mua sắm</span></div>
+
+<main class="cart-page">
+    <div class="breadcrumb">Trang chủ / Giỏ hàng</div>
+
+    <div class="cart-layout">
+        <section>
+            <div class="select-all card">
+                <label><input id="selectAll" type="checkbox" checked> <b>Chọn tất cả</b> <span id="count"></span></label>
+                <button id="deleteAll">♙</button>
+            </div>
+
+            <div id="cartItems"></div>
+        </section>
+
+        <aside class="summary card">
+            <div class="summary-head"><b>🎁 Quà tặng</b><a href="#">Xem quà</a></div>
+            <div class="offer">🎟️ Đã chọn 10 ưu đãi và khuyến mãi <span>›</span></div>
+            <div class="login-point">🪙 Đăng nhập để sử dụng điểm thưởng</div>
+
+            <h2>Thông tin đơn hàng</h2>
+            <div class="line"><span>Tổng tiền</span><b id="total">0đ</b></div>
+            <div class="line"><span>Tổng khuyến mãi</span><b>-1.000.000đ</b></div>
+            <div class="subline"><span>• Giảm giá sản phẩm</span><b>1.000.000đ</b></div>
+            <div class="subline"><span>• Voucher</span><b>0đ</b></div>
+            <div class="pay"><span>Cần thanh toán</span><b id="pay">0đ</b></div>
+            <div class="points"><span>Điểm thưởng</span><b>🪙 +3,747</b></div>
+            <a class="collapse" href="#">Rút gọn ︿</a>
+            <button id="checkout" class="checkout">Xác nhận đơn</button>
+        </aside>
+    </div>
+</main>
+
+<footer>Hệ thống SHOP trên toàn quốc</footer>
+<script src="assets/js/cart.js"></script>
+</body>
+</html>
