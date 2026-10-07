@@ -26,7 +26,7 @@ body {
     transition: margin-left 0.3s ease;
 }
 
-.sidebar.collapsed {
+.sidebar.collapsed { /*chỉ áp dụng cho các phần tử có cả 2 class là sidebar và collapsed*/
     margin-left: -250px;
 }
 
