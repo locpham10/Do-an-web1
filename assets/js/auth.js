@@ -1,4 +1,4 @@
-const loginTab = document.getElementById("loginTab"); 
+const loginTab = document.getElementById("loginTab");
 const registerTab = document.getElementById("registerTab");
 
 const loginForm = document.getElementById("loginForm");
@@ -60,7 +60,7 @@ function showForgot() {
 }
 
 
-// CHUYỂN TAB
+// CHUYỂN FORM
 
 loginTab.addEventListener("click", showLogin);
 
@@ -85,7 +85,7 @@ registerForm.addEventListener("submit", function(e) {
 
     const hoTen = registerName.value.trim();
     const soDienThoai = registerPhone.value.trim();
-    const email = registerEmail.value.trim();
+    const email = registerEmail.value.trim().toLowerCase();
     const matKhau = registerPassword.value;
     const xacNhanMatKhau = confirmPassword.value;
 
@@ -105,8 +105,10 @@ registerForm.addEventListener("submit", function(e) {
 
     const daTonTai = taiKhoan.some(function(account) {
 
-        return account.email === email ||
-               account.soDienThoai === soDienThoai;
+        return (
+            account.email.toLowerCase() === email ||
+            account.soDienThoai === soDienThoai
+        );
 
     });
 
@@ -155,6 +157,7 @@ loginForm.addEventListener("submit", function(e) {
 
     e.preventDefault();
 
+
     const taiKhoanNhap =
         loginAccount.value.trim();
 
@@ -170,10 +173,17 @@ loginForm.addEventListener("submit", function(e) {
 
         return (
             (
-                account.email === taiKhoanNhap ||
-                account.soDienThoai === taiKhoanNhap
+                account.email.toLowerCase() ===
+                taiKhoanNhap.toLowerCase()
+
+                ||
+
+                account.soDienThoai ===
+                taiKhoanNhap
             )
+
             &&
+
             account.matKhau === matKhauNhap
         );
 
@@ -187,9 +197,15 @@ loginForm.addEventListener("submit", function(e) {
             JSON.stringify(nguoiDung)
         );
 
+
         alert("Đăng nhập thành công!");
 
+
         loginForm.reset();
+
+
+        window.location.href = "index.html";
+
 
     } else {
 
@@ -208,16 +224,26 @@ forgotForm.addEventListener("submit", function(e) {
 
 
     const email =
-        document.getElementById("forgotEmail").value.trim();
+        document.getElementById("forgotEmail")
+        .value
+        .trim()
+        .toLowerCase();
+
 
     const soDienThoai =
-        document.getElementById("forgotPhone").value.trim();
+        document.getElementById("forgotPhone")
+        .value
+        .trim();
+
 
     const matKhauMoi =
-        document.getElementById("newPassword").value;
+        document.getElementById("newPassword")
+        .value;
+
 
     const xacNhanMatKhau =
-        document.getElementById("confirmNewPassword").value;
+        document.getElementById("confirmNewPassword")
+        .value;
 
 
     if (matKhauMoi !== xacNhanMatKhau) {
@@ -232,10 +258,13 @@ forgotForm.addEventListener("submit", function(e) {
     let taiKhoan =
         JSON.parse(localStorage.getItem("taiKhoan")) || [];
 
+
     const nguoiDung = taiKhoan.find(function(account) {
 
-        return account.email === email &&
-               account.soDienThoai === soDienThoai;
+        return (
+            account.email.toLowerCase() === email &&
+            account.soDienThoai === soDienThoai
+        );
 
     });
 
