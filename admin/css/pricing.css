@@ -13,23 +13,19 @@
 
 /*Margin Dương (Lãi)*/
 .badge-completed {
-    background-color: #28a745;
-    color: #fff;
+    background-color: rgba(26, 86, 42, 0.1);
+    color: #1a562a;
     padding: 5px 10px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 13px;
+    border-radius: 30px;
     display: inline-block;
 }
 
 /*Margin Âm */
 .badge-loss {
-    background-color: #dc3545;
-    color: #fff;
+    background-color: rgba(168, 28, 36, 0.1);
+    color: #a81c24;
     padding: 5px 10px;
-    border-radius: 6px;
-    font-weight: 700;
-    font-size: 13px;
+    border-radius: 30px;
     display: inline-block;
 }
 
@@ -43,10 +39,6 @@
     font-size: 13px;
     display: inline-block;
 }
-
-
-
-
 /* Khung viền bao quanh khu vực tính toán trong Modal */
 .calculator-box {
     background-color: #f8f9fa;
@@ -60,8 +52,6 @@
 /* Ô input */
 .price-input-cost {
     background-color: #e9ecef !important;
-    color: #dc3545 !important; /* Chữ màu đỏ */
-    font-weight: 700;
     cursor: not-allowed;
 }
 
@@ -96,22 +86,4 @@
 
 .profit-amount.loss {
     color: #dc3545; /* Nếu lỡ nhập giá bán < giá nhập thì chuyển màu đỏ (Lỗ) */
-}
-
-/* 6. Nút tăng nhanh tỷ lệ % lợi nhuận */
-.btn-quick-margin {
-    background-color: #17a2b8;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    white-space: nowrap;
-}
-
-.btn-quick-margin:hover {
-    background-color: #138496;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
