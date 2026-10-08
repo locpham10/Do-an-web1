@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Trang quản trị</title>
+        <link rel="stylesheet" href="css/admin.css">
+    </head>
+    <body> 
+    <!--=================================================================================================
+        GIAO DIỆN ĐĂNG NHẬP (B.TRÂM)
+    ==================================================================================================-->
+
+
+    <!--=================================================================================================
+        PHẦN CHUNG CỦA ADMIN (KHÔNG ĐỔI)
+    ==================================================================================================-->
+    
+        <!-- SIDEBAR BÊN TRÁI -->
+        <aside class="sidebar collapsed" id="sidebar">
+            <div class="sidebar-brand">DASHBOARD</div>
+            <ul class="sidebar-menu">
+                <li><a href="#">Quản lý khách hàng</a></li>
+                <li><a href="#">Quản lý sản phẩm</a></li>
+                <li class="active"><a href="#">Quản lý nhập hàng</a></li>
+                <li><a href="pricing.html">Quản lý giá bán</a></li>
+                <li><a href="#">Quản lý đơn hàng</a></li>
+                <li><a href="#">Báo cáo tồn kho</a></li>
+            </ul>
+        </aside>
+        
+        <!-- KHU NỘI DUNG CHÍNH BÊN PHẢI -->
+        <div class="main-container">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="sidebarToggle" class="btn-toggle-menu">☰</button>
+                    <div class="topbar-title">Hệ thống quản trị [tên web]</div>
+                </div>
+        
+                <div class="topbar-user">
+                    <span>Xin chào, <strong>Admin</strong></span>
+                    <button class="btn-logout" onclick="alert('Đã đăng xuất!')">Đăng xuất</button>
+                </div>
+            </header>
+
+            <main class="content">
+                <!--============================================================================================
+                    TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
+                =============================================================================================-->
+                <div class="page-header">
+                    <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="date-filter">
+                        <label>Lọc từ ngày: </label>
+                        <input type="date">
+                        <label>đến</label>
+                        <input type="date">
+                    </div>
+                    <div class="search-action">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo mã phiếu" onkeyup="searchImport()">
+                        <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
+                    </div>
+                </div>
+                <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
+                <div class="card-table">
+                    <table id="importTable">
+                        <thead>
+                            <tr>
+                                <th>Mã phiếu</th>
+                                <th>Ngày nhập</th>
+                                <th>Tổng tiền nhập</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="importTableBody">
+                            <!-- JS render vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+
+        <!-- MODAL THÊM/SỬA PHIẾU NHẬP -->
+        <div id="importModal" class="modal">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle">Lập phiếu nhập hàng</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-half">
+                            <label>Mã phiếu:</label>
+                            <input type="text" id="modalCode">
+                        </div>
+                        <div class="form-group col-half">
+                            <label>Ngày nhập hàng:</label>
+                            <input type="date" id="modalDate">
+                        </div>
+                    </div>
+
+                    <!-- THANH THÊM HÀNG HÓA -->
+                    <div class="add-item-box" id="addItemControls">
+                        <div class="form-group flex-1">
+                            <label>Ảnh SP:</label>
+                            <input type="file" id="itemImage" accept="image/*" class="file-input">
+                        </div>
+                        
+                        <!-- Cột Tên mặt hàng (Có thêm danh sách gợi ý) -->
+                        <div class="form-group flex-2 position-relative">
+                            <label>Tên mặt hàng:</label>
+                            <!-- autocomplete="off" để tắt gợi ý mặc định của trình duyệt -->
+                            <input type="text" id="itemProduct" autocomplete="off" placeholder="Gõ tên hàng...">
+                            <ul id="productSuggestions" class="suggestions-list"></ul>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label>Số lượng:</label>
+                            <input type="number" id="itemQuantity" min="1" value="1">
+                        </div>
+                        
+                        <div class="form-group flex-1">
+                            <label>Đơn giá (VNĐ):</label>
+                            <input type="number" id="itemPrice" min="0" step="1">
+                        </div>
+                        
+                        <div class="form-group btn-add-wrapper">
+                            <button type="button" class="btn-add-item" onclick="addItemToDraft()">+ Thêm</button>
+                        </div>
+                    </div>
+
+                    <!-- BẢNG DANH SÁCH CHI TIẾT CÁC MÓN ĐƯỢC NHẬP -->
+                    <div class="detail-table-wrapper">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th style="text-align: center;">Ảnh</th>
+                                    <th>Tên mặt hàng</th>
+                                    <th style="text-align: center;">Số lượng</th>
+                                    <th style="text-align: right;">Đơn giá nhập</th>
+                                    <th style="text-align: right;">Thành tiền</th>
+                                    <th style="text-align: center;" id="actionHeader">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailTableBody">
+                                <!-- JS đổ ds hàng hóa tại đây -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TỔNG TIỀN -->
+                    <div class="modal-total-summary">
+                        Tổng giá trị: <span id="modalTotalDisplay">0 đ</span>
+                    </div>
+                </div>
+                
+                <div class="modal-footer" id="modalFooter">
+                    <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Đóng (Hủy)</button>
+                    <button class="btn-action btn-create" id="btnSaveDraft" onclick="saveForm('pending')">Lưu tạm</button>
+                    <button class="btn-action btn-complete" id="btnSaveComplete" onclick="saveForm('completed')">Hoàn thành</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- File JS -->
+        <script src="js/admin.js"></script>
+    </body>
+</html>
