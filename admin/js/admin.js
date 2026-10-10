@@ -13,6 +13,9 @@ function closeModal() {
     
     const pricingModal = document.getElementById('pricingModal');
     if (pricingModal) pricingModal.style.display = 'none';
+
+    const orderModal = document.getElementById('orderModal');
+    if (orderModal) orderModal.style.display = 'none';
 }
 
 // Khởi chạy các UI cơ bản (Sidebar) sau khi trang đã tải xong
@@ -346,9 +349,6 @@ document.addEventListener("DOMContentLoaded", function() {
 /*======================================================================
     PHẦN DÙNG CHO TRANG QL GIÁ BÁN
 ======================================================================*/ 
-/* =========================================================
-   MODULE XỬ LÝ TRANG QUẢN LÝ GIÁ BÁN & LỢI NHUẬN 
-========================================================= */
 
 let currentProductCode = "";
 let currentImportPrice = 0;
@@ -557,14 +557,12 @@ function savePricing() {
     }
 
     if (retailPrice < currentImportPrice) {
-        if (!confirm("CẢNH BÁO: Giá bán đang thấp hơn giá nhập (CHỊU LỖ).\nBạn có chắc chắn muốn lưu?")) return;
+        if (!confirm("CẢNH BÁO: Giá bán đang thấp hơn giá nhập.\nBạn có chắc chắn muốn lưu?")) return;
     }
 
     const prodIndex = pricingList.findIndex(p => p.code === currentProductCode);
     if (prodIndex > -1) {
         pricingList[prodIndex].retailPrice = retailPrice;
-        
-        // BẮT BUỘC: Đẩy vào LocalStorage để KHÔNG BỊ MẤT DỮ LIỆU KHI SẬP NGUỒN
         localStorage.setItem('saved_pricing', JSON.stringify(pricingList));
     }
     
@@ -572,11 +570,161 @@ function savePricing() {
     renderPricingTable();
 }
 
-/* --- 5. TỰ ĐỘNG CHẠY KHI MỞ TRANG --- */
+/*======================================================================
+    PHẦN DÙNG CHO TRANG QL ĐƠN HÀNG
+======================================================================*/ 
 document.addEventListener("DOMContentLoaded", () => {
     loadDataForPricing();
 });
 
+let orderList = [];
+let currentEditingOrderId = "";
+
+// 1. TẢI DỮ LIỆU ĐƠN HÀNG (Kèm chức năng Tự động tạo Mock Data)
+function loadDataForOrders() {
+    const storedOrders = localStorage.getItem('saved_orders');
+    
+    if (storedOrders) {
+        try { orderList = JSON.parse(storedOrders); } 
+        catch (e) { orderList = []; }
+    } 
+
+    if (orderList.length === 0) {
+        orderList = [
+            {
+                id: "DH-0001", date: "2026-10-10", customerName: "Nguyễn Nhật", customerPhone: "0901234567",
+                customerAddress: "123 Đường Tôn Đức Thắng, Quận 1, TP.HCM", totalAmount: 300000, status: "pending",
+                items: [{ name: "Áo thun Polo trơn", qty: 2, price: 150000 }]
+            },
+            {
+                id: "DH-0002", date: "2026-10-09", customerName: "Lê Trần Dứa", customerPhone: "0987654321",
+                customerAddress: "456 Nguyễn Thị Minh Khai, Quận 3, TP.HCM", totalAmount: 1450000, status: "processing",
+                items: [{ name: "Giày thể thao Nike", qty: 1, price: 1200000 }, { name: "Vớ thể thao trắng", qty: 5, price: 50000 }]
+            }
+        ];
+        localStorage.setItem('saved_orders', JSON.stringify(orderList));
+    }
+
+    renderOrderTable();
+}
+
+// 2. VẼ BẢNG ĐƠN HÀNG
+function renderOrderTable() {
+    const tbody = document.getElementById('orderTableBody');
+    if (!tbody) return;
+
+    if (orderList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="empty-row">Chưa có đơn hàng nào trong hệ thống!</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = orderList.map(order => {
+        let badgeHtml = "";
+        switch (order.status) {
+            case 'pending': badgeHtml = `<span class="badge badge-pending">Chờ xác nhận</span>`; break;
+            case 'processing': badgeHtml = `<span class="badge" style="background:#007bff; color:white;">Đang giao hàng</span>`; break;
+            case 'completed': badgeHtml = `<span class="badge badge-completed">Thành công</span>`; break;
+            case 'cancelled': badgeHtml = `<span class="badge badge-loss">Đã hủy</span>`; break;
+        }
+
+        return `
+            <tr>
+                <td><strong>${order.id}</strong></td>
+                <td>${order.date}</td>
+                <td>
+                    <strong>${order.customerName}</strong><br>
+                    <span style="font-size: 12px; color: #6c757d;">📞 ${order.customerPhone}</span>
+                </td>
+                <td style="text-align: right; color: #dc3545; font-weight: bold;">${formatMoney(order.totalAmount)}</td>
+                <td style="text-align: center;">${badgeHtml}</td>
+                <td style="text-align: center;">
+                    <button class="btn-action btn-view-detail" onclick="openOrderModal('${order.id}')">Chi tiết / Duyệt</button>
+                </td>
+            </tr>`;
+    }).join('');
+}
+
+// 3. MỞ MODAL XEM CHI TIẾT
+function openOrderModal(orderId) {
+    const order = orderList.find(o => o.id === orderId);
+    if (!order) return;
+
+    currentEditingOrderId = order.id;
+
+    document.getElementById('modalOrderId').innerText = order.id;
+    document.getElementById('modalCustomerName').value = order.customerName;
+    document.getElementById('modalCustomerPhone').value = order.customerPhone;
+    document.getElementById('modalCustomerAddress').value = order.customerAddress;
+    document.getElementById('modalOrderTotal').innerText = formatMoney(order.totalAmount);
+    document.getElementById('modalOrderStatusUpdate').value = order.status;
+
+    const detailBody = document.getElementById('orderDetailBody');
+    detailBody.innerHTML = order.items.map((item, idx) => `
+        <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${item.name}</strong></td>
+            <td style="text-align: center;">${item.qty}</td>
+            <td style="text-align: right;">${formatMoney(item.price)}</td>
+            <td style="text-align: right; font-weight: bold;">${formatMoney(item.qty * item.price)}</td>
+        </tr>
+    `).join('');
+
+    document.getElementById('orderModal').style.display = 'flex';
+}
+
+// 4. LƯU CẬP NHẬT TRẠNG THÁI
+function saveOrderStatus() {
+    const newStatus = document.getElementById('modalOrderStatusUpdate').value;
+    const orderIndex = orderList.findIndex(o => o.id === currentEditingOrderId);
+    
+    if (orderIndex > -1) {
+
+        orderList[orderIndex].status = newStatus;
+        localStorage.setItem('saved_orders', JSON.stringify(orderList));
+        
+        closeModal();
+        
+        renderOrderTable();
+        
+        applyOrderFilters(); 
+    
+    }
+}
+
+// 5. BỘ LỌC ĐƠN HÀNG 
+function applyOrderFilters() {
+    const searchFilter = document.getElementById('orderSearchInput').value.trim().toUpperCase();
+    const fromTime = document.getElementById('orderFromDate').value ? new Date(document.getElementById('orderFromDate').value).setHours(0,0,0,0) : null;
+    const toTime = document.getElementById('orderToDate').value ? new Date(document.getElementById('orderToDate').value).setHours(23,59,59,999) : null;
+    const statusFilter = document.getElementById('orderStatusFilter').value;
+
+    const rows = document.getElementById('orderTableBody').getElementsByTagName('tr');
+
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i].classList.contains('empty-row')) continue;
+
+        const idText = rows[i].getElementsByTagName('td')[0].textContent.trim().toUpperCase();
+        const customerText = rows[i].getElementsByTagName('td')[2].textContent.trim().toUpperCase();
+        const dateText = rows[i].getElementsByTagName('td')[1].textContent.trim();
+        const orderData = orderList[i]; 
+
+        const matchSearch = idText.includes(searchFilter) || customerText.includes(searchFilter);
+        const matchStatus = (statusFilter === "ALL" || orderData.status === statusFilter);
+
+        let matchDate = true;
+        if (dateText) {
+            const rowTime = new Date(dateText).setHours(12,0,0,0);
+            if (fromTime && rowTime < fromTime) matchDate = false;
+            if (toTime && rowTime > toTime) matchDate = false;
+        }
+
+        if (matchSearch && matchStatus && matchDate) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}
 /*======================================================================
     HÀM CHUYỂN ĐỔI TAB (MÔ HÌNH SINGLE PAGE APPLICATION)
 ======================================================================*/ 
@@ -599,5 +747,7 @@ function switchTab(tabName) {
         loadDataForPricing();
     } else if (tabName === 'imports') {
         renderTable();
+    } else if (tabName === 'orders') {
+        loadDataForOrders();
     }
 }

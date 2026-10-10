@@ -12,25 +12,25 @@
     <!--=================================================================================================
         GIAO DIỆN ĐĂNG NHẬP (B.TRÂM)
     ==================================================================================================-->
-    
+
     <!--=================================================================================================
         PHẦN CHUNG CỦA ADMIN (KHÔNG ĐỔI)
     ==================================================================================================-->
 
-    <!-- SIDEBAR BÊN TRÁI --> 
+    <!-- SIDEBAR BÊN TRÁI -->
     <aside class="sidebar collapsed" id="sidebar">
         <div class="sidebar-brand">DASHBOARD</div>
         <ul class="sidebar-menu">
             <li><a href="#">Quản lý khách hàng</a></li>
             <li><a href="#">Quản lý sản phẩm</a></li>
             <!-- Gắn ID và sự kiện chuyển Tab cho Menu -->
-            <li class="active" id="menu-imports" onclick="switchTab('imports')"><a href="#">Quản lý nhập hàng</a></li>
+            <li id="menu-imports" onclick="switchTab('imports')"><a href="#">Quản lý nhập hàng</a></li>
             <li id="menu-pricing" onclick="switchTab('pricing')"><a href="#">Quản lý giá bán</a></li>
-            <li><a href="#">Quản lý đơn hàng</a></li>
+            <li id="menu-orders" onclick="switchTab('orders')"><a href="#">Quản lý đơn hàng</a></li>
             <li><a href="#">Báo cáo tồn kho</a></li>
         </ul>
     </aside>
-    
+
     <!-- KHU NỘI DUNG CHÍNH BÊN PHẢI -->
     <div class="main-container">
         <!-- TOPBAR -->
@@ -47,29 +47,30 @@
         </header>
 
         <main class="content">
-            
-            <!-- MODULE 1: QUẢN LÝ NHẬP HÀNG -->
+
+            <!--============================================================================================
+                TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
+            =============================================================================================-->
             <section id="tab-imports" class="admin-module" style="display: block;">
-                <!--============================================================================================
-                        TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
-                    =============================================================================================-->
                 <div class="page-header">
                     <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
                 </div>
                 <div class="header-actions">
-                <div class="date-filter">
-                    <label>Lọc từ ngày: </label>
-                    <input type="date" id="fromDate">
-                    <label>đến</label>
-                    <input type="date" id="toDate">
-                    <button class="btn-action" style="background-color: #17a2b8; color: white; margin-left: 10px;" onclick="applyFilters()">Lọc</button>
+                    <div class="date-filter">
+                        <label>Lọc từ ngày: </label>
+                        <input type="date" id="fromDate">
+                        <label>đến</label>
+                        <input type="date" id="toDate">
+                        <button class="btn-action" style="background-color: #17a2b8; color: white; margin-left: 10px;"
+                            onclick="applyFilters()">Lọc</button>
+                    </div>
+                    <div class="search-action">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo mã phiếu"
+                            onkeyup="applyFilters()">
+                        <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
+                    </div>
                 </div>
-                <div class="search-action">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo mã phiếu" onkeyup="applyFilters()">
-                    <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
-                </div>
-            </div>
-                
+
                 <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
                 <div class="card-table">
                     <table id="importTable">
@@ -89,11 +90,10 @@
                 </div>
             </section>
 
-            <!-- MODULE 2: QUẢN LÝ GIÁ BÁN -->
+            <!--======================================================================================
+                TRANG QUẢN LÝ GIÁ BÁN
+            =======================================================================================-->
             <section id="tab-pricing" class="admin-module" style="display: none;">
-                <!--======================================================================================
-                        TRANG QUẢN LÝ GIÁ BÁN
-                =======================================================================================-->
                 <div class="page-header">
                     <h1 class="page-title">Thiết lập giá bán</h1>
                 </div>
@@ -116,11 +116,63 @@
                     </table>
                 </div>
             </section>
+
+            <!--======================================================================================
+                TRANG QUẢN LÝ ĐƠN HÀNG
+            =======================================================================================-->
+            <section id="tab-orders" class="admin-module" style="display: none;">
+                <div class="page-header">
+                    <h1 class="page-title">Danh mục đơn hàng</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="date-filter">
+                        <label>Từ ngày:</label>
+                        <input type="date" id="orderFromDate">
+                        <label>đến</label>
+                        <input type="date" id="orderToDate">
+
+                        <select id="orderStatusFilter" class="search-input order-status-filter"
+                            onchange="applyOrderFilters()">
+                            <option value="ALL">-- Tất cả trạng thái --</option>
+                            <option value="pending">Chờ xác nhận</option>
+                            <option value="processing">Đang giao hàng</option>
+                            <option value="completed">Đã giao thành công</option>
+                            <option value="cancelled">Đã hủy</option>
+                        </select>
+
+                        <button class="btn-action" style="background-color: #17a2b8; color: white; margin-left: 10px;"
+                            onclick="applyOrderFilters()">Lọc</button>
+
+                    </div>
+                    <div class="search-action">
+                        <input type="text" id="orderSearchInput" class="search-input"
+                            placeholder="Tìm mã đơn hoặc SĐT..." onkeyup="applyOrderFilters()">
+                    </div>
+
+                </div>
+                <div class="card-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mã ĐH</th>
+                                <th>Ngày đặt</th>
+                                <th>Khách hàng</th>
+                                <th style="text-align: right;">Tổng thanh toán</th>
+                                <th style="text-align: center;">Trạng thái</th>
+                                <th style="text-align: center;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody">
+                            <!-- JS render dữ liệu vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </main>
     </div> <!-- Kết thúc main-container -->
 
     <!-- CÁC MODAL ĐƯỢC ĐƯA RA KHỎI MAIN ĐỂ TRÁNH LỖI GIAO DIỆN -->
-    
+
     <!-- MODAL THÊM/SỬA PHIẾU NHẬP -->
     <div id="importModal" class="modal">
         <div class="modal-content modal-lg">
@@ -197,9 +249,11 @@
             </div>
 
             <div class="modal-footer" id="modalFooter">
-                <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Đóng (Hủy)</button>
+                <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Đóng
+                    (Hủy)</button>
                 <button class="btn-action btn-create" id="btnSaveDraft" onclick="saveForm('pending')">Lưu tạm</button>
-                <button class="btn-action btn-complete" id="btnSaveComplete" onclick="saveForm('completed')">Hoàn thành</button>
+                <button class="btn-action btn-complete" id="btnSaveComplete" onclick="saveForm('completed')">Hoàn
+                    thành</button>
             </div>
         </div>
     </div>
@@ -216,7 +270,8 @@
                 <div class="form-row">
                     <div class="form-group col-half">
                         <label>Mã sản phẩm</label>
-                        <input type="text" id="modalProdCode" readonly style="background-color: #e9ecef; font-weight: bold;">
+                        <input type="text" id="modalProdCode" readonly
+                            style="background-color: #e9ecef; font-weight: bold;">
                     </div>
                     <div class="form-group col-half">
                         <label>Tên sản phẩm</label>
@@ -233,7 +288,8 @@
                         </div>
                         <div class="form-group col-half">
                             <label>Giá bán (VNĐ)</label>
-                            <input type="number" id="modalRetailPrice" class="price-input-retail" placeholder="Nhập giá bán..." oninput="calculateMargin()">
+                            <input type="number" id="modalRetailPrice" class="price-input-retail"
+                                placeholder="Nhập giá bán..." oninput="calculateMargin()">
                         </div>
                     </div>
 
@@ -241,7 +297,8 @@
                         <div class="form-group col-half">
                             <label>Hoặc tăng theo tỷ lệ lợi nhuận (%)</label>
                             <div style="display: flex; gap: 10px;">
-                                <input type="number" id="modalMarginPercent" placeholder="VD: 30" oninput="calculateRetailPrice()">
+                                <input type="number" id="modalMarginPercent" placeholder="VD: 30"
+                                    oninput="calculateRetailPrice()">
                             </div>
                         </div>
                         <div class="form-group col-half">
@@ -255,12 +312,85 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Hủy bỏ</button>
+                <button class="btn-action" style="background-color: #6c757d; color: white;" onclick="closeModal()">Hủy
+                    bỏ</button>
                 <button class="btn-create" onclick="savePricing()">Lưu Bảng Giá</button>
             </div>
         </div>
     </div>
-    
+
+    <!-- MODAL XỬ LÝ ĐƠN HÀNG -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Chi Tiết Đơn Hàng: <span id="modalOrderId" style="color: #007bff;"></span></h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <h4 style="margin-bottom: 10px; color: #495057;">Thông tin người nhận</h4>
+                <div class="form-row">
+                    <div class="form-group col-half">
+                        <label>Tên khách hàng:</label>
+                        <input type="text" id="modalCustomerName" readonly style="background-color: #e9ecef;">
+                    </div>
+                    <div class="form-group col-half">
+                        <label>Số điện thoại:</label>
+                        <input type="text" id="modalCustomerPhone" readonly
+                            style="background-color: #e9ecef;">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="width: 100%;">
+                        <label>Địa chỉ giao hàng:</label>
+                        <input type="text" id="modalCustomerAddress" readonly style="background-color: #e9ecef;">
+                    </div>
+                </div>
+
+                <h4 style="margin-top: 20px; margin-bottom: 10px; color: #495057;">Danh sách sản phẩm mua</h4>
+                <div class="detail-table-wrapper">
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên sản phẩm</th>
+                                <th style="text-align: center;">Số lượng</th>
+                                <th style="text-align: right;">Đơn giá</th>
+                                <th style="text-align: right;">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderDetailBody">
+                            <!-- JS đổ ds sản phẩm -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-total-summary">
+                    Tổng cộng: <span id="modalOrderTotal">0 đ</span>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <label style="font-weight: bold; font-size: 14px;">Trạng thái đơn:</label>
+                    <select id="modalOrderStatusUpdate" class="search-input order-status-filter"
+                        style="border: 2px solid #80bdff; font-weight: bold;">
+                        <option value="pending">Chờ xác nhận</option>
+                        <option value="processing">Đang giao hàng</option>
+                        <option value="completed">Đã giao thành công</option>
+                        <option value="cancelled">Hủy đơn hàng</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="btn-action" style="background-color: #6c757d; color: white;"
+                        onclick="closeModal()">Đóng</button>
+                    <button class="btn-create" onclick="saveOrderStatus()">Cập nhật & Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/admin.js"></script>
 </body>
+
 </html>

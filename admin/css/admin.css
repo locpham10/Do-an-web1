@@ -667,3 +667,11 @@ input[type="number"] {
     background-color: #138496;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+/*====================================================================================
+    DÀNH CHO TRANG QUẢN LÝ ĐƠN HÀNG
+====================================================================================*/
+.order-status-filter{
+    width: auto; 
+    margin-left: 10px; 
+    padding: 6px;
+}
