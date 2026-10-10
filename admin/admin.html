@@ -131,7 +131,7 @@
                         <label>đến</label>
                         <input type="date" id="orderToDate">
 
-                        <select id="orderStatusFilter" class="search-input order-status-filter"
+                        <select id="orderStatusFilter" class="search-input status-filter"
                             onchange="applyOrderFilters()">
                             <option value="ALL">-- Tất cả trạng thái --</option>
                             <option value="pending">Chờ xác nhận</option>
@@ -168,10 +168,25 @@
                     </table>
                 </div>
             </section>
+
+            <!--============================================================================================
+                TRANG BÁO CÁO CÁO TỒN KHO
+            =============================================================================================-->
+            <section id="tab-inventory" class="admin-module" style="display: none;" >
+                <div class="page-header">
+                    <h1 class="page-title">Báo cáo tồn kho</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="search-input status-filter"></div>
+                </div>
+            </section>
+
         </main>
     </div> <!-- Kết thúc main-container -->
 
-    <!-- CÁC MODAL ĐƯỢC ĐƯA RA KHỎI MAIN ĐỂ TRÁNH LỖI GIAO DIỆN -->
+    <!---==========================================================================================
+            CÁC MODAL
+    =============================================================================================-->
 
     <!-- MODAL THÊM/SỬA PHIẾU NHẬP -->
     <div id="importModal" class="modal">

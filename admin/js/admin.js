@@ -622,7 +622,7 @@ function renderOrderTable() {
         let badgeHtml = "";
         switch (order.status) {
             case 'pending': badgeHtml = `<span class="badge badge-pending">Chờ xác nhận</span>`; break;
-            case 'processing': badgeHtml = `<span class="badge" style="background:#007bff; color:white;">Đang giao hàng</span>`; break;
+            case 'processing': badgeHtml = `<span class="badge badge-delivering">Đang giao hàng</span>`; break;
             case 'completed': badgeHtml = `<span class="badge badge-completed">Thành công</span>`; break;
             case 'cancelled': badgeHtml = `<span class="badge badge-loss">Đã hủy</span>`; break;
         }
