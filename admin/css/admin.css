@@ -671,9 +671,9 @@ input[type="number"] {
     DÀNH CHO TRANG QUẢN LÝ ĐƠN HÀNG
 ====================================================================================*/
 .status-filter{
-    width: auto; 
-    margin-left: 10px; 
-    padding: 6px;
+    width: auto !important; 
+    padding: 6px 10px !important;
+    cursor: pointer;
 }
 .badge-delivering{
     background-color: #cec115;
@@ -687,3 +687,14 @@ input[type="number"] {
 /*====================================================================================
     DÀNH CHO TRANG BÁO CÁO TỒN KHO
 ====================================================================================*/
+.inventory-filter {
+    display: flex; 
+    flex-direction: column; 
+    gap: 5px;
+    align-items: flex-start;
+}
+.inventory-filter label {
+    font-weight: bold; 
+    font-size: 14px; 
+    margin-left: 2px;
+}

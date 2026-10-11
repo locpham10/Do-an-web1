@@ -47,7 +47,7 @@ function saveToLocalStorage() {
     localStorage.setItem('saved_catalog', JSON.stringify(Array.from(productCatalog)));
 }
 
-function loadFromLocalStorage() {
+function loadDataForImports() {
     const storedImports = localStorage.getItem('saved_imports');
     if (storedImports) {
         try { importList = JSON.parse(storedImports); } 
@@ -59,6 +59,9 @@ function loadFromLocalStorage() {
         try { productCatalog = new Set(JSON.parse(storedCatalog)); } 
         catch (e) { productCatalog = new Set([]); }
     }
+    
+    // ĐỒNG BỘ: Tự động gọi vẽ bảng sau khi lấy xong dữ liệu
+    renderTable(); 
 }
 
 // 3. LOGIC GIAO DIỆN VÀ MODAL
@@ -294,12 +297,8 @@ function applyFilters() {
     }
 }
 
-// 5. KHỞI CHẠY KHI MỞ TRANG
-document.addEventListener("DOMContentLoaded", function() {
-    // 1. Tải dữ liệu từ LocalStorage trước tiên
-    loadFromLocalStorage();
-
-    // 2. Gắn sự kiện HTML
+// 5. GẮN SỰ KIỆN CHO MODAL NHẬP HÀNG
+function initImportEvents() {
     const itemImageInput = document.getElementById('itemImage');
     if (itemImageInput) {
         itemImageInput.addEventListener('change', e => {
@@ -342,10 +341,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
-
-    // 3. Vẽ bảng (Sẽ có dữ liệu ngay lập tức nhờ hàm Load ở trên)
-    renderTable();
-});
+}
 /*======================================================================
     PHẦN DÙNG CHO TRANG QL GIÁ BÁN
 ======================================================================*/ 
@@ -573,9 +569,6 @@ function savePricing() {
 /*======================================================================
     PHẦN DÙNG CHO TRANG QL ĐƠN HÀNG
 ======================================================================*/ 
-document.addEventListener("DOMContentLoaded", () => {
-    loadDataForPricing();
-});
 
 let orderList = [];
 let currentEditingOrderId = "";
@@ -726,6 +719,91 @@ function applyOrderFilters() {
     }
 }
 /*======================================================================
+    PHẦN DÙNG CHO TRANG QL ĐƠN HÀNG
+======================================================================*/ 
+let inventoryList=[];
+
+function loadDataForInventory() {
+    // Kéo dữ liệu từ 2 kho (Nhập và Xuất)
+    const storedImports = localStorage.getItem('saved_imports');
+    const storedOrders = localStorage.getItem('saved_orders');
+    
+    let imports = storedImports ? JSON.parse(storedImports) : [];
+    let orders = storedOrders ? JSON.parse(storedOrders) : [];
+    
+    let inventoryMap = {};
+
+    // BƯỚC 1: CỘNG DỒN HÀNG NHẬP (Chỉ tính các phiếu Đã Hoàn Thành)
+    imports.forEach(ticket => {
+        if (ticket.status === 'completed' && Array.isArray(ticket.items)) {
+            ticket.items.forEach(item => {
+                if (!item.name) return;
+                
+                if (!inventoryMap[item.name]) {
+                    inventoryMap[item.name] = {
+                        name: item.name,
+                        image: item.image || '../assets/images/default-image.svg',
+                        importPrice: 0, // Sẽ lấy trung bình nếu nhập nhiều lần giá khác nhau
+                        totalImportedQty: 0,
+                        totalCost: 0,
+                        totalSoldQty: 0,
+                        currentStock: 0,
+                        code: "" 
+                    };
+                }
+                inventoryMap[item.name].totalImportedQty += item.qty;
+                inventoryMap[item.name].totalCost += (item.qty * item.price);
+            });
+        }
+    });
+
+    // Tính lại giá nhập trung bình và gán Mã SP (Cho khớp với tab Giá Bán)
+    Object.values(inventoryMap).forEach((prod, index) => {
+        prod.importPrice = prod.totalImportedQty > 0 ? Math.round(prod.totalCost / prod.totalImportedQty) : 0;
+        prod.code = "SP" + String(index + 1).padStart(3, '0');
+    });
+
+    // BƯỚC 2: TRỪ ĐI HÀNG ĐÃ BÁN (Tính cả đơn Đang Giao và Hoàn Thành, bỏ qua đơn Hủy/Chờ)
+    orders.forEach(order => {
+        // Hàng đã rời kho (đang đi trên đường) hoặc đã đến tay khách thì đều coi như không còn trong kho
+        if (order.status === 'processing' || order.status === 'completed') {
+            if (Array.isArray(order.items)) {
+                order.items.forEach(item => {
+                    if (inventoryMap[item.name]) {
+                        inventoryMap[item.name].totalSoldQty += item.qty;
+                    }
+                });
+            }
+        }
+    });
+
+    // BƯỚC 3: TÍNH TỒN KHO THỰC TẾ VÀ CHỐT MẢNG
+    let totalStockValue = 0;
+    let totalItemsInStock = 0;
+    let lowStockCount = 0;
+
+    inventoryList = Object.values(inventoryMap).map(prod => {
+        prod.currentStock = prod.totalImportedQty - prod.totalSoldQty;
+        
+        // Tính toán cho Dashboard tổng quan
+        if (prod.currentStock > 0) {
+            totalStockValue += (prod.currentStock * prod.importPrice);
+            totalItemsInStock += prod.currentStock;
+        }
+        
+        // Đếm số lượng sản phẩm sắp hết hàng (Dưới 5 cái)
+        if (prod.currentStock < 5) {
+            lowStockCount++;
+        }
+        
+        return prod;
+    });
+
+    // Vẽ giao diện
+    updateInventoryDashboard(totalItemsInStock, totalStockValue, lowStockCount);
+    renderInventoryTable();
+}
+/*======================================================================
     HÀM CHUYỂN ĐỔI TAB (MÔ HÌNH SINGLE PAGE APPLICATION)
 ======================================================================*/ 
 function switchTab(tabName) {
@@ -749,5 +827,7 @@ function switchTab(tabName) {
         renderTable();
     } else if (tabName === 'orders') {
         loadDataForOrders();
+    } else if (tabName === 'inventory') {
+        loadDataForInventory();
     }
 }
