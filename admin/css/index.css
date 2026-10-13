@@ -88,10 +88,11 @@ a {
   display: none;
   position: absolute;
   width: 150px;
+  margin: 5px;
   border: solid 1px #ccc;
   background-color: #fff;
   padding: 2px 0 2px 3px;
-  z-index: 10;
+  /* z-index: 10; */
 }
 .submenu li {
   padding: 0;
@@ -119,7 +120,7 @@ main {
 }
 footer {
   background-color: #f8f9fa;
-  border-top: 2px solid #d70027;
+  border-top: 1px solid #d70027;
   margin-top: 50px;
   width: 100%;
 }
@@ -134,7 +135,7 @@ footer {
   gap: 100px;
 }
 
-.Footer_footer_title {
+.Foot_footer_title {
   font-size: 16px;
   font-weight: bold;
   color: #d70027;
@@ -164,9 +165,13 @@ footer {
 }
 
 .footer-bottom {
-  background-color: #333;
   color: #fff;
   text-align: center;
   padding: 15px 50px;
-  font-size: 13px;
+  font-size 13px;
+  border-top: solid 1px #d70027;
+}
+p {
+    font-size: 13px;
+    color:#333;
 }
