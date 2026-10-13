@@ -687,6 +687,11 @@ input[type="number"] {
 /*====================================================================================
     DÀNH CHO TRANG BÁO CÁO TỒN KHO
 ====================================================================================*/
+.inventory-filter-group {
+    display: flex;
+    align-items: flex-end; /* Căn 2 ô select thẳng hàng nhau ở cạnh đáy */
+    gap: 20px; /* Khoảng cách giữa bộ lọc Trạng thái và Hàng tồn */
+}
 .inventory-filter {
     display: flex; 
     flex-direction: column; 
