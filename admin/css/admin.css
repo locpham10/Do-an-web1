@@ -687,6 +687,19 @@ input[type="number"] {
 /*====================================================================================
     DÀNH CHO TRANG BÁO CÁO TỒN KHO
 ====================================================================================*/
+.inventory-stat-table{
+    border: 1px solid #d70027;
+    border-radius: 3px;
+    margin: 20px 0;
+    width: fit-content;
+    display: block;
+}
+.inventory-stat-table table {
+    width: auto;
+}
+#tab-inventory .header-actions {
+    align-items: flex-end;
+}
 .inventory-filter-group {
     display: flex;
     align-items: flex-end; /* Căn 2 ô select thẳng hàng nhau ở cạnh đáy */

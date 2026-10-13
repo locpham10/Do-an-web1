@@ -59,8 +59,16 @@ function loadDataForImports() {
         try { productCatalog = new Set(JSON.parse(storedCatalog)); } 
         catch (e) { productCatalog = new Set([]); }
     }
+
+    // Quét toàn bộ phiếu nhập trước đó để nạp hết tên SP vào danh sách gợi ý
+    importList.forEach(ticket => {
+        if (Array.isArray(ticket.items)) {
+            ticket.items.forEach(item => {
+                if (item.name) productCatalog.add(item.name);
+            });
+        }
+    });
     
-    // ĐỒNG BỘ: Tự động gọi vẽ bảng sau khi lấy xong dữ liệu
     renderTable(); 
 }
 
@@ -298,6 +306,7 @@ function applyFilters() {
 }
 
 // 5. GẮN SỰ KIỆN CHO MODAL NHẬP HÀNG
+// 5. GẮN SỰ KIỆN CHO MODAL NHẬP HÀNG
 function initImportEvents() {
     const itemImageInput = document.getElementById('itemImage');
     if (itemImageInput) {
@@ -313,13 +322,23 @@ function initImportEvents() {
 
     const itemProduct = document.getElementById('itemProduct');
     const productSuggestions = document.getElementById('productSuggestions');
+    
     if (itemProduct && productSuggestions) {
+        // Chỉ chạy khi người dùng bắt đầu gõ phím vào ô
         itemProduct.addEventListener('input', function() {
             const keyword = this.value.trim().toLowerCase();
             productSuggestions.innerHTML = ''; 
-            if (!keyword) { productSuggestions.style.display = 'none'; return; }
+            
+            // Nếu chưa gõ gì (hoặc xóa hết chữ) thì ẩn ngay danh sách
+            if (!keyword) { 
+                productSuggestions.style.display = 'none'; 
+                return; 
+            }
 
-            const matches = Array.from(productCatalog).filter(name => name.toLowerCase().includes(keyword));
+            const matches = Array.from(productCatalog).filter(name => 
+                name.toLowerCase().includes(keyword)
+            );
+
             if (matches.length > 0) {
                 matches.forEach(match => {
                     const li = document.createElement('li');
@@ -332,11 +351,14 @@ function initImportEvents() {
                     productSuggestions.appendChild(li);
                 });
                 productSuggestions.style.display = 'block';
-            } else productSuggestions.style.display = 'none';
+            } else {
+                productSuggestions.style.display = 'none';
+            }
         });
 
+        // Ẩn danh sách khi click chuột ra ngoài
         document.addEventListener('click', e => {
-            if (e.target !== itemProduct && e.target !== productSuggestions) {
+            if (e.target !== itemProduct && !productSuggestions.contains(e.target)) {
                 productSuggestions.style.display = 'none';
             }
         });
@@ -824,10 +846,17 @@ function switchTab(tabName) {
     if (tabName === 'pricing') {
         loadDataForPricing();
     } else if (tabName === 'imports') {
-        renderTable();
+        loadDataForImports();
     } else if (tabName === 'orders') {
         loadDataForOrders();
     } else if (tabName === 'inventory') {
         loadDataForInventory();
     }
 }
+document.addEventListener("DOMContentLoaded", () => {
+    if (typeof loadDataForImports === "function") loadDataForImports();
+    if (typeof initImportEvents === "function") initImportEvents();
+    if (typeof loadDataForPricing === "function") loadDataForPricing();
+    if (typeof loadDataForOrders === "function") loadDataForOrders();
+    if (typeof loadDataForInventory === "function") loadDataForInventory();
+});
