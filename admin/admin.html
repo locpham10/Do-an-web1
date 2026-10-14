@@ -188,7 +188,18 @@
                         </thead>
 
                         <tbody>
-
+                            <tr>
+                                <td>Tổng sản phẩm tồn kho:</td>
+                                <td><strong id="invTotalQty">0</strong> sản phẩm</td>
+                            </tr>
+                            <tr>
+                                <td>Tổng giá trị tồn kho:</td>
+                                <td><strong id="invTotalValue" style="color: #007bff;">0 đ</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Cảnh báo sắp hết (&lt; 5):</td>
+                                <td><strong id="invLowStockAlert" style="color: #dc3545;">0</strong> mặt hàng</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -221,8 +232,19 @@
 
                     <div class="search-action" >
                         <input type="text" id="inventorySearchInput" class="search-input"
-                            placeholder="Tìm mã sản phẩm" onkeyup="applyInventoryFilters()">
+                            placeholder="Tìm mã sản phẩm..." onkeyup="applyInventoryFilters()">
                     </div>
+                </div>
+                <div class="card-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 15%; text-align: center;">Mã SP</th>
+                                <th style="width: 20%; text-align: center;">Ảnh</th>
+                                <th style="width: 65%;">Thông tin chi tiết</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
 
             </section>

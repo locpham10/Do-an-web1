@@ -694,6 +694,9 @@ input[type="number"] {
     width: fit-content;
     display: block;
 }
+.inventory-stat-table thead th{
+    border-bottom: 1px solid #d70027;
+}
 .inventory-stat-table table {
     width: auto;
 }
