@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tài khoản & Đơn hàng - Shop</title>
+    <link rel="stylesheet" href="assets/css/profile.css" />
+  </head>
+  <body>
+    <!-- Header đồng bộ tone màu với cart.html -->
+    <header class="topbar">
+      <div class="header-inner">
+        <a class="brand" href="index.html"
+          ><span class="brand-mark">S</span><b>SHOP</b></a
+        >
+        <button class="category">☰ <span>Danh mục</span></button>
+        <div class="search">
+          <input
+            type="text"
+            placeholder="Nhập tên điện thoại, laptop, phụ kiện... cần tìm"
+          />
+          <button>⌕</button>
+        </div>
+
+        <!-- Cụm icon tài khoản kèm Dropdown khi rê chuột -->
+        <div class="user-menu-dropdown-wrap">
+          <a
+            class="head-icon active"
+            href="profile.html#info"
+            title="Tài khoản cá nhân"
+            >👤</a
+          >
+          <div class="user-dropdown-menu">
+            <a href="profile.html#info" class="menu-item"
+              >👤 Thông tin cá nhân</a
+            >
+            <a href="profile.html#delete" class="menu-item danger"
+              >🗑️ Xóa tài khoản</a
+            >
+            <div class="menu-divider"></div>
+            <a href="#" id="headerBtnLogout" class="menu-item logout-link"
+              >🚪 Đăng xuất</a
+            >
+          </div>
+        </div>
+
+        <a class="cart-head" href="cart.html">🛒 <b>Giỏ hàng</b></a>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Trang chủ</a> /
+        <span id="breadcrumbCurrent">Thông tin tài khoản</span>
+      </div>
+
+      <!-- KHU VỰC 1: THÔNG TIN CÁ NHÂN VÀ ĐƠN HÀNG (Mặc định) -->
+      <div id="sectionProfile" class="profile-layout">
+        <!-- Cột trái: Thông tin cá nhân -->
+        <aside class="profile-sidebar">
+          <div class="card user-info-card">
+            <div class="user-avatar-wrap">
+              <div class="user-avatar" id="avatarText">U</div>
+            </div>
+            <h2 class="user-name" id="profileName">Chưa đăng nhập</h2>
+            <span class="user-badge">Khách hàng thành viên</span>
+
+            <div class="user-details-list">
+              <div class="detail-item">
+                <span class="detail-label">📧 Email:</span>
+                <span class="detail-value" id="profileEmail">---</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">📞 Số điện thoại:</span>
+                <span class="detail-value" id="profilePhone">---</span>
+              </div>
+            </div>
+
+            <div class="sidebar-action-group">
+              <a href="profile.html#delete" class="btn-sidebar-delete"
+                >Yêu cầu xóa tài khoản</a
+              >
+              <button id="btnLogout" class="btn-logout">Đăng xuất</button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Cột phải: Lịch sử đơn hàng đã mua -->
+        <section class="orders-section">
+          <div class="card order-list-card">
+            <div class="section-header">
+              <h2>Đơn hàng đã mua (<span id="orderCount">0</span>)</h2>
+            </div>
+
+            <!-- Danh sách đơn hàng render tự động -->
+            <div id="orderList" class="order-items-container"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- KHU VỰC 2: XÓA TÀI KHOẢN (Hiển thị khi URL là #delete) -->
+      <div
+        id="sectionDelete"
+        class="delete-account-wrapper"
+        style="display: none"
+      >
+        <div class="card delete-card">
+          <div class="delete-header">
+            <h2>⚠️ Yêu cầu xóa vĩnh viễn tài khoản</h2>
+            <p class="delete-desc">
+              Hành động này không thể hoàn tác. Mọi thông tin tài khoản, lịch sử
+              mua hàng và các quyền lợi thành viên sẽ bị vô hiệu hóa hoàn toàn
+              khỏi hệ thống.
+            </p>
+          </div>
+
+          <form id="formConfirmDelete" class="delete-form">
+            <div class="form-group">
+              <label for="confirmPassword"
+                >Nhập mật khẩu hiện tại để xác nhận:</label
+              >
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Nhập chính xác mật khẩu của bạn..."
+                required
+              />
+            </div>
+            <div class="delete-btn-group">
+              <button type="submit" class="btn-confirm-delete">
+                Xác nhận xóa tài khoản
+              </button>
+              <a href="profile.html#info" class="btn-cancel"
+                >Hủy bỏ & Quay lại</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="assets/js/profile.js"></script>
+  </body>
+</html>

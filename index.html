@@ -9,6 +9,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <link rel="stylesheet" href="assets/css/index.css" />
+    <link rel="stylesheet" href="assets/css/auth.css" />
+    
   </head>
   <body>
     <header>
@@ -22,10 +24,27 @@
         </div>
         <ul class="others">
           <li><a class="fa fa-paw" href=""></a></li>
-          <li>
-            <a class="fa fa-user" href="auth.html"> </a>
+          <li class="user-item">
+            <a class="fa fa-user" href="javascript:void(0)" id="userBtn"></a>
+            <!-- Menu 2 dòng chỉ xuất hiện khi hover NẾU đã đăng nhập -->
+            <ul class="user-menu" id="userMenu">
+              <li><a href="profile.html">Thông tin cá nhân</a></li>
+              <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
+            </ul>
           </li>
-          <li><a class="fa fa-shopping-bag" href=""></a></li>
+
+          <!-- BIỂU TƯỢNG GIỎ HÀNG -->
+          <li>
+            <a class="fa fa-shopping-bag" href="javascript:void(0)" id="cartBtn"></a>
+          </li>
+          <!-- <li>
+            <a class="fa fa-user" > 
+              <div>
+                
+              </div>
+            </a>
+          </li> -->
+          <!-- <li><a class="fa fa-shopping-bag" href=""></a></li> -->
         </ul>
       </div>
       <div class="header-bottom">
@@ -112,6 +131,157 @@
       </div>
       </div>
     </footer>
+
+
+    
+        <!-- POPUP MODAL ĐĂNG NHẬP / ĐĂNG KÝ TRỰC TIẾP -->
+    <div id="authModal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <span class="close-modal" id="closeAuthModal">&times;</span>
+
+        <section class="auth-card">
+          <h1>Đăng nhập / Đăng ký</h1>
+          <p class="sub">Mua sắm nhanh chóng và quản lý đơn hàng của bạn</p>
+
+          <div class="tabs">
+            <button id="loginTab" class="tab active">Đăng nhập</button>
+            <button id="registerTab" class="tab">Đăng ký</button>
+          </div>
+
+          <!-- TAB ĐĂNG NHẬP -->
+          <form id="loginForm">
+            <label>Số điện thoại hoặc email</label>
+            <input
+              id="loginAccount"
+              type="text"
+              placeholder="Nhập số điện thoại hoặc email"
+              required
+            />
+
+            <label>Mật khẩu</label>
+            <input
+              id="loginPassword"
+              type="password"
+              placeholder="Nhập mật khẩu"
+              required
+            />
+
+            <div class="form-row">
+              <label class="check">
+                <input type="checkbox" id="remember" /> Ghi nhớ đăng nhập
+              </label>
+              <button type="button" id="forgotPassword" class="forgot-btn">
+                Quên mật khẩu?
+              </button>
+            </div>
+
+            <button class="primary" type="submit">Đăng nhập</button>
+
+            <p class="switch-text">
+              Chưa có tài khoản?
+              <button type="button" id="goRegister">Đăng ký ngay</button>
+            </p>
+          </form>
+
+          <!-- TAB QUÊN MẬT KHẨU -->
+          <form id="forgotForm" class="hidden">
+            <label>Email</label>
+            <input
+              id="forgotEmail"
+              type="email"
+              placeholder="Nhập email đã đăng ký"
+              required
+            />
+
+            <label>Số điện thoại</label>
+            <input
+              id="forgotPhone"
+              type="tel"
+              placeholder="Nhập số điện thoại đã đăng ký"
+              pattern="0[0-9]{9}"
+              maxlength="10"
+              required
+            />
+
+            <label>Mật khẩu mới</label>
+            <input
+              id="newPassword"
+              type="password"
+              placeholder="Nhập mật khẩu mới"
+              required
+            />
+
+            <label>Xác nhận mật khẩu mới</label>
+            <input
+              id="confirmNewPassword"
+              type="password"
+              placeholder="Nhập lại mật khẩu mới"
+              required
+            />
+
+            <button class="primary" type="submit">Đổi mật khẩu</button>
+
+            <p class="switch-text">
+              <button type="button" id="backToLogin">Quay lại đăng nhập</button>
+            </p>
+          </form>
+
+          <!-- TAB ĐĂNG KÝ -->
+          <form id="registerForm" class="hidden">
+            <label>Họ và tên</label>
+            <input
+              id="registerName"
+              type="text"
+              placeholder="Nhập họ và tên"
+              required
+            />
+
+            <label>Số điện thoại</label>
+            <input
+              id="registerPhone"
+              type="tel"
+              placeholder="Nhập số điện thoại"
+              pattern="0[0-9]{9}"
+              maxlength="10"
+              required
+            />
+
+            <label>Email</label>
+            <input
+              id="registerEmail"
+              type="email"
+              placeholder="Nhập email"
+              required
+            />
+
+            <label>Mật khẩu</label>
+            <input
+              id="registerPassword"
+              type="password"
+              placeholder="Tạo mật khẩu"
+              required
+            />
+
+            <label>Xác nhận mật khẩu</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="Nhập lại mật khẩu"
+              required
+            />
+
+            <button class="primary" type="submit">Đăng ký</button>
+
+            <p class="switch-text">
+              Đã có tài khoản?
+              <button type="button" id="goLogin">Đăng nhập</button>
+            </p>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <!-- Nhúng file JS từ assets/js/index.js -->
     <script src="assets/js/index.js"></script>
   </body>
 </html>

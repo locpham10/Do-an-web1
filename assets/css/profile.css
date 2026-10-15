@@ -1,0 +1,518 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: #f4f6f8;
+  color: #333;
+}
+
+/* Header đồng bộ cart.html */
+.topbar {
+  background: #e0052b;
+  color: white;
+  padding: 12px 0;
+  position: relative;
+  z-index: 1000;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0 16px;
+}
+
+.brand {
+  color: #fff;
+  text-decoration: none;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-mark {
+  background: #fff;
+  color: #e0052b;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-weight: bold;
+}
+
+.category {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search {
+  flex: 1;
+  display: flex;
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.search input {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+}
+
+.search button {
+  background: transparent;
+  border: none;
+  padding: 0 14px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ================== DROPDOWN HOVER TÀI KHOẢN ================== */
+.user-menu-dropdown-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.user-menu-dropdown-wrap::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 10px; /* Cầu nối tránh mất hover khi rê chuột xuống menu */
+}
+
+.head-icon {
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  display: block;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.head-icon:hover,
+.head-icon.active {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.user-dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 6px;
+  background: #ffffff;
+  min-width: 190px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  border-radius: 6px;
+  border: 1px solid #e1e4e8;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+.user-menu-dropdown-wrap:hover .user-dropdown-menu {
+  display: block;
+  animation: menuFadeIn 0.2s ease-in-out;
+}
+
+.user-dropdown-menu .menu-item {
+  display: block;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.user-dropdown-menu .menu-item:hover {
+  background-color: #f8f9fa;
+  color: #e0052b;
+}
+
+.user-dropdown-menu .menu-item.danger {
+  color: #dc3545;
+}
+
+.user-dropdown-menu .menu-item.danger:hover {
+  background-color: #fff5f5;
+  color: #b02a37;
+}
+
+.menu-divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 4px 0;
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cart-head {
+  color: #fff;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+/* ================== CONTAINER & LAYOUT ================== */
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 16px;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.breadcrumb a {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid #e1e4e8;
+}
+
+/* ================== THÔNG TIN USER ================== */
+.user-info-card {
+  text-align: center;
+}
+
+.user-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.user-avatar {
+  width: 72px;
+  height: 72px;
+  background: #e0052b;
+  color: #fff;
+  font-size: 32px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.user-badge {
+  display: inline-block;
+  background: #fff0f2;
+  color: #e0052b;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+.user-details-list {
+  text-align: left;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-label {
+  color: #777;
+  font-size: 13px;
+}
+
+.detail-value {
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.sidebar-action-group {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-sidebar-delete {
+  display: block;
+  text-decoration: none;
+  font-size: 13px;
+  color: #dc3545;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px dashed #f5c6cb;
+  background: #fffdfd;
+  transition: 0.2s;
+}
+
+.btn-sidebar-delete:hover {
+  background: #f8d7da;
+  border-color: #dc3545;
+}
+
+.btn-logout {
+  width: 100%;
+  padding: 10px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.btn-logout:hover {
+  background: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+
+/* ================== DANH SÁCH ĐƠN HÀNG ================== */
+.section-header h2 {
+  font-size: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 16px;
+}
+
+.order-box {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.order-header {
+  background: #fcfcfc;
+  padding: 10px 14px;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #555;
+}
+
+.order-status {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.order-items {
+  padding: 10px 14px;
+}
+
+.order-product-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed #f0f0f0;
+}
+
+.order-product-row:last-child {
+  border-bottom: none;
+}
+
+.order-product-row img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+.order-product-info {
+  flex: 1;
+}
+
+.order-product-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.order-product-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.order-product-price {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.order-footer {
+  padding: 12px 14px;
+  background: #fafafa;
+  border-top: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.order-address-info {
+  font-size: 12px;
+  color: #666;
+  max-width: 60%;
+}
+
+.order-total-price {
+  color: #e0052b;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.empty-orders {
+  text-align: center;
+  padding: 40px 10px;
+  color: #888;
+}
+
+/* ================== GIAO DIỆN XÓA TÀI KHOẢN ================== */
+.delete-account-wrapper {
+  max-width: 650px;
+  margin: 20px auto;
+}
+
+.delete-card {
+  border-top: 4px solid #dc3545;
+}
+
+.delete-header h2 {
+  color: #dc3545;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.delete-desc {
+  background: #fff5f5;
+  border-left: 3px solid #dc3545;
+  padding: 12px 14px;
+  color: #721c24;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.delete-form .form-group {
+  margin-bottom: 20px;
+}
+
+.delete-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.delete-form input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+.delete-form input[type="password"]:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+}
+
+.delete-btn-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-confirm-delete {
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-confirm-delete:hover {
+  background: #b02a37;
+}
+
+.btn-cancel {
+  background: #e9ecef;
+  color: #495057;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-cancel:hover {
+  background: #dee2e6;
+}
+
+@media (max-width: 850px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+}
