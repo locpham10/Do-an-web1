@@ -1,4 +1,52 @@
 /*======================================================================
+    ĐĂNG NHẬP CHO TRANG ADMIN
+======================================================================*/ 
+function handleLogin() {
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+
+    // Đặt sẵn Tài khoản/Mật khẩu cho đồ án (Ví dụ: admin / 123456)
+    if (user === 'admin' && pass === '123456') {
+        document.getElementById('loginArea').style.display = 'none'; // Giấu form login
+        document.getElementById('dashboardArea').style.display = 'flex'; // Mở dashboard
+        
+        // Lưu trạng thái đăng nhập để xài Live Server không bị out ra ngoài
+        sessionStorage.setItem('isAdminLoggedIn', 'true');
+    } else {
+        alert('Sai tài khoản hoặc mật khẩu!\n(Gợi ý test: admin / 123456)');
+    }
+}
+
+// 2. HÀM XỬ LÝ ĐĂNG XUẤT
+function handleLogout() {
+    if(confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+        sessionStorage.removeItem('isAdminLoggedIn');
+        document.getElementById('dashboardArea').style.display = 'none';
+        document.getElementById('loginArea').style.display = 'flex';
+        
+        // Xóa trắng mật khẩu cũ
+        document.getElementById('password').value = "";
+    }
+}
+
+// Khởi chạy các UI cơ bản sau khi trang đã tải xong
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // Kiểm tra xem trước đó đã đăng nhập chưa (Chống văng khi F5)
+    if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
+        document.getElementById('loginArea').style.display = 'none';
+        document.getElementById('dashboardArea').style.display = 'flex';
+    }
+
+    // Hỗ trợ ấn phím Enter ở ô mật khẩu để đăng nhập nhanh
+    const passInput = document.getElementById('password');
+    if(passInput) {
+        passInput.addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') handleLogin();
+        });
+    }
+});
+/*======================================================================
     PHẦN DÙNG CHUNG CHO CẢ TRANG ADMIN
 ======================================================================*/ 
 // Hàm định dạng tiền tệ (VD: 150000 -> 150.000 đ)
