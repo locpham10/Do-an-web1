@@ -1007,3 +1007,91 @@ input[type="number"] {
     font-size: 14px; 
     margin-left: 2px;
 }
+.inv-code {
+    text-align: center;
+    font-size: 16px;
+}
+
+.inv-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.inv-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.inv-info {
+    flex: 1;
+}
+
+.inv-name {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #212529;
+}
+
+.inv-price-row {
+    margin-bottom: 8px;
+}
+
+.inv-price-import {
+    color: #6c757d;
+    font-size: 13px;
+    margin-right: 15px;
+}
+
+.inv-price-retail {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.inv-stat-box {
+    background-color: #f8f9fa;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    min-width: 250px;
+}
+
+.inv-stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.inv-stat-label {
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.inv-divider {
+    border: 0;
+    border-top: 1px dashed #ccc;
+    margin: 8px 0;
+}
+
+.inv-stock-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inv-stock-label {
+    font-weight: bold;
+    color: #343a40;
+}
+
+.inv-stock-number {
+    font-size: 18px;
+    font-weight: 900;
+    color: #007bff;
+}

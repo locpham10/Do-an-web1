@@ -702,7 +702,7 @@ function renderOrderTable() {
         let badgeHtml = "";
         switch (order.status) {
             case 'pending': badgeHtml = `<span class="badge badge-pending">Chờ xác nhận</span>`; break;
-            case 'processing': badgeHtml = `<span class="badge badge-delivering">Đang giao hàng</span>`; break;
+            case 'processed': badgeHtml = `<span class="badge badge-delivering">Đã xử lý</span>`; break;
             case 'completed': badgeHtml = `<span class="badge badge-completed">Thành công</span>`; break;
             case 'cancelled': badgeHtml = `<span class="badge badge-loss">Đã hủy</span>`; break;
         }
@@ -806,89 +806,182 @@ function applyOrderFilters() {
     }
 }
 /*======================================================================
-    PHẦN DÙNG CHO TRANG QL ĐƠN HÀNG
+    PHẦN DÙNG CHO TRANG BÁO CÁO TỒN KHO
 ======================================================================*/ 
-let inventoryList=[];
+let rawImports = [];
+let rawOrders = [];
+let savedProducts = []; // Lấy từ Tab 4 để biết Sản phẩm thuộc Loại nào
 
 function loadDataForInventory() {
-    // Kéo dữ liệu từ 2 kho (Nhập và Xuất)
     const storedImports = localStorage.getItem('saved_imports');
     const storedOrders = localStorage.getItem('saved_orders');
+    const storedProducts = localStorage.getItem('saved_products');
     
-    let imports = storedImports ? JSON.parse(storedImports) : [];
-    let orders = storedOrders ? JSON.parse(storedOrders) : [];
+    rawImports = storedImports ? JSON.parse(storedImports) : [];
+    rawOrders = storedOrders ? JSON.parse(storedOrders) : [];
+    savedProducts = storedProducts ? JSON.parse(storedProducts) : [];
+
+    // Tự động gom nhóm các "Loại SP" đang có trong kho để đổ vào ô Dropdown (Chức năng 8.1)
+    const categorySet = new Set();
+    savedProducts.forEach(p => { if (p.category) categorySet.add(p.category); });
     
+    const catFilterEl = document.getElementById('invCategoryFilter');
+    if (catFilterEl) {
+        catFilterEl.innerHTML = '<option value="ALL">-- Tất cả loại --</option>' + 
+            Array.from(categorySet).map(c => `<option value="${c}">${c}</option>`).join('');
+    }
+
+    // Sau khi tải dữ liệu xong thì gọi hàm lọc ngay để vẽ bảng
+    applyInventoryFilters();
+}
+
+function applyInventoryFilters() {
+    const fromDateStr = document.getElementById('invFromDate').value;
+    const toDateStr = document.getElementById('invToDate').value;
+    const catFilter = document.getElementById('invCategoryFilter').value;
+    const searchKeyword = document.getElementById('inventorySearchInput').value.trim().toLowerCase();
+
+    // Chuyển đổi ngày sang Timestamp (Nếu ko nhập thì mặc định quét từ đầu đến tận năm 2100)
+    const fromTime = fromDateStr ? new Date(fromDateStr).setHours(0,0,0,0) : 0;
+    const toTime = toDateStr ? new Date(toDateStr).setHours(23,59,59,999) : new Date("2100-01-01").getTime();
+
     let inventoryMap = {};
 
-    // BƯỚC 1: CỘNG DỒN HÀNG NHẬP (Chỉ tính các phiếu Đã Hoàn Thành)
-    imports.forEach(ticket => {
-        if (ticket.status === 'completed' && Array.isArray(ticket.items)) {
-            ticket.items.forEach(item => {
-                if (!item.name) return;
-                
-                if (!inventoryMap[item.name]) {
-                    inventoryMap[item.name] = {
-                        name: item.name,
-                        image: item.image || '../assets/images/default-image.svg',
-                        importPrice: 0, // Sẽ lấy trung bình nếu nhập nhiều lần giá khác nhau
-                        totalImportedQty: 0,
-                        totalCost: 0,
-                        totalSoldQty: 0,
-                        currentStock: 0,
-                        code: "" 
-                    };
-                }
-                inventoryMap[item.name].totalImportedQty += item.qty;
-                inventoryMap[item.name].totalCost += (item.qty * item.price);
-            });
-        }
+    // BƯỚC 1: Khởi tạo mốc sản phẩm trống
+    savedProducts.forEach(p => {
+        inventoryMap[p.name] = {
+            code: p.code,
+            name: p.name,
+            image: p.image || '../assets/images/default-image.jpeg',
+            category: p.category || 'Chưa phân loại',
+            importPrice: 0,
+            totalCost: 0,
+            totalImportedQty: 0,
+            importedInRange: 0, // Nhập trong kỳ
+            soldInRange: 0,     // Xuất trong kỳ
+            currentStock: 0     // Tồn cuối kỳ
+        };
     });
 
-    // Tính lại giá nhập trung bình và gán Mã SP (Cho khớp với tab Giá Bán)
-    Object.values(inventoryMap).forEach((prod, index) => {
-        prod.importPrice = prod.totalImportedQty > 0 ? Math.round(prod.totalCost / prod.totalImportedQty) : 0;
-        prod.code = "SP" + String(index + 1).padStart(3, '0');
-    });
+    // BƯỚC 2: QUÉT HÀNG NHẬP
+    rawImports.forEach(ticket => {
+        if (ticket.status === 'completed') {
+            const ticketTime = new Date(ticket.date).setHours(12,0,0,0);
+            
+            // Chỉ tính những phiếu nhập XẢY RA TRƯỚC mốc ToDate
+            if (ticketTime <= toTime) {
+                ticket.items.forEach(item => {
+                    if (!inventoryMap[item.name]) {
+                        inventoryMap[item.name] = { code: "", name: item.name, image: item.image, category: 'Khác', importPrice: 0, totalCost: 0, totalImportedQty: 0, importedInRange: 0, soldInRange: 0, currentStock: 0 };
+                    }
+                    // Cộng vào Tồn cuối kỳ
+                    inventoryMap[item.name].currentStock += item.qty;
+                    inventoryMap[item.name].totalImportedQty += item.qty;
+                    inventoryMap[item.name].totalCost += (item.qty * item.price);
 
-    // BƯỚC 2: TRỪ ĐI HÀNG ĐÃ BÁN (Tính cả đơn Đang Giao và Hoàn Thành, bỏ qua đơn Hủy/Chờ)
-    orders.forEach(order => {
-        // Hàng đã rời kho (đang đi trên đường) hoặc đã đến tay khách thì đều coi như không còn trong kho
-        if (order.status === 'processing' || order.status === 'completed') {
-            if (Array.isArray(order.items)) {
-                order.items.forEach(item => {
-                    if (inventoryMap[item.name]) {
-                        inventoryMap[item.name].totalSoldQty += item.qty;
+                    // Nếu phiếu này nằm TRONG KHOẢNG thời gian đang lọc -> Tính vào "Nhập Trong Kỳ"
+                    if (ticketTime >= fromTime) {
+                        inventoryMap[item.name].importedInRange += item.qty;
                     }
                 });
             }
         }
     });
 
-    // BƯỚC 3: TÍNH TỒN KHO THỰC TẾ VÀ CHỐT MẢNG
-    let totalStockValue = 0;
-    let totalItemsInStock = 0;
-    let lowStockCount = 0;
-
-    inventoryList = Object.values(inventoryMap).map(prod => {
-        prod.currentStock = prod.totalImportedQty - prod.totalSoldQty;
-        
-        // Tính toán cho Dashboard tổng quan
-        if (prod.currentStock > 0) {
-            totalStockValue += (prod.currentStock * prod.importPrice);
-            totalItemsInStock += prod.currentStock;
-        }
-        
-        // Đếm số lượng sản phẩm sắp hết hàng (Dưới 5 cái)
-        if (prod.currentStock < 5) {
-            lowStockCount++;
-        }
-        
-        return prod;
+    // Tính lại giá nhập trung bình
+    Object.values(inventoryMap).forEach(prod => {
+        prod.importPrice = prod.totalImportedQty > 0 ? Math.round(prod.totalCost / prod.totalImportedQty) : 0;
     });
 
-    // Vẽ giao diện
-    updateInventoryDashboard(totalItemsInStock, totalStockValue, lowStockCount);
-    renderInventoryTable();
+    // BƯỚC 3: QUÉT HÀNG XUẤT (ĐƠN HÀNG)
+    rawOrders.forEach(order => {
+        if (order.status === 'processed' || order.status === 'completed') {
+            const orderTime = new Date(order.date).setHours(12,0,0,0);
+            
+            // Chỉ tính những đơn XẢY RA TRƯỚC mốc ToDate
+            if (orderTime <= toTime) {
+                order.items.forEach(item => {
+                    if (inventoryMap[item.name]) {
+                        // Trừ khỏi Tồn cuối kỳ
+                        inventoryMap[item.name].currentStock -= item.qty;
+                        
+                        // Nếu đơn này nằm TRONG KHOẢNG thời gian đang lọc -> Tính vào "Xuất Trong Kỳ"
+                        if (orderTime >= fromTime) {
+                            inventoryMap[item.name].soldInRange += item.qty;
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    // BƯỚC 4: LỌC DỮ LIỆU ĐỂ HIỂN THỊ
+    let finalData = Object.values(inventoryMap).filter(item => {
+        // Lọc theo Loại SP
+        if (catFilter !== 'ALL' && item.category !== catFilter) return false;
+        
+        // Lọc theo Mã / Tên
+        if (searchKeyword && !item.name.toLowerCase().includes(searchKeyword) && !item.code.toLowerCase().includes(searchKeyword)) return false;
+        
+        // Ẩn đi các mặt hàng rác (không tồn, không nhập, không xuất)
+        if (item.currentStock === 0 && item.importedInRange === 0 && item.soldInRange === 0) return false;
+
+        return true;
+    });
+
+    // BƯỚC 5: TÍNH TOÁN DASHBOARD VÀ VẼ BẢNG
+    let totalItems = 0;
+    let totalValue = 0;
+    let lowStockCount = 0;
+
+    finalData.forEach(prod => {
+        if (prod.currentStock > 0) {
+            totalItems += prod.currentStock;
+            totalValue += (prod.currentStock * prod.importPrice);
+        }
+        if (prod.currentStock > 0 && prod.currentStock < 5) {
+            lowStockCount++;
+        }
+    });
+
+    updateInventoryDashboard(totalItems, totalValue, lowStockCount);
+    renderInventoryTable(finalData);
+}
+
+// HÀM VẼ GIAO DIỆN BẢNG
+function renderInventoryTable(data) {
+    const tbody = document.getElementById('inventoryTableBody');
+    if (!tbody) return;
+
+    if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">Không tìm thấy sản phẩm nào phù hợp!</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+        <tr>
+            <td style="text-align: center;"><strong>${item.code}</strong></td>
+            <td style="text-align: center;">
+                <img src="${item.image}" alt="Ảnh SP" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;">
+            </td>
+            <td><strong>${item.name}</strong></td>
+            <td style="text-align: center;"><span class="badge" style="background:#e9ecef; color:#333;">${item.category}</span></td>
+            
+            <td style="text-align: center; font-size: 16px; font-weight: bold;">+ ${item.importedInRange}</td>
+            <td style="text-align: center; font-size: 16px; font-weight: bold;">- ${item.soldInRange}</td>
+            <td style="text-align: center; font-size: 18px; font-weight: 900;">= ${item.currentStock}</td>
+        </tr>
+    `).join('');
+}
+
+function updateInventoryDashboard(totalItems, totalValue, lowStockCount) {
+    const elQty = document.getElementById('invTotalQty');
+    const elValue = document.getElementById('invTotalValue');
+    const elAlert = document.getElementById('invLowStockAlert');
+
+    if (elQty) elQty.innerText = new Intl.NumberFormat('vi-VN').format(totalItems);
+    if (elValue) elValue.innerText = formatMoney(totalValue);
+    if (elAlert) elAlert.innerText = lowStockCount;
 }
 /*======================================================================
     HÀM CHUYỂN ĐỔI TAB (MÔ HÌNH SINGLE PAGE APPLICATION)
