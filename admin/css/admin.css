@@ -723,7 +723,7 @@ input[type="number"] {
     gap: 10px;
 }
 .btn-add-wrapper {
-    margin-bottom: 15px;
+    margin-bottom: 0 !important;
 }
 
 .btn-add-item {

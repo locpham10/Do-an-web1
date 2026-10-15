@@ -151,6 +151,21 @@ function renderTable() {
     }).join('');
 }
 
+let globalProductList = []; // Biến lưu danh sách sản phẩm từ Tab 4
+
+function loadProductsForImportDropdown() {
+    const storedProducts = localStorage.getItem('saved_products');
+    if (storedProducts) {
+        try { globalProductList = JSON.parse(storedProducts); } catch(e) { globalProductList = []; }
+    }
+    
+    const selectEl = document.getElementById('itemProductSelect');
+    if (!selectEl) return;
+    
+    selectEl.innerHTML = '<option value="">-- Vui lòng chọn sản phẩm --</option>' + 
+        globalProductList.map(p => `<option value="${p.code}">${p.code} - ${p.name}</option>`).join('');
+}
+
 function openAddModel() {
     editIndex = null;
     currentDraftItems = [];
@@ -162,12 +177,19 @@ function openAddModel() {
     const dateInput = document.getElementById('modalDate');
     dateInput.valueAsDate = new Date(); dateInput.readOnly = false;
 
-    resetItemInputForm();
+    // Đổ danh sách sản phẩm vào Dropdown mỗi khi mở Modal
+    loadProductsForImportDropdown();
+
+    document.getElementById('itemProductSelect').value = "";
+    document.getElementById('itemQuantity').value = "1";
+    document.getElementById('itemPrice').value = "";
+    
     toggleActionButtons(false);
     renderDetailTable();
     
     document.getElementById('importModal').style.display = 'flex';
 }
+
 
 function openEditModal(index) {
     editIndex = index;
@@ -181,6 +203,17 @@ function openEditModal(index) {
     
     const dateInput = document.getElementById('modalDate');
     dateInput.value = item.date; dateInput.readOnly = isCompleted;
+
+    // QUAN TRỌNG: Tải danh sách SP vào Dropdown (nếu phiếu chưa hoàn thành)
+    if (!isCompleted) {
+        loadProductsForImportDropdown();
+        
+        // Dọn dẹp sạch sẽ các ô nhập liệu bên dưới để sẵn sàng thêm món mới
+        const selectEl = document.getElementById('itemProductSelect');
+        if(selectEl) selectEl.value = "";
+        document.getElementById('itemQuantity').value = "1";
+        document.getElementById('itemPrice').value = "";
+    }
 
     // Clone dữ liệu để sửa không ảnh hưởng mảng gốc nếu chưa bấm Lưu
     currentDraftItems = JSON.parse(JSON.stringify(item.items));
@@ -208,29 +241,40 @@ function resetItemInputForm() {
 }
 
 function addItemToDraft() {
-    const nameInput = document.getElementById('itemProduct');
-    const name = nameInput.value.trim(); 
+    const selectEl = document.getElementById('itemProductSelect');
+    const selectedCode = selectEl.value; 
     const qty = parseInt(document.getElementById('itemQuantity').value, 10);
     const price = parseFloat(document.getElementById('itemPrice').value);
-    const finalImage = currentImageBase64 || DEFAULT_IMAGE; 
 
-    if (!name) { alert("Vui lòng nhập tên mặt hàng!"); nameInput.focus(); return; }
+    if (!selectedCode) { alert("Vui lòng chọn 1 sản phẩm từ danh sách!"); selectEl.focus(); return; }
     if (isNaN(qty) || qty <= 0) { alert("Số lượng phải lớn hơn 0!"); return; }
     if (isNaN(price) || price < 0) { alert("Đơn giá nhập không hợp lệ!"); return; }
 
-    productCatalog.add(name); 
+    // Tìm thông tin SP (tên, ảnh) từ danh sách gốc dựa trên Mã
+    const productInfo = globalProductList.find(p => p.code === selectedCode);
+    if (!productInfo) return;
 
-    const existing = currentDraftItems.find(i => i.name.toLowerCase() === name.toLowerCase());
+    // Kiểm tra xem đã có trong list nháp chưa, nếu có thì cộng dồn số lượng
+    const existing = currentDraftItems.find(i => i.code === selectedCode);
     if (existing) {
         existing.qty += qty; 
         existing.price = price; 
-        if (currentImageBase64) existing.image = finalImage;
     } else {
-        currentDraftItems.push({ image: finalImage, name: name, qty: qty, price: price });
+        currentDraftItems.push({ 
+            code: productInfo.code,
+            name: productInfo.name, 
+            image: productInfo.image, 
+            qty: qty, 
+            price: price 
+        });
     }
     
     renderDetailTable();
-    resetItemInputForm();
+    
+    // Reset form nhanh để nhập món tiếp theo
+    selectEl.value = "";
+    document.getElementById('itemQuantity').value = "1";
+    document.getElementById('itemPrice').value = "";
 }
 
 function removeItemFromDraft(idx) {
@@ -356,17 +400,6 @@ function applyFilters() {
 // 5. GẮN SỰ KIỆN CHO MODAL NHẬP HÀNG
 // 5. GẮN SỰ KIỆN CHO MODAL NHẬP HÀNG
 function initImportEvents() {
-    const itemImageInput = document.getElementById('itemImage');
-    if (itemImageInput) {
-        itemImageInput.addEventListener('change', e => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = event => currentImageBase64 = event.target.result;
-                reader.readAsDataURL(file);
-            } else currentImageBase64 = "";
-        });
-    }
 
     const itemProduct = document.getElementById('itemProduct');
     const productSuggestions = document.getElementById('productSuggestions');
@@ -652,22 +685,6 @@ function loadDataForOrders() {
         catch (e) { orderList = []; }
     } 
 
-    if (orderList.length === 0) {
-        orderList = [
-            {
-                id: "DH-0001", date: "2026-10-10", customerName: "Nguyễn Nhật", customerPhone: "0901234567",
-                customerAddress: "123 Đường Tôn Đức Thắng, Quận 1, TP.HCM", totalAmount: 300000, status: "pending",
-                items: [{ name: "Áo thun Polo trơn", qty: 2, price: 150000 }]
-            },
-            {
-                id: "DH-0002", date: "2026-10-09", customerName: "Lê Trần Dứa", customerPhone: "0987654321",
-                customerAddress: "456 Nguyễn Thị Minh Khai, Quận 3, TP.HCM", totalAmount: 1450000, status: "processing",
-                items: [{ name: "Giày thể thao Nike", qty: 1, price: 1200000 }, { name: "Vớ thể thao trắng", qty: 5, price: 50000 }]
-            }
-        ];
-        localStorage.setItem('saved_orders', JSON.stringify(orderList));
-    }
-
     renderOrderTable();
 }
 
@@ -677,7 +694,7 @@ function renderOrderTable() {
     if (!tbody) return;
 
     if (orderList.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="empty-row">Chưa có đơn hàng nào trong hệ thống!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 50px; color: #888;">Chưa có đơn hàng nào trong hệ thống!</td></tr>`;
         return;
     }
 

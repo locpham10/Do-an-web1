@@ -319,32 +319,29 @@
 
                     <!-- THANH THÊM HÀNG HÓA -->
                     <div class="add-item-box" id="addItemControls">
-                        <div class="form-group flex-1">
-                            <label>Ảnh SP:</label>
-                            <input type="file" id="itemImage" accept="image/*" class="file-input">
-                        </div>
-
-                        <!-- Cột Tên mặt hàng (Có thêm danh sách gợi ý) -->
-                        <div class="form-group flex-2 position-relative">
-                            <label>Tên mặt hàng:</label>
-                            <input type="text" id="itemProduct" autocomplete="off" placeholder="Gõ tên hàng...">
-                            <ul id="productSuggestions" class="suggestions-list"></ul>
-                        </div>
-
-                        <div class="form-group flex-1">
-                            <label>Số lượng:</label>
-                            <input type="number" id="itemQuantity" min="1" value="1">
-                        </div>
-
-                        <div class="form-group flex-1">
-                            <label>Đơn giá (VNĐ):</label>
-                            <input type="number" id="itemPrice" min="0" step="1">
-                        </div>
-
-                        <div class="form-group btn-add-wrapper">
-                            <button type="button" class="btn-add-item" onclick="addItemToDraft()">+ Thêm</button>
-                        </div>
+                    
+                    <div class="form-group flex-2">
+                        <label>Chọn sản phẩm:</label>
+                        <select id="itemProductSelect" style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; outline: none;">
+                            <option value="">-- Vui lòng chọn sản phẩm --</option>
+                            <!-- JS sẽ tự động lấy SP từ Tab 4 đổ vào đây -->
+                        </select>
                     </div>
+
+                    <div class="form-group flex-1">
+                        <label>Số lượng:</label>
+                        <input type="number" id="itemQuantity" min="1" value="1">
+                    </div>
+
+                    <div class="form-group flex-1">
+                        <label>Đơn giá nhập (VNĐ):</label>
+                        <input type="number" id="itemPrice" min="0" step="1">
+                    </div>
+
+                    <div class="form-group btn-add-wrapper">
+                        <button type="button" class="btn-add-item" onclick="addItemToDraft()">+ Thêm vào phiếu</button>
+                    </div>
+                </div>
 
                     <!-- BẢNG DANH SÁCH CHI TIẾT CÁC MÓN ĐƯỢC NHẬP -->
                     <div class="detail-table-wrapper">
