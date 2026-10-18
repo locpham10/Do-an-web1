@@ -57,7 +57,7 @@
         <aside class="sidebar collapsed" id="sidebar">
             <div class="sidebar-brand">DASHBOARD</div>
             <ul class="sidebar-menu">
-                <li><a href="#">Quản lý khách hàng</a></li>
+                <li id="menu-customers"><a href="#">Quản lý khách hàng</a></li>
                 <li><a href="#">Quản lý sản phẩm</a></li>
                 <!-- Gắn ID và sự kiện chuyển Tab cho Menu -->
                 <li id="menu-imports" onclick="switchTab('imports')"><a href="#">Quản lý nhập hàng</a></li>
@@ -84,6 +84,13 @@
 
             <main class="content">
 
+                <!--============================================================================================
+                TRANG QUẢN LÝ KHÁCH HÀNG
+            =============================================================================================-->
+                <section id="customersPage" class="admin-module" style="display: none;"></section>
+
+                <!--JS ĐỔ DỮ LIỆU-->
+                
                 <!--============================================================================================
                 TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
             =============================================================================================-->

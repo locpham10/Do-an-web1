@@ -682,7 +682,181 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
     -moz-appearance: textfield; /* dành cho Mozilla Firefox, ép ô nhập số hiển thị dưới dạng một ô nhập vb (text) thông thường*/
 }
+/*========
+    DÀNH CHO TRANG QUẢN LÝ KHÁCH HÀNG
+=======================================*/
+.customer-page {
+    width: 100%;
+}
 
+.customer-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.customer-tabs button,
+.customer-search button,
+.customer-actions button,
+.customer-modal-actions button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.customer-tabs button {
+    background: #e9ecef;
+    color: #333;
+}
+
+.customer-tabs button.active {
+    background: #343a40;
+    color: white;
+}
+
+.customer-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.customer-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.customer-search button,
+#resetSelectedCustomers {
+    background: #007bff;
+    color: white;
+}
+
+#lockSelectedCustomers {
+    background: #dc3545;
+    color: white;
+}
+
+#unlockSelectedCustomers {
+    background: #28a745;
+    color: white;
+}
+
+.customer-table-wrap {
+    overflow-x: auto;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 7px;
+}
+
+.customer-table {
+    min-width: 750px;
+}
+
+.customer-table th,
+.customer-table td {
+    padding: 12px 15px;
+}
+
+.customer-table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.customer-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.customer-status.hoatdong {
+    color: #155724;
+    background: #d4edda;
+}
+
+.customer-status.ngunghoatdong {
+    color: #856404;
+    background: #fff3cd;
+}
+
+.customer-status.daXoa {
+    color: #721c24;
+    background: #f8d7da;
+}
+
+.customer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.customer-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    background: rgba(0, 0, 0, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.customer-modal-content {
+    width: 450px;
+    max-width: 100%;
+    padding: 25px;
+    background: white;
+    border-radius: 8px;
+}
+
+.customer-modal-content h3 {
+    margin-bottom: 15px;
+}
+
+.customer-modal-content label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+}
+
+.customer-modal-content input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.customer-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#saveResetPassword {
+    background: #28a745;
+    color: white;
+}
+
+#cancelResetPassword {
+    background: #6c757d;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .customer-search {
+        flex-direction: column;
+    }
+}
 /*====================================================================================
     DÀNH CHO TRANG QUẢN LÝ PHIẾU NHẬP
 ====================================================================================*/

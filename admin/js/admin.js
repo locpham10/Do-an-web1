@@ -79,6 +79,596 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 /*======================================================================
+    PHẦN DÙNG CHO TRANG QL KHÁCH HÀNG
+======================================================================*/
+const KEY_TAIKHOAN = "taiKhoan";
+const KEY_HD = "hoatdong";
+const KEY_NHD = "ngunghoatdong";
+const KEY_DAXOA = "daXoa";
+
+// Đọc JSON 
+function docDuLieu(key) {
+    try {
+        return JSON.parse(localStorage.getItem(key)) || [];
+    } catch (e) {
+        return [];
+    }
+}
+
+// Lưu JSON
+function luuDuLieu(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Chuẩn hóa để tìm kiếm không phân biệt dấu
+function chuanHoaChu(value) {
+    return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/đ/g, "d")
+        .replace(/Đ/g, "D")
+        .toLowerCase()
+        .trim();
+}
+
+// Mã hóa nội dung trước khi đưa vào HTML
+function anToanKH(value) {
+    return String(value ?? "").replace(/[&<>"']/g, function(c) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        }[c];
+    });
+}
+
+// Chuẩn hóa danh sách trạng thái theo mã KH
+function chuanHoaDanhSachKH(key) {
+    const ds = docDuLieu(key);
+    const taiKhoan = docDuLieu(KEY_TAIKHOAN);
+    const ketQua = [];
+
+    ds.forEach(function(item) {
+        if (typeof item === "string") {
+            const tk = taiKhoan.find(function(acc) {
+                return acc.maKH === item ||
+                    acc.email?.toLowerCase() === item.toLowerCase() ||
+                    acc.soDienThoai === item;
+            });
+
+            if (tk) ketQua.push(tk.maKH || tk.email);
+        } else if (item && typeof item === "object") {
+            const tk = taiKhoan.find(function(acc) {
+                return (item.maKH && acc.maKH === item.maKH) ||
+                    (item.email && acc.email?.toLowerCase() === item.email.toLowerCase()) ||
+                    (item.soDienThoai && acc.soDienThoai === item.soDienThoai);
+            });
+
+            if (tk) ketQua.push(tk.maKH || tk.email);
+        }
+    });
+
+    return [...new Set(ketQua)];
+}
+
+// Tạo mã KH cho tài khoản cũ chưa có mã
+function capNhatMaKH() {
+    let taiKhoan = docDuLieu(KEY_TAIKHOAN);
+    let so = 1;
+
+    taiKhoan.forEach(function(tk) {
+        if (!tk.maKH) {
+            let ma;
+
+            do {
+                ma = "KH" + String(so).padStart(3, "0");
+                so++;
+            } while (taiKhoan.some(function(acc) {
+                return acc.maKH === ma;
+            }));
+
+            tk.maKH = ma;
+        }
+    });
+
+    luuDuLieu(KEY_TAIKHOAN, taiKhoan);
+}
+
+// Xác định trạng thái tài khoản
+function trangThaiKH(tk) {
+    const id = tk.maKH || tk.email;
+    const daXoa = chuanHoaDanhSachKH(KEY_DAXOA);
+    const ngung = chuanHoaDanhSachKH(KEY_NHD);
+
+    if (daXoa.includes(id)) return "daXoa";
+    if (ngung.includes(id)) return "ngunghoatdong";
+    return "hoatdong";
+}
+
+// Lưu trạng thái theo mã KH, email và số điện thoại
+// Login user hiện tại có thể nhận diện email hoặc số điện thoại
+function datTrangThaiKH(maKH, trangThai) {
+    const taiKhoan = docDuLieu(KEY_TAIKHOAN);
+
+    const tk = taiKhoan.find(function(item) {
+        return (item.maKH || item.email) === maKH;
+    });
+
+    if (!tk) return;
+
+    const thongTin = {
+        maKH: tk.maKH,
+        email: tk.email,
+        soDienThoai: tk.soDienThoai
+    };
+
+    [KEY_HD, KEY_NHD, KEY_DAXOA].forEach(function(key) {
+        let ds = docDuLieu(key);
+
+        ds = ds.filter(function(item) {
+            if (typeof item === "string") {
+                return item !== tk.maKH &&
+                    item.toLowerCase() !== String(tk.email).toLowerCase() &&
+                    item !== tk.soDienThoai;
+            }
+
+            return item.maKH !== tk.maKH &&
+                String(item.email || "").toLowerCase() !==
+                    String(tk.email || "").toLowerCase() &&
+                item.soDienThoai !== tk.soDienThoai;
+        });
+
+        luuDuLieu(key, ds);
+    });
+
+    const key = trangThai === "hoatdong"
+        ? KEY_HD
+        : trangThai === "ngunghoatdong"
+            ? KEY_NHD
+            : KEY_DAXOA;
+
+    const dsMoi = docDuLieu(key);
+    dsMoi.push(thongTin);
+    luuDuLieu(key, dsMoi);
+}
+
+// Chuyển trạng thái tài khoản thành mã KH
+function dongBoTrangThaiKH() {
+    const taiKhoan = docDuLieu(KEY_TAIKHOAN);
+    const hd = [];
+    const nhd = [];
+    const dx = [];
+
+    taiKhoan.forEach(function(tk) {
+        const id = tk.maKH || tk.email;
+        const trangThai = trangThaiKH(tk);
+
+        if (trangThai === "daXoa") dx.push(id);
+        else if (trangThai === "ngunghoatdong") nhd.push(id);
+        else hd.push(id);
+    });
+
+    luuDuLieu(KEY_HD, hd);
+    luuDuLieu(KEY_NHD, nhd);
+    luuDuLieu(KEY_DAXOA, dx);
+}
+
+// Khởi tạo trang khách hàng
+function initCustomersPage() {
+    const page = document.getElementById("customersPage");
+    if (!page) return;
+
+    capNhatMaKH();
+
+    page.innerHTML = `
+        <div class="customer-page">
+            <div class="page-header">
+                <h2 class="page-title">Quản lý khách hàng</h2>
+            </div>
+
+            <div class="customer-tabs">
+                <button type="button" class="active"
+                    data-customer-tab="list">Danh sách khách hàng</button>
+                <button type="button"
+                    data-customer-tab="reset">Reset mật khẩu khách hàng</button>
+                <button type="button"
+                    data-customer-tab="lock">Khóa / mở tài khoản</button>
+            </div>
+
+            <div class="customer-search">
+                <input id="customerSearch"
+                    placeholder="Tìm mã KH, tên, số điện thoại, email...">
+                <button type="button" id="customerSearchBtn">Tìm kiếm</button>
+            </div>
+
+            <div id="customerListPanel">
+                <div class="customer-list-heading">
+                    <h3>Danh sách khách hàng</h3>
+                </div>
+                <div class="customer-table-wrap">
+                    <table class="customer-table">
+                        <thead>
+                            <tr>
+                                <th>Chọn</th>
+                                <th>Mã KH</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="customerResetPanel" style="display:none;">
+                <div class="customer-list-heading">
+                    <h3>Reset mật khẩu khách hàng</h3>
+                </div>
+                <div class="customer-table-wrap">
+                    <table class="customer-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="checkAllReset"></th>
+                                <th>Mã KH</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="resetTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="customer-actions">
+                    <button type="button" id="resetSelectedCustomers">
+                        Reset mật khẩu các tài khoản đã chọn
+                    </button>
+                </div>
+        
+            </div>
+
+            <div id="customerLockPanel" style="display:none;">
+                <div class="customer-list-heading">
+                    <h3>Khóa / mở tài khoản</h3>
+                </div>
+                <div class="customer-table-wrap">
+                    <table class="customer-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="checkAllLock"></th>
+                                <th>Mã KH</th>
+                                <th>Họ tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lockTableBody"></tbody>
+                    </table>
+                </div>
+                <div class="customer-actions">
+                    <button type="button" id="lockSelectedCustomers">
+                        Khóa tài khoản đã chọn
+                    </button>
+                    <button type="button" id="unlockSelectedCustomers">
+                        Mở khóa tài khoản đã chọn
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="customer-modal" id="resetPasswordModal">
+            <div class="customer-modal-content">
+                <h3>Reset mật khẩu</h3>
+                <p id="resetCountText"></p>
+                <label for="newCustomerPassword">Mật khẩu mới</label>
+                <input type="password" id="newCustomerPassword"
+                    autocomplete="new-password">
+                <label for="confirmCustomerPassword">Xác nhận mật khẩu</label>
+                <input type="password" id="confirmCustomerPassword"
+                    autocomplete="new-password">
+                <div class="customer-modal-actions">
+                    <button type="button" id="cancelResetPassword">Hủy</button>
+                    <button type="button" id="saveResetPassword">Lưu mật khẩu</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    page.querySelectorAll("[data-customer-tab]").forEach(function(btn) {
+        btn.onclick = function() {
+            hienThiTabKH(btn.dataset.customerTab);
+        };
+    });
+
+    document.getElementById("customerSearchBtn").onclick = renderCustomers;
+    document.getElementById("customerSearch").oninput = renderCustomers;
+
+    document.getElementById("checkAllReset").onchange = function() {
+        document.querySelectorAll(".reset-customer-check").forEach(cb => {
+            cb.checked = this.checked;
+        });
+    };
+
+    document.getElementById("checkAllLock").onchange = function() {
+        document.querySelectorAll(".lock-customer-check").forEach(cb => {
+            cb.checked = this.checked;
+        });
+    };
+
+    document.getElementById("resetSelectedCustomers").onclick =
+        moFormResetKH;
+
+    document.getElementById("cancelResetPassword").onclick = function() {
+        document.getElementById("resetPasswordModal").style.display = "none";
+    };
+
+    document.getElementById("saveResetPassword").onclick = resetMatKhauKH;
+
+    document.getElementById("lockSelectedCustomers").onclick = function() {
+        thayDoiTrangThaiNhieuKH("ngunghoatdong");
+    };
+
+    document.getElementById("unlockSelectedCustomers").onclick = function() {
+        thayDoiTrangThaiNhieuKH("hoatdong");
+    };
+
+    hienThiTabKH("list");
+}
+
+// Chuyển giữa 3 chức năng bên trong trang khách hàng
+function hienThiTabKH(tab) {
+    document.getElementById("customerListPanel").style.display =
+        tab === "list" ? "block" : "none";
+
+    document.getElementById("customerResetPanel").style.display =
+        tab === "reset" ? "block" : "none";
+
+    document.getElementById("customerLockPanel").style.display =
+        tab === "lock" ? "block" : "none";
+
+    document.querySelectorAll("[data-customer-tab]").forEach(function(btn) {
+        btn.classList.toggle("active", btn.dataset.customerTab === tab);
+    });
+
+    renderCustomers();
+}
+
+// Lấy danh sách khách hàng theo từ khóa tìm kiếm
+function layKHTheoTuKhoa() {
+    const tuKhoa = chuanHoaChu(
+        document.getElementById("customerSearch")?.value || ""
+    );
+
+    return docDuLieu(KEY_TAIKHOAN).filter(function(tk) {
+        const noiDung = chuanHoaChu([
+            tk.maKH,
+            tk.hoTen,
+            tk.soDienThoai,
+            tk.email
+        ].join(" "));
+
+        return noiDung.includes(tuKhoa);
+    });
+}
+
+// Hiển thị 3 bảng
+function renderCustomers() {
+    const ds = layKHTheoTuKhoa();
+
+    const html = function(tk, loai) {
+        const id = tk.maKH || tk.email;
+        const status = trangThaiKH(tk);
+
+        let tenTrangThai = "Hoạt động";
+        if (status === "ngunghoatdong") tenTrangThai = "Ngừng hoạt động";
+        if (status === "daXoa") tenTrangThai = "Tài khoản đã xóa";
+
+        return `
+            <tr>
+                <td>
+                    <input type="checkbox"
+                        class="${loai}-customer-check"
+                        value="${anToanKH(id)}"
+                        ${status === "daXoa" ? "disabled" : ""}>
+                </td>
+                <td>${anToanKH(tk.maKH)}</td>
+                <td>${anToanKH(tk.hoTen)}</td>
+                <td>${anToanKH(tk.email)}</td>
+                <td>${anToanKH(tk.soDienThoai)}</td>
+                <td>
+                    <span class="customer-status ${status}">
+                        ${tenTrangThai}
+                    </span>
+                </td>
+            </tr>
+        `;
+    };
+
+    const empty = `<tr><td colspan="6">Không có khách hàng phù hợp.</td></tr>`;
+
+    document.getElementById("customerTableBody").innerHTML =
+        ds.length ? ds.map(tk => html(tk, "list")).join("") : empty;
+
+    document.getElementById("resetTableBody").innerHTML =
+        ds.length ? ds.map(tk => html(tk, "reset")).join("") : empty;
+
+    document.getElementById("lockTableBody").innerHTML =
+        ds.length ? ds.map(tk => html(tk, "lock")).join("") : empty;
+}
+
+// Lấy các khách hàng đã chọn
+function layKHDaChon(loai) {
+    return [...document.querySelectorAll("." + loai + "-customer-check:checked")]
+        .map(cb => cb.value);
+}
+
+// Mở form reset mật khẩu
+function moFormResetKH() {
+    const ds = layKHDaChon("reset");
+
+    if (ds.length === 0) {
+        alert("Vui lòng chọn ít nhất một khách hàng!");
+        return;
+    }
+
+    const taiKhoan = docDuLieu(KEY_TAIKHOAN);
+
+    const khHopLe = ds.filter(function(id) {
+        const tk = taiKhoan.find(acc => (acc.maKH || acc.email) === id);
+        return tk && trangThaiKH(tk) === "hoatdong";
+    });
+
+    if (khHopLe.length === 0) {
+        alert("Chỉ có thể reset mật khẩu tài khoản đang hoạt động!");
+        return;
+    }
+
+    document.getElementById("resetCountText").textContent =
+        "Bạn đang reset mật khẩu cho " + khHopLe.length + " tài khoản.";
+
+    document.getElementById("resetPasswordModal").dataset.ids =
+        JSON.stringify(khHopLe);
+
+    document.getElementById("newCustomerPassword").value = "";
+    document.getElementById("confirmCustomerPassword").value = "";
+    document.getElementById("resetPasswordModal").style.display = "flex";
+}
+
+// Lưu mật khẩu mới vào taiKhoan
+function resetMatKhauKH() {
+    const modal = document.getElementById("resetPasswordModal");
+    const ids = JSON.parse(modal.dataset.ids || "[]");
+
+    const mkMoi = document.getElementById("newCustomerPassword").value;
+    const xacNhan = document.getElementById("confirmCustomerPassword").value;
+
+    if (!mkMoi) {
+        alert("Vui lòng nhập mật khẩu mới!");
+        return;
+    }
+
+    if (mkMoi !== xacNhan) {
+        alert("Mật khẩu xác nhận không trùng khớp!");
+        return;
+    }
+
+    let taiKhoan = docDuLieu(KEY_TAIKHOAN);
+    let dem = 0;
+
+    taiKhoan = taiKhoan.map(function(tk) {
+        if (ids.includes(tk.maKH || tk.email) &&
+            trangThaiKH(tk) === "hoatdong") {
+            tk.matKhau = mkMoi;
+            dem++;
+        }
+        return tk;
+    });
+
+    luuDuLieu(KEY_TAIKHOAN, taiKhoan);
+    modal.style.display = "none";
+
+    alert("Đã reset mật khẩu cho " + dem + " tài khoản.");
+    renderCustomers();
+}
+
+// Khóa hoặc mở nhiều tài khoản
+function thayDoiTrangThaiNhieuKH(trangThai) {
+    const ds = layKHDaChon("lock");
+
+    if (ds.length === 0) {
+        alert("Vui lòng chọn ít nhất một khách hàng!");
+        return;
+    }
+
+    const taiKhoan = docDuLieu(KEY_TAIKHOAN);
+
+    ds.forEach(function(id) {
+        const tk = taiKhoan.find(acc => (acc.maKH || acc.email) === id);
+        if (!tk || trangThaiKH(tk) === "daXoa") return;
+
+        datTrangThaiKH(id, trangThai);
+    });
+
+    renderCustomers();
+
+    alert(trangThai === "ngunghoatdong"
+        ? "Đã khóa các tài khoản được chọn."
+        : "Đã mở khóa các tài khoản được chọn.");
+}
+
+// Theo dõi khi tài khoản user thay đổi từ tab khác
+window.addEventListener("storage", function(e) {
+    if ([KEY_TAIKHOAN, KEY_HD, KEY_NHD, KEY_DAXOA].includes(e.key)) {
+        const page = document.getElementById("customersPage");
+        if (page && page.style.display !== "none") {
+            capNhatMaKH();
+            renderCustomers();
+        }
+    }
+});
+
+
+// Khi nhấn các mục, nội dung bên phải sẽ thay đổi.
+document.addEventListener("DOMContentLoaded", function() {
+    const menuKH = document.getElementById("menu-customers");
+    const menuLoai = document.getElementById("menu-product-types");
+    const menuDanhMuc = document.getElementById("menu-product-categories");
+
+    if (menuKH) {
+        menuKH.addEventListener("click", function() {
+            // 1. Ép ẩn TẤT CẢ các tab khác (Nhập hàng, Đơn hàng, Tồn kho...)
+            document.querySelectorAll('.admin-module').forEach(mod => mod.style.display = 'none');
+            
+            // 2. Chuyển màu xám (active) cho menu Khách hàng
+            document.querySelectorAll('.sidebar-menu li').forEach(li => li.classList.remove('active'));
+            this.classList.add('active');
+
+            // 3. Gọi giao diện Khách hàng ra
+            hienThiKhuVucQuanLy("customersPage");
+            initCustomersPage();
+        });
+    }
+
+    if (menuLoai) {
+        menuLoai.addEventListener("click", function() {
+            hienThiKhuVucQuanLy("productTypesPage");
+        });
+    }
+
+    if (menuDanhMuc) {
+        menuDanhMuc.addEventListener("click", function() {
+            hienThiKhuVucQuanLy("productCategoriesPage");
+        });
+    }
+});
+
+// Ẩn các khu vực quản lý khác, chỉ hiện khu vực được chọn
+function hienThiKhuVucQuanLy(id) {
+    [
+        "customersPage",
+        "productTypesPage",
+        "productCategoriesPage"
+    ].forEach(function(pageId) {
+        const page = document.getElementById(pageId);
+        if (page) page.style.display = pageId === id ? "block" : "none";
+    });
+
+    if (id === "productTypesPage" &&
+        typeof initProductTypesPage === "function") {
+        initProductTypesPage();
+    }
+
+    if (id === "productCategoriesPage" &&
+        typeof initProductCategoriesPage === "function") {
+        initProductCategoriesPage();
+    }
+} 
+/*======================================================================
     PHẦN DÙNG CHO TRANG QL NHẬP HÀNG
 ======================================================================*/ 
 let importList = [];
