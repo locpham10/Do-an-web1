@@ -406,6 +406,41 @@ body {
     font-size: 15px;
 }
 
+.admin-dropdown-container {
+    position: relative;
+    display: inline-block;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.admin-name {
+    color: #212529;
+    transition: color 0.2s;
+}
+
+.admin-dropdown-container:hover .admin-name {
+    color: #ee9106;
+}
+.admin-dropdown-menu {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 170px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 8px 0;
+    z-index: 1000;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease; 
+}
+
+.admin-dropdown-container:hover .admin-dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+}
 /* --- CONTENT KHU VỰC CHÍNH --- */
 .content {
     padding: 30px;

@@ -13,7 +13,7 @@ function handleLogin() {
         // Lưu trạng thái đăng nhập để xài Live Server không bị out ra ngoài
         sessionStorage.setItem('isAdminLoggedIn', 'true');
     } else {
-        alert('Sai tài khoản hoặc mật khẩu!\n(Gợi ý test: admin / 123456)');
+        alert('Sai tài khoản hoặc mật khẩu!\n');
     }
 }
 
