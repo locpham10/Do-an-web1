@@ -291,7 +291,6 @@ function initCustomersPage() {
                     <table class="customer-table">
                         <thead>
                             <tr>
-                                <th>Chọn</th>
                                 <th>Mã KH</th>
                                 <th>Họ tên</th>
                                 <th>Email</th>
@@ -312,7 +311,6 @@ function initCustomersPage() {
                     <table class="customer-table">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" id="checkAllReset"></th>
                                 <th>Mã KH</th>
                                 <th>Họ tên</th>
                                 <th>Email</th>
@@ -470,12 +468,6 @@ function renderCustomers() {
 
         return `
             <tr>
-                <td>
-                    <input type="checkbox"
-                        class="${loai}-customer-check"
-                        value="${anToanKH(id)}"
-                        ${status === "daXoa" ? "disabled" : ""}>
-                </td>
                 <td>${anToanKH(tk.maKH)}</td>
                 <td>${anToanKH(tk.hoTen)}</td>
                 <td>${anToanKH(tk.email)}</td>
