@@ -7,7 +7,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(66, 242, 248, 0.2);
+    background-color: rgba(255, 173, 50, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -716,6 +716,127 @@ input[type="number"]::-webkit-outer-spin-button {
 
 input[type="number"] {
     -moz-appearance: textfield; /* dành cho Mozilla Firefox, ép ô nhập số hiển thị dưới dạng một ô nhập vb (text) thông thường*/
+}
+
+/* ========================================
+    QUẢN LÝ SẢN PHẨM 
+======================================== */
+.type-search-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Ép ô nhập từ khóa giãn dài ra hết phần trống */
+.type-search-row #typeSearch {
+    flex: 1;
+    min-width: 0;
+}
+
+#addProductBtn {
+    margin-left: auto;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Khung bao bọc bảng để hỗ trợ cuộn ngang nếu màn hình nhỏ */
+.type-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Đảm bảo bảng không bị bóp méo khi thu nhỏ cửa sổ */
+.type-table {
+    min-width: 900px; 
+}
+
+/* Định dạng riêng cho ảnh thumbnail trong bảng */
+.type-table img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background: white;
+}
+/* ========================================
+    QUẢN LÝ LOẠI SẢN PHẨM 
+======================================== */
+
+/* 1. Căn chỉnh thanh tìm kiếm dài ra và các nút bấm thẳng hàng */
+#tab-product-types .header-actions {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+#tab-product-types .search-action {
+    flex: 1; /* Cho khu vực tìm kiếm chiếm hết không gian trống */
+    display: flex;
+    gap: 12px;
+}
+
+/* Ô nhập từ khóa */
+#typeSearch {
+    flex: 1; /* Kéo giãn ô tìm kiếm dài ra */
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    outline: none;
+}
+
+#typeSearch:focus {
+    border-color: #80bdff;
+}
+
+/* Đồng bộ chiều cao các nút bấm trong thanh tìm kiếm */
+#tab-product-types .btn-action, 
+#addTypeBtn {
+    height: 42px;
+    min-width: 100px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+/* 2. Bảng Loại sản phẩm */
+#typeTableBody td {
+    padding: 13px 15px;
+}
+
+/* Giới hạn kích thước ảnh trong bảng */
+#typeTableBody img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* Căn khoảng cách giữa các nút thao tác */
+#typeTableBody button {
+    margin: 2px;
+    padding: 7px 12px;
+}
+
+/* Màu sắc nút Xóa đặc trưng */
+#typeTableBody button[onclick^="xoaLoaiSanPham"] {
+    background-color: #dc3545;
+    color: white;
+}
+
+#typeTableBody button[onclick^="xoaLoaiSanPham"]:hover {
+    background-color: #c82333;
+}
+
+/* 3. Tinh chỉnh lại Form trong Modal cho bớt chật chội */
+#typeModal #typeForm input {
+    margin-top: 5px;
 }
 /*========
     DÀNH CHO TRANG QUẢN LÝ KHÁCH HÀNG
