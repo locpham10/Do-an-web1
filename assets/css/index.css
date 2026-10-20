@@ -1,0 +1,341 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Tahoma, Verdana, sans-serif;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  background-size: cover;
+  top: 0;
+  position:sticky;
+  z-index: 100;
+}
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 50px;
+  align-items: center;
+}
+.search-container {
+  position: relative;
+  width: 250px;
+  border: solid 1px #d70027;
+  border-radius: 5px;
+  padding: 5px 5px;
+}
+.search-container input {
+  width: 100%;
+  border: none;
+  outline: none;
+}
+.search-container i {
+  position: absolute;
+  padding: 2px;
+  right: 5px;
+  font-size: 15px;
+}
+.logo {
+  flex: 1;
+}
+
+.others {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.others li {
+  padding: 0 14px;
+}
+
+.others li a {
+  font-size: 14px;
+}
+.header-bottom {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  padding: 14px 50px;
+  background-color: #d70027;
+}
+.menu {
+  display: flex;
+}
+.menu li {
+  padding: 0 14px;
+  position: relative;
+}
+.menu li a {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  line-height: 10px;
+  display: block;
+}
+.menu li:hover .submenu {
+  display: block;
+}
+.submenu {
+  display: none;
+  position: absolute;
+  width: 150px;
+  margin: 5px;
+  border: solid 1px #ccc;
+  background-color: #fff;
+  padding: 2px 0 2px 3px;
+  /* z-index: 10; */
+}
+.submenu li {
+  padding: 0;
+}
+.submenu li a {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  font-size: 14px;
+  font-weight: normal;
+  border-bottom: 1px solid #eee;
+}
+.submenu li a:hover {
+  background-color: #f1f1f1;
+  color: #d70027;
+}
+
+main {
+  min-height: 60vh;
+  background-color: #f9f9f9;
+  padding: 30px 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #d70027;
+  margin-top: 50px;
+  width: 100%;
+}
+
+.topfooter {
+  padding: 40px 50px;
+}
+
+.content {
+  display: flex;
+  justify-content: flex-start;
+  gap: 100px;
+}
+
+.Foot_footer_title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #d70027;
+  margin-bottom: 20px;
+}
+.content ul {
+  padding: 0;
+}
+.content ul li {
+  margin-bottom: 12px;
+}
+
+.Foot_footer_list {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.3s ease;
+}
+
+.Foot_footer_list:hover {
+  color: #d70027;
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  color: #fff;
+  text-align: center;
+  padding: 15px 50px;
+  font-size: 13px;
+  border-top: solid 1px #d70027;
+}
+p {
+  font-size: 13px;
+  color: #333;
+}
+
+.banner-slider {
+  width: 100%;
+  position: relative;
+}
+.slideshow-container {
+  max-width: 100%;
+  position: relative;
+  margin: auto;
+  /* overflow: hidden; */
+}
+
+.slides {
+  display: none;
+}
+
+.slides img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  margin-top: -22px;
+  color: #333;
+  font-weight: bold;
+  font-size: 14px;
+  transition: 0.5s ease;
+  border-radius: 0 10px 10px 0;
+  user-select: none;
+}
+.prev {
+  left: -50px;
+}
+.next {
+  right: -50px;
+  border-radius: 10px 0 0 10px;
+}
+.prev:hover,
+.next:hover {
+  background-color: #d70027;
+  color: #ccc;
+}
+.dot-container {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+}
+.dot {
+  cursor: pointer;
+  height: 5px;
+  width: 5px;
+  margin: 0 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+.active,
+.dot:hover {
+  background-color: #fff;
+}
+/* ================== USER MENU (HOVER) ================== */
+.user-item {
+  position: relative;
+}
+
+.user-menu {
+  display: none; /* Mặc định khi chưa đăng nhập sẽ ẩn hoàn toàn */
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 170px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  padding: 8px 0;
+  z-index: 1000;
+}
+
+.user-menu li {
+  padding: 0 !important;
+}
+
+.user-menu li a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.user-menu li a:hover {
+  background-color: #f1f1f1;
+  color: #d70027;
+}
+
+/* CHỈ KHI ĐÃ ĐĂNG NHẬP (CÓ CLASS .logged-in) THÌ RÊ CHUỘT MỚI XUẤT HIỆN 2 DÒNG */
+.user-item.logged-in:hover .user-menu {
+  display: block;
+}
+
+/* ================== MODAL POPUP CHO AUTH TRÊN INDEX ================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-overlay.hidden {
+  display: none !important;
+}
+
+.modal-content {
+  position: relative;
+  max-width: 450px;
+  width: 90%;
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #888;
+  z-index: 10;
+  line-height: 1;
+}
+
+.close-modal:hover {
+  color: #d70027;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Cửa Hàng Điện Thoại</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="assets/css/index.css" />
+    <link rel="stylesheet" href="assets/css/auth.css" />
+    
+  </head>
+  <body>
+    <header>
+      <div class="header-top">
+        <div class="logo">
+          <img src="" alt="SHOPDienthoai" />
+        </div>
+        <div class="search-container">
+          <input type="text" placeholder="Tìm kiếm..." />
+          <i class="fas fa-search"></i>
+        </div>
+        <ul class="others">
+          <li><a class="fa fa-paw" href=""></a></li>
+          <li class="user-item">
+            <a class="fa fa-user" href="javascript:void(0)" id="userBtn"></a>
+            <!-- Menu 2 dòng chỉ xuất hiện khi hover NẾU đã đăng nhập -->
+            <ul class="user-menu" id="userMenu">
+              <li><a href="profile.html">Thông tin cá nhân</a></li>
+              <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
+            </ul>
+          </li>
+
+          <!-- BIỂU TƯỢNG GIỎ HÀNG -->
+          <li>
+            <a class="fa fa-shopping-bag" href="javascript:void(0)" id="cartBtn"></a>
+          </li>
+          <!-- <li>
+            <a class="fa fa-user" > 
+              <div>
+                
+              </div>
+            </a>
+          </li> -->
+          <!-- <li><a class="fa fa-shopping-bag" href=""></a></li> -->
+        </ul>
+      </div>
+      <div class="header-bottom">
+        <ul class="menu">
+          <li>
+            <a href="">APPLE</a>
+            <ul class="submenu">
+              <li><a href="">iPhone 18</a></li>
+              <li><a href="">iPhone Duo</a></li>
+              <li><a href="">iPhone 17</a></li>
+              <li><a href="">iPhone Air</a></li>
+              <li><a href="">iPhone 16</a></li>
+              <li><a href="">iPhone 15</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="">SAMSUNG</a>
+            <ul class="submenu">
+              <li><a href="">Galaxy S26 </a></li>
+              <li><a href="">Galaxy Z7</a></li>
+              <li><a href="">Galaxy Z8</a></li>
+              <li><a href="">Galaxy A</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="">OPPO</a>
+            <ul class="submenu">
+              <li><a href="">OPPO Reno </a></li>
+              <li><a href="">OPPO A</a></li>
+            </ul>
+          </li>
+          <li><a href="">KHÁC</a></li>
+        </ul>
+      </div>
+    </header>
+    <main>
+      <section class="banner-slider">
+        <div class="slideshow-container">
+          <div class="slides">
+            <img src="slide1.jpg" alt="Banner Điện Thoại 1" style="width:100%">
+          </div>
+          <div class="slides">
+            <img src="slide22.jpg" alt="Banner Điện Thoại 2" style="width:100%">
+          </div>
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
+          <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1)"></span> 
+            <span class="dot" onclick="currentSlide(2)"></span> 
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="topfooter">
+        <div class="content">
+          <div>
+            <h3 class="Foot-footer-title">INTRODUCE</h3>
+            <ul>
+              <li><button class="Foot-footer-list">Về Chúng Tôi</button></li>
+              <li>
+                <button class="Foot-footer-list">Thoả Thuận Sử Dụng</button>
+              </li>
+              <li>
+                <button class="Foot-footer-list">Quy Chế Hoạt Động</button>
+              </li>
+              <li>
+                <button class="Foot-footer-list">Chính Sách Bảo Mật</button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="Foot-footer-title">SUPPORT</h3>
+            <ul>
+              <li><button class="Foot-footer-list">Góp Ý</button></li>
+              <li><button class="Foot-footer-list">Tuyển Dụng</button></li>
+              <li><button class="Foot-footer-list">FAQ</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
+      </div>
+      </div>
+    </footer>
+
+
+    
+        <!-- POPUP MODAL ĐĂNG NHẬP / ĐĂNG KÝ TRỰC TIẾP -->
+    <div id="authModal" class="modal-overlay hidden">
+      <div class="modal-content">
+        <span class="close-modal" id="closeAuthModal">&times;</span>
+
+        <section class="auth-card">
+          <h1>Đăng nhập / Đăng ký</h1>
+          <p class="sub">Mua sắm nhanh chóng và quản lý đơn hàng của bạn</p>
+
+          <div class="tabs">
+            <button id="loginTab" class="tab active">Đăng nhập</button>
+            <button id="registerTab" class="tab">Đăng ký</button>
+          </div>
+
+          <!-- TAB ĐĂNG NHẬP -->
+          <form id="loginForm">
+            <label>Số điện thoại hoặc email</label>
+            <input
+              id="loginAccount"
+              type="text"
+              placeholder="Nhập số điện thoại hoặc email"
+              required
+            />
+
+            <label>Mật khẩu</label>
+            <input
+              id="loginPassword"
+              type="password"
+              placeholder="Nhập mật khẩu"
+              required
+            />
+
+            <div class="form-row">
+              <label class="check">
+                <input type="checkbox" id="remember" /> Ghi nhớ đăng nhập
+              </label>
+              <button type="button" id="forgotPassword" class="forgot-btn">
+                Quên mật khẩu?
+              </button>
+            </div>
+
+            <button class="primary" type="submit">Đăng nhập</button>
+
+            <p class="switch-text">
+              Chưa có tài khoản?
+              <button type="button" id="goRegister">Đăng ký ngay</button>
+            </p>
+          </form>
+
+          <!-- TAB QUÊN MẬT KHẨU -->
+          <form id="forgotForm" class="hidden">
+            <label>Email</label>
+            <input
+              id="forgotEmail"
+              type="email"
+              placeholder="Nhập email đã đăng ký"
+              required
+            />
+
+            <label>Số điện thoại</label>
+            <input
+              id="forgotPhone"
+              type="tel"
+              placeholder="Nhập số điện thoại đã đăng ký"
+              pattern="0[0-9]{9}"
+              maxlength="10"
+              required
+            />
+
+            <label>Mật khẩu mới</label>
+            <input
+              id="newPassword"
+              type="password"
+              placeholder="Nhập mật khẩu mới"
+              required
+            />
+
+            <label>Xác nhận mật khẩu mới</label>
+            <input
+              id="confirmNewPassword"
+              type="password"
+              placeholder="Nhập lại mật khẩu mới"
+              required
+            />
+
+            <button class="primary" type="submit">Đổi mật khẩu</button>
+
+            <p class="switch-text">
+              <button type="button" id="backToLogin">Quay lại đăng nhập</button>
+            </p>
+          </form>
+
+          <!-- TAB ĐĂNG KÝ -->
+          <form id="registerForm" class="hidden">
+            <label>Họ và tên</label>
+            <input
+              id="registerName"
+              type="text"
+              placeholder="Nhập họ và tên"
+              required
+            />
+
+            <label>Số điện thoại</label>
+            <input
+              id="registerPhone"
+              type="tel"
+              placeholder="Nhập số điện thoại"
+              pattern="0[0-9]{9}"
+              maxlength="10"
+              required
+            />
+
+            <label>Email</label>
+            <input
+              id="registerEmail"
+              type="email"
+              placeholder="Nhập email"
+              required
+            />
+
+            <label>Mật khẩu</label>
+            <input
+              id="registerPassword"
+              type="password"
+              placeholder="Tạo mật khẩu"
+              required
+            />
+
+            <label>Xác nhận mật khẩu</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="Nhập lại mật khẩu"
+              required
+            />
+
+            <button class="primary" type="submit">Đăng ký</button>
+
+            <p class="switch-text">
+              Đã có tài khoản?
+              <button type="button" id="goLogin">Đăng nhập</button>
+            </p>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <!-- Nhúng file JS từ assets/js/index.js -->
+    <script src="assets/js/index.js"></script>
+  </body>
+</html>
