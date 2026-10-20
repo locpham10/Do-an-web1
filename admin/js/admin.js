@@ -1,12 +1,18 @@
 /*======================================================================
     ĐĂNG NHẬP CHO TRANG ADMIN
 ======================================================================*/
+const KEY_ADMIN_PASS = 'adminPassword';
+
+function getAdminPassword() {
+    return localStorage.getItem(KEY_ADMIN_PASS) || '123456'
+}
+
 function handleLogin() {
-    const user = document.getElementById('username').value;
+    const user = document.getElementById('username').value.trim();
     const pass = document.getElementById('password').value;
 
     // Đặt sẵn Tài khoản/Mật khẩu cho đồ án (Ví dụ: admin / 123456)
-    if (user === 'admin' && pass === '123456') {
+    if (user === 'admin' && pass === getAdminPassword()) {
         document.getElementById('loginArea').style.display = 'none'; // Giấu form login
         document.getElementById('dashboardArea').style.display = 'flex'; // Mở dashboard
 
@@ -17,6 +23,38 @@ function handleLogin() {
     }
 }
 
+function openChangePassModal(){
+    document.getElementById('oldAdminPass').value = '';
+    document.getElementById('newAdminPass').value = '';
+    document.getElementById('confirmAdminPass').value = '';
+    document.getElementById('changePassModal').style.display = 'flex';
+    document.getElementById('oldAdminPass').focus();
+}
+
+function saveAdminPassword() {
+    const oldPass = document.getElementById('oldAdminPass').value;
+    const newPass = document.getElementById('newAdminPass').value;
+    const confirmPass = document.getElementById('confirmAdminPass').value;
+
+    if (!oldPass || !newPass || !confirmPass){
+        alert('Vui lòng nhập đầy đủ thông tin!');
+        return;
+    }
+    if (oldPass !== getAdminPassword()){
+        alert('Mật khẩu hiện tại không chính xác!');
+        document.getElementById('oldAdminPass').focus();
+        return;
+    }
+    if (newPass !== confirmPass){
+        alert('Mật khẩu xác nhận không khớp!')
+        document.getElementById('confirmAdminPass').focus();
+        return;
+    }
+
+    localStorage.setItem(KEY_ADMIN_PASS, newPass);
+    closeModal();
+    alert('Đổi mật khẩu thành công!');
+}
 // 2. HÀM XỬ LÝ ĐĂNG XUẤT
 function handleLogout() {
     if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
@@ -64,6 +102,9 @@ function closeModal() {
 
     const orderModal = document.getElementById('orderModal');
     if (orderModal) orderModal.style.display = 'none';
+
+    const changePassModal = document.getElementById('changePassModal');
+    if (changePassModal) changePassModal.style.display = 'none';
 }
 
 // Khởi chạy các UI cơ bản (Sidebar) sau khi trang đã tải xong
