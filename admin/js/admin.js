@@ -311,6 +311,7 @@ function initCustomersPage() {
                     <table class="customer-table">
                         <thead>
                             <tr>
+                                <th><input type="checkbox" id="checkAllReset"></th>
                                 <th>Mã KH</th>
                                 <th>Họ tên</th>
                                 <th>Email</th>
@@ -463,11 +464,27 @@ function renderCustomers() {
         const status = trangThaiKH(tk);
 
         let tenTrangThai = "Hoạt động";
-        if (status === "ngunghoatdong") tenTrangThai = "Ngừng hoạt động";
-        if (status === "daXoa") tenTrangThai = "Tài khoản đã xóa";
+        if (status === "ngunghoatdong") {
+            tenTrangThai = "Ngừng hoạt động";
+        }
+        if (status === "daXoa") {
+            tenTrangThai = "Tài khoản đã xóa";
+        }
+
+        // Danh sách khách hàng: không hiển thị checkbox
+        // Hai tab Reset và Khóa/mở: vẫn giữ checkbox để chọn tài khoản
+        const cotCheckbox = loai === "list"
+            ? ""
+            : `<td>
+                <input type="checkbox"
+                    class="${loai}-customer-check"
+                    value="${anToanKH(id)}"
+                    ${status === "daXoa" ? "disabled" : ""}>
+                </td>`;
 
         return `
             <tr>
+                ${cotCheckbox}
                 <td>${anToanKH(tk.maKH)}</td>
                 <td>${anToanKH(tk.hoTen)}</td>
                 <td>${anToanKH(tk.email)}</td>
@@ -481,16 +498,33 @@ function renderCustomers() {
         `;
     };
 
-    const empty = `<tr><td colspan="6">Không có khách hàng phù hợp.</td></tr>`;
+    // Bảng danh sách có 5 cột, hai bảng còn lại có 6 cột
+    const emptyList = `
+        <tr>
+            <td colspan="5">Không có khách hàng phù hợp.</td>
+        </tr>
+    `;
+
+    const emptyCheckbox = `
+        <tr>
+            <td colspan="6">Không có khách hàng phù hợp.</td>
+        </tr>
+    `;
 
     document.getElementById("customerTableBody").innerHTML =
-        ds.length ? ds.map(tk => html(tk, "list")).join("") : empty;
+        ds.length
+            ? ds.map(tk => html(tk, "list")).join("")
+            : emptyList;
 
     document.getElementById("resetTableBody").innerHTML =
-        ds.length ? ds.map(tk => html(tk, "reset")).join("") : empty;
+        ds.length
+            ? ds.map(tk => html(tk, "reset")).join("")
+            : emptyCheckbox;
 
     document.getElementById("lockTableBody").innerHTML =
-        ds.length ? ds.map(tk => html(tk, "lock")).join("") : empty;
+        ds.length
+            ? ds.map(tk => html(tk, "lock")).join("")
+            : emptyCheckbox;
 }
 
 // Lấy các khách hàng đã chọn
