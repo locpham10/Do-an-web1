@@ -7,7 +7,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(66, 242, 248, 0.2);
+    background-color: rgba(255, 173, 50, 0.2);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -406,6 +406,41 @@ body {
     font-size: 15px;
 }
 
+.admin-dropdown-container {
+    position: relative;
+    display: inline-block;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.admin-name {
+    color: #212529;
+    transition: color 0.2s;
+}
+
+.admin-dropdown-container:hover .admin-name {
+    color: #ee9106;
+}
+.admin-dropdown-menu {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #ffffff;
+    min-width: 170px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    padding: 8px 0;
+    z-index: 1000;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease; 
+}
+
+.admin-dropdown-container:hover .admin-dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+}
 /* --- CONTENT KHU VỰC CHÍNH --- */
 .content {
     padding: 30px;
@@ -683,6 +718,301 @@ input[type="number"] {
     -moz-appearance: textfield; /* dành cho Mozilla Firefox, ép ô nhập số hiển thị dưới dạng một ô nhập vb (text) thông thường*/
 }
 
+/* ========================================
+    QUẢN LÝ SẢN PHẨM 
+======================================== */
+.type-search-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Ép ô nhập từ khóa giãn dài ra hết phần trống */
+.type-search-row #typeSearch {
+    flex: 1;
+    min-width: 0;
+}
+
+#addProductBtn {
+    margin-left: auto;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Khung bao bọc bảng để hỗ trợ cuộn ngang nếu màn hình nhỏ */
+.type-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Đảm bảo bảng không bị bóp méo khi thu nhỏ cửa sổ */
+.type-table {
+    min-width: 900px; 
+}
+
+/* Định dạng riêng cho ảnh thumbnail trong bảng */
+.type-table img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background: white;
+}
+/* ========================================
+    QUẢN LÝ LOẠI SẢN PHẨM 
+======================================== */
+
+/* 1. Căn chỉnh thanh tìm kiếm dài ra và các nút bấm thẳng hàng */
+#tab-product-types .header-actions {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+#tab-product-types .search-action {
+    flex: 1; /* Cho khu vực tìm kiếm chiếm hết không gian trống */
+    display: flex;
+    gap: 12px;
+}
+
+/* Ô nhập từ khóa */
+#typeSearch {
+    flex: 1; /* Kéo giãn ô tìm kiếm dài ra */
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    outline: none;
+}
+
+#typeSearch:focus {
+    border-color: #80bdff;
+}
+
+/* Đồng bộ chiều cao các nút bấm trong thanh tìm kiếm */
+#tab-product-types .btn-action, 
+#addTypeBtn {
+    height: 42px;
+    min-width: 100px;
+    padding: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+/* 2. Bảng Loại sản phẩm */
+#typeTableBody td {
+    padding: 13px 15px;
+}
+
+/* Giới hạn kích thước ảnh trong bảng */
+#typeTableBody img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* Căn khoảng cách giữa các nút thao tác */
+#typeTableBody button {
+    margin: 2px;
+    padding: 7px 12px;
+}
+
+/* Màu sắc nút Xóa đặc trưng */
+#typeTableBody button[onclick^="xoaLoaiSanPham"] {
+    background-color: #dc3545;
+    color: white;
+}
+
+#typeTableBody button[onclick^="xoaLoaiSanPham"]:hover {
+    background-color: #c82333;
+}
+
+/* 3. Tinh chỉnh lại Form trong Modal cho bớt chật chội */
+#typeModal #typeForm input {
+    margin-top: 5px;
+}
+/*========
+    DÀNH CHO TRANG QUẢN LÝ KHÁCH HÀNG
+=======================================*/
+.customer-page {
+    width: 100%;
+}
+
+.customer-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.customer-tabs button,
+.customer-search button,
+.customer-actions button,
+.customer-modal-actions button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.customer-tabs button {
+    background: #e9ecef;
+    color: #333;
+}
+
+.customer-tabs button.active {
+    background: #343a40;
+    color: white;
+}
+
+.customer-search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.customer-search input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.customer-search button,
+#resetSelectedCustomers {
+    background: #007bff;
+    color: white;
+}
+
+#lockSelectedCustomers {
+    background: #dc3545;
+    color: white;
+}
+
+#unlockSelectedCustomers {
+    background: #28a745;
+    color: white;
+}
+
+.customer-table-wrap {
+    overflow-x: auto;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 7px;
+}
+
+.customer-table {
+    min-width: 750px;
+}
+
+.customer-table th,
+.customer-table td {
+    padding: 12px 15px;
+}
+
+.customer-table input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.customer-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.customer-status.hoatdong {
+    color: #155724;
+    background: #d4edda;
+}
+
+.customer-status.ngunghoatdong {
+    color: #856404;
+    background: #fff3cd;
+}
+
+.customer-status.daXoa {
+    color: #721c24;
+    background: #f8d7da;
+}
+
+.customer-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.customer-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    background: rgba(0, 0, 0, 0.45);
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.customer-modal-content {
+    width: 450px;
+    max-width: 100%;
+    padding: 25px;
+    background: white;
+    border-radius: 8px;
+}
+
+.customer-modal-content h3 {
+    margin-bottom: 15px;
+}
+
+.customer-modal-content label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+}
+
+.customer-modal-content input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.customer-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#saveResetPassword {
+    background: #28a745;
+    color: white;
+}
+
+#cancelResetPassword {
+    background: #6c757d;
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .customer-search {
+        flex-direction: column;
+    }
+}
 /*====================================================================================
     DÀNH CHO TRANG QUẢN LÝ PHIẾU NHẬP
 ====================================================================================*/

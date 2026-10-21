@@ -54,6 +54,7 @@
     <!--=================================================================================================
         PHẦN CHUNG CỦA ADMIN (KHÔNG ĐỔI)
     ==================================================================================================-->
+<<<<<<< HEAD
     <div id="dashboardArea" style="display: none; width: 100%; height: 100%">
       <!-- SIDEBAR BÊN TRÁI -->
       <aside class="sidebar collapsed" id="sidebar">
@@ -76,6 +77,24 @@
           </li>
         </ul>
       </aside>
+=======
+    <div id="dashboardArea" style="display: none; width: 100%; height: 100%;">
+        <!-- SIDEBAR BÊN TRÁI -->
+        <aside class="sidebar collapsed" id="sidebar">
+            <div class="sidebar-brand">DASHBOARD</div>
+            <ul class="sidebar-menu">
+                <li id="menu-customers"><a href="#">Quản lý khách hàng</a></li>
+                <li id="menu-products" onclick="switchTab('products')"><a href="#">Quản lý sản phẩm</a></li>
+                <li id="menu-product-types" onclick="switchTab('product-types')"><a href="#">Quản lý loại sản phẩm</a>
+                </li>
+                <!-- Gắn ID và sự kiện chuyển Tab cho Menu -->
+                <li id="menu-imports" onclick="switchTab('imports')"><a href="#">Quản lý nhập hàng</a></li>
+                <li id="menu-pricing" onclick="switchTab('pricing')"><a href="#">Quản lý giá bán</a></li>
+                <li id="menu-orders" onclick="switchTab('orders')"><a href="#">Quản lý đơn hàng</a></li>
+                <li id="menu-inventory" onclick="switchTab('inventory')"><a href="#">Báo cáo tồn kho</a></li>
+            </ul>
+        </aside>
+>>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
       <!-- KHU NỘI DUNG CHÍNH BÊN PHẢI -->
       <div class="main-container">
@@ -86,6 +105,7 @@
             <div class="topbar-title">Hệ thống quản trị [tên web]</div>
           </div>
 
+<<<<<<< HEAD
           <div class="topbar-user">
             <span>Xin chào, <strong>Admin</strong></span>
             <button class="btn-logout" onclick="alert('Đã đăng xuất!')">
@@ -133,6 +153,149 @@
                 </button>
               </div>
             </div>
+=======
+                <div class="topbar-user">
+
+                    <span>Xin chào, </span>
+                    <div class="admin-dropdown-container">
+
+                        <strong class="admin-name">Admin</strong>
+                        <div class="admin-dropdown-menu">
+                            <a href="#" onclick="openChangePassModal()" style="padding: 20px;">
+                                Đổi mật khẩu
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <button class="btn-logout" onclick="handleLogout()">Đăng xuất</button>
+
+                </div>
+            </header>
+
+            <main class="content">
+
+                <!--============================================================================================
+                TRANG QUẢN LÝ KHÁCH HÀNG
+            =============================================================================================-->
+                <section id="customersPage" class="admin-module" style="display: none;"></section>
+
+                <!--JS ĐỔ DỮ LIỆU-->
+
+                <!--============================================================================================
+                TRANG QUẢN LÝ SẢN PHẨM
+            =============================================================================================-->
+                <section id="tab-products" class="admin-module product-page" style="display: none">
+                    <div class="page-header">
+                        <h2 class="page-title">Quản lý sản phẩm</h2>
+                    </div>
+
+                    <!-- TÌM KIẾM SẢN PHẨM -->
+                    <div class="type-search-row">
+                        <select id="productCategoryFilter" class="search-input" style="width: auto; min-width: 150px;">
+                            <option value="ALL">-- Tất cả hãng / loại --</option>
+                            <!-- JS tự đổ danh mục vào đây -->
+                        </select>
+
+                        <input type="text" id="productSearch" class="search-input"
+                            placeholder="Nhập mã hoặc tên sản phẩm...">
+
+                        <button type="button" id="productSearchBtn" class="btn-action"
+                            style="background-color: #17a2b8; color: white;">
+                            Tìm kiếm
+                        </button>
+                        <button type="button" id="productResetSearchBtn" class="btn-action"
+                            style="background:#6c757d;color:white;">
+                            Làm mới
+                        </button>
+
+                        <button type="button" id="addProductBtn" class="btn-create">
+                            + Thêm sản phẩm mới
+                        </button>
+                    </div>
+
+                    <!-- BẢNG DANH SÁCH SẢN PHẨM -->
+                    <div class="type-table-wrap card-table" style="margin-top:18px;">
+                        <table class="type-table">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Hình ảnh</th>
+                                    <th>Mã SP</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Hãng / Loại</th>
+                                    <th style="text-align: right;">Giá bán</th>
+                                    <th>Trạng thái</th>
+                                    <th style="text-align: center;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                <!-- JS tự đổ dữ liệu sản phẩm vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <!--=====================================
+                TRANG QUẢN LÝ LOẠI SẢN PHẨM
+            ======================================================-->
+                <section id="tab-product-types" class="admin-module" style="display: none;">
+                    <div class="page-header">
+                        <h1 class="page-title">Quản lý loại sản phẩm</h1>
+                    </div>
+                    <div class="header-actions">
+                        <div class="search-action">
+                            <input type="text" id="typeSearch" class="search-input"
+                                placeholder="Tìm mã hoặc tên loại...">
+                            <button type="button" id="typeSearchBtn" class="btn-action"
+                                style="background-color: #17a2b8; color: white;">Tìm kiếm</button>
+                            <button type="button" id="typeResetSearchBtn" class="btn-action"
+                                style="background-color: #6c757d; color: white;">Làm mới</button>
+                        </div>
+                        <button type="button" id="addTypeBtn" class="btn-create">+ Thêm loại mới</button>
+                    </div>
+
+                    <div class="card-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Ảnh</th>
+                                    <th>Mã loại</th>
+                                    <th>Tên loại</th>
+                                    <th>Mô tả</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="typeTableBody">
+                                <!-- JS sẽ tự đổ dữ liệu vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!--============================================================================================
+                TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
+            =============================================================================================-->
+                <section id="tab-imports" class="admin-module" style="display: none;">
+                    <div class="page-header">
+                        <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
+                    </div>
+                    <div class="header-actions">
+                        <div class="date-filter">
+                            <label>Lọc từ ngày: </label>
+                            <input type="date" id="fromDate">
+                            <label>đến</label>
+                            <input type="date" id="toDate">
+                            <button class="btn-action"
+                                style="background-color: #17a2b8; color: white; margin-left: 10px;"
+                                onclick="applyFilters()">Lọc</button>
+                        </div>
+                        <div class="search-action">
+                            <input type="text" id="searchInput" class="search-input"
+                                placeholder="Tìm kiếm theo mã phiếu" onkeyup="applyFilters()">
+                            <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
+                        </div>
+                    </div>
+>>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
             <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
             <div class="card-table">
@@ -259,6 +422,7 @@
               <h1 class="page-title">Báo cáo tồn kho</h1>
             </div>
 
+<<<<<<< HEAD
             <!-- BẢNG THỐNG KÊ TỔNG QUAN -->
             <div class="inventory-stat-table">
               <table>
@@ -318,6 +482,38 @@
                     <!-- JS sẽ tự đổ dữ liệu danh mục vào đây -->
                   </select>
                 </div>
+=======
+                    <!-- BẢNG THỐNG KÊ TỔNG QUAN -->
+                    <div class="inventory-stat-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th colspan="2">Bảng thống kê tồn kho tại thời điểm tra cứu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Tổng sản phẩm tồn kho:</td>
+                                    <td><strong id="invTotalQty">0</strong> sản phẩm</td>
+                                </tr>
+                                <tr>
+                                    <td>Tổng giá trị tồn kho:</td>
+                                    <td><strong id="invTotalValue" style="color: #007bff;">0 đ</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>Cảnh báo sắp hết (&lt; 5):</td>
+                                    <td><strong id="invLowStockAlert" style="color: #dc3545;">0</strong> mặt hàng
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- BỘ LỌC TÌM KIẾM -->
+                    <div class="header-actions" style="flex-wrap: wrap;">
+                        <div class="inventory-filter-group"
+                            style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+>>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
                 <!-- Chức năng 8.3: Khoảng thời gian (Nhập-Xuất-Tồn) -->
                 <div class="inventory-filter">
@@ -351,6 +547,7 @@
                 </div>
               </div>
 
+<<<<<<< HEAD
               <div class="search-action" style="margin-top: 15px">
                 <input
                   type="text"
@@ -361,6 +558,14 @@
                 />
               </div>
             </div>
+=======
+                            <!-- Nút bấm tra cứu -->
+                            <div class="inventory-filter">
+                                <button class="btn-action" style="background-color: #17a2b8; color: white;"
+                                    onclick="applyInventoryFilters()">Tra cứu</button>
+                            </div>
+                        </div>
+>>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
             <!-- BẢNG BÁO CÁO CHI TIẾT (3 CỘT: NHẬP - XUẤT - TỒN) -->
             <div class="card-table">
@@ -396,6 +601,7 @@
             CÁC MODAL
     =============================================================================================-->
 
+<<<<<<< HEAD
       <!-- MODAL THÊM/SỬA PHIẾU NHẬP -->
       <div id="importModal" class="modal">
         <div class="modal-content modal-lg">
@@ -403,6 +609,253 @@
             <h3 class="modal-title" id="modalTitle">Lập phiếu nhập hàng</h3>
             <button class="modal-close" onclick="closeModal()">&times;</button>
           </div>
+=======
+        <!--MODAL ĐỔI MẬT KHẨU ADMIN-->
+        <div id="changePassModal" class="modal" style="display: none;">
+            <div class="modal-content" style="width: 450px;">
+                <div class="modal-header">
+                    <h3 class="modal-title">Đổi mật khẩu Admin</h3>
+                    <button type="button" class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="oldAdminPass">Mật khẩu hiện tại *</label>
+                        <input type="password" id="oldAdminPass" placeholder="Nhập mật khẩu cũ...">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 15px;">
+                        <label for="newAdminPass">Mật khẩu mới *</label>
+                        <input type="password" id="newAdminPass" placeholder="Nhập mật khẩu mới...">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmAdminPass">Xác nhận mật khẩu mới *</label>
+                        <input type="password" id="confirmAdminPass" placeholder="Nhập lại mật khẩu mới...">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-action" style="background-color: #6c757d; color: white;"
+                        onclick="closeModal()">Hủy</button>
+                    <button type="button" class="btn-create" onclick="saveAdminPassword()">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+
+        <!--CÁC MODAL TRANG QL SẢN PHẨM-->
+        <div id="typeModal" class="modal" style="display:none;">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h3 id="typeFormTitle" class="modal-title">
+                        Thêm loại sản phẩm
+                    </h3>
+
+                    <button type="button" id="closeTypeModalBtn" class="modal-close" aria-label="Đóng">&times;</button>
+                </div>
+
+                <form id="typeForm">
+                    <div class="modal-body">
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="typeCode">Mã loại *</label>
+                            <input id="typeCode" type="text" maxlength="50" required
+                                placeholder="Tự nhập mã loại sản phẩm">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="typeName">Tên loại *</label>
+                            <input id="typeName" type="text" maxlength="150" required
+                                placeholder="Nhập tên loại sản phẩm">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="typeImageFile">Hình ảnh</label>
+
+                            <input id="typeImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
+                                style="width:100%;padding:8px;border:1px solid #ced4da;border-radius:4px;">
+
+                            <div id="typeImagePreviewWrap" style="display:none;margin-top:12px;">
+                                <img id="typeImagePreview" alt="Xem trước ảnh loại sản phẩm"
+                                    style="max-width:180px;max-height:180px;object-fit:contain;border:1px solid #dee2e6;border-radius:6px;padding:5px;">
+
+                                <div>
+                                    <button type="button" id="removeTypeImageBtn" class="btn-action"
+                                        style="margin-top:8px;background:#dc3545;color:white;">
+                                        Bỏ ảnh
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p style="font-size:12px;color:#6c757d;margin-top:6px;">
+                                Chọn từ máy tính
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="typeDescription">Mô tả</label>
+                            <textarea id="typeDescription" rows="3" maxlength="1000"
+                                placeholder="Nhập mô tả loại sản phẩm"
+                                style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:4px;resize:vertical;"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="cancelTypeBtn" class="btn-action"
+                            style="background:#6c757d;color:white;">
+                            Hủy
+                        </button>
+
+                        <button type="submit" class="btn-create">
+                            Lưu
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <!-- MODAL THÊM / SỬA SẢN PHẨM -->
+        <div id="productModal" class="modal" style="display:none;">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h3 id="productFormTitle" class="modal-title">Thêm sản phẩm</h3>
+                    <button type="button" id="closeProductModalBtn" class="modal-close">&times;</button>
+                </div>
+
+                <form id="productForm">
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-half">
+                                <label for="productCode">Mã sản phẩm *</label>
+                                <input id="productCode" type="text" maxlength="50" required placeholder="VD: IP15PM">
+                            </div>
+                            <div class="form-group col-half">
+                                <label for="productCategory">Thuộc hãng / loại *</label>
+                                <select id="productCategory" class="search-input" required style="width: 100%;">
+                                    <option value="">-- Chọn hãng / loại --</option>
+                                    <!-- JS đổ danh mục vào đây -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="productName">Tên sản phẩm *</label>
+                            <input id="productName" type="text" maxlength="150" required
+                                placeholder="VD: iPhone 15 Pro Max 256GB">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="productImageFile">Hình ảnh sản phẩm</label>
+                            <input id="productImageFile" type="file" accept="image/*"
+                                style="width:100%;padding:8px;border:1px solid #ced4da;border-radius:4px;">
+
+                            <div id="productImagePreviewWrap" style="display:none;margin-top:12px;">
+                                <img id="productImagePreview" alt="Xem trước"
+                                    style="max-width:180px;max-height:180px;object-fit:contain;border:1px solid #dee2e6;border-radius:6px;padding:5px;">
+                                <div>
+                                    <button type="button" id="removeProductImageBtn" class="btn-action"
+                                        style="margin-top:8px;background:#dc3545;color:white;">Bỏ ảnh</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productDescription">Mô tả chi tiết</label>
+                            <textarea id="productDescription" rows="4" placeholder="Nhập cấu hình, thông số kỹ thuật..."
+                                style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:4px;resize:vertical;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="cancelProductBtn" class="btn-action"
+                            style="background:#6c757d;color:white;">Hủy</button>
+                        <button type="submit" class="btn-create">Lưu sản phẩm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--MODAL THÊM / SỬA LOẠI HÀNG-->
+        <div id="typeModal" class="modal">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h3 id="typeFormTitle" class="modal-title">
+                        Thêm loại sản phẩm
+                    </h3>
+
+                    <button type="button" id="closeTypeModalBtn" class="modal-close" aria-label="Đóng">&times;</button>
+                </div>
+
+                <form id="typeForm">
+                    <div class="modal-body">
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="typeCode">Mã loại *</label>
+                            <input id="typeCode" type="text" maxlength="50" required
+                                placeholder="Nhập mã loại sản phẩm">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="typeName">Tên loại *</label>
+                            <input id="typeName" type="text" maxlength="150" required
+                                placeholder="Nhập tên loại sản phẩm">
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:15px;">
+                            <label for="typeImageFile">Hình ảnh</label>
+
+                            <input id="typeImageFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif"
+                                style="width:100%;padding:8px;border:1px solid #ced4da;border-radius:4px;">
+
+                            <div id="typeImagePreviewWrap" style="display:none;margin-top:12px;">
+                                <img id="typeImagePreview" alt="Xem trước ảnh loại sản phẩm"
+                                    style="max-width:180px;max-height:180px;object-fit:contain;border:1px solid #dee2e6;border-radius:6px;padding:5px;">
+
+                                <div>
+                                    <button type="button" id="removeTypeImageBtn" class="btn-action"
+                                        style="margin-top:8px;background:#dc3545;color:white;">
+                                        Bỏ ảnh
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p style="font-size:12px;color:#6c757d;margin-top:6px;">
+                                Chọn từ máy tính
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="typeDescription">Mô tả</label>
+                            <textarea id="typeDescription" rows="3" maxlength="1000"
+                                placeholder="Nhập mô tả loại sản phẩm"
+                                style="width:100%;padding:9px 12px;border:1px solid #ced4da;border-radius:4px;resize:vertical;"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" id="cancelTypeBtn" class="btn-action"
+                            style="background:#6c757d;color:white;">
+                            Hủy
+                        </button>
+
+                        <button type="submit" class="btn-create">
+                            Lưu
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- MODAL THÊM/SỬA PHIẾU NHẬP -->
+        <div id="importModal" class="modal">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle">Lập phiếu nhập hàng</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+>>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
           <div class="modal-body">
             <div class="form-row">
