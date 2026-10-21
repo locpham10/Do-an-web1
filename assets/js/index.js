@@ -1,5 +1,4 @@
 let slideIndex = 1;
-
 // Gọi hàm để hiển thị slide đầu tiên khi vừa tải trang
 showSlides(slideIndex);
 
@@ -12,18 +11,15 @@ function plusSlides(n) {
 function currentSlide(n) {
   showSlides((slideIndex = n));
 }
-
 // Hàm chính xử lý logic ẩn/hiện ảnh
 function showSlides(n) {
   let i;
   let slides = document.getElementsByClassName("slides");
   let dots = document.getElementsByClassName("dot");
-
   // Nếu vuốt quá ảnh cuối cùng -> quay lại ảnh số 1
   if (n > slides.length) {
     slideIndex = 1;
   }
-
   // Nếu vuốt ngược qua ảnh số 1 -> đi tới ảnh cuối cùng
   if (n < 1) {
     slideIndex = slides.length;
@@ -326,3 +322,255 @@ document.addEventListener("DOMContentLoaded", function () {
     showLogin();
   });
 });
+
+// ======================================================================
+// PHẦN HIỂN THỊ VÀ TÌM KIẾM SẢN PHẨM (DÙNG JS CƠ BẢN NHẤT)
+// ======================================================================
+
+// 1. Lấy dữ liệu từ localStorage ra và gán vào biến
+let allProducts = JSON.parse(localStorage.getItem("products")) || [];
+
+// Tạo một mảng mới để chứa các sản phẩm sẽ hiển thị ra màn hình
+let filteredProducts = [];
+// Dùng vòng lặp for để copy toàn bộ sản phẩm từ allProducts sang filteredProducts
+for (let i = 0; i < allProducts.length; i++) {
+  filteredProducts.push(allProducts[i]);
+}
+
+let currentPage = 1;
+let itemsPerPage = 8; // Hiện 8 sản phẩm 1 trang
+
+// ---------------------------------------------------------
+// HÀM 1: Vẽ sản phẩm ra màn hình
+// ---------------------------------------------------------
+function renderProducts(page) {
+  let productGrid = document.getElementById("productGrid");
+  if (!productGrid) return;
+
+  productGrid.innerHTML = ""; // Xóa các sản phẩm cũ
+
+  let startIndex = (page - 1) * itemsPerPage;
+  let endIndex = startIndex + itemsPerPage;
+  let hasProduct = false;
+
+  // Dùng vòng lặp for cơ bản duyệt qua mảng để in sản phẩm ra
+  for (let i = startIndex; i < endIndex; i++) {
+    if (i >= filteredProducts.length) break;
+
+    hasProduct = true;
+    let product = filteredProducts[i];
+    let formatPrice = product.price.toLocaleString("vi-VN") + " đ";
+
+    let cardHTML = `
+      <div class="product-card">
+        <div onclick="showDetail(${product.id})">
+          <img src="${product.img}" alt="${product.name}">
+          <h4>${product.name}</h4>
+          <p class="price">${formatPrice}</p>
+        </div>
+        <button onclick="addToCart(${product.id})">Thêm vào giỏ</button>
+      </div>
+    `;
+    productGrid.innerHTML += cardHTML;
+  }
+
+  if (hasProduct === false) {
+    productGrid.innerHTML =
+      "<h3 style='grid-column: span 4; text-align:center;'>Không tìm thấy sản phẩm nào!</h3>";
+  }
+}
+
+// ---------------------------------------------------------
+// HÀM 2: Tạo các nút Phân trang (1, 2, 3...)
+// ---------------------------------------------------------
+function renderPagination() {
+  let paginationDiv = document.getElementById("pagination");
+  if (!paginationDiv) return;
+  paginationDiv.innerHTML = "";
+
+  let totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    let btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) {
+      btn.className = "active";
+    }
+
+    btn.addEventListener("click", function () {
+      currentPage = i;
+      renderProducts(currentPage);
+      renderPagination();
+      let titleElem = document.getElementById("categoryTitle");
+      if (titleElem) titleElem.scrollIntoView({ behavior: "smooth" });
+    });
+
+    paginationDiv.appendChild(btn);
+  }
+}
+
+// ---------------------------------------------------------
+// HÀM 3: Tìm kiếm thông minh trên Header
+// ---------------------------------------------------------
+let searchInputHeader = document.querySelector(".search-container input");
+let searchIconHeader = document.querySelector(".search-container .fa-search");
+
+function searchBasic() {
+  if (!searchInputHeader) return;
+  let keyword = searchInputHeader.value.toLowerCase().trim();
+
+  filteredProducts = [];
+
+  for (let i = 0; i < allProducts.length; i++) {
+    let product = allProducts[i];
+
+    // Ghép tên, hãng và màu sắc thành 1 câu dài chữ thường
+    let productInfo =
+      product.name + " " + product.category + " " + (product.color || "");
+    productInfo = productInfo.toLowerCase();
+
+    // Loại bỏ dấu cách trống trong chuỗi info để đối chiếu dễ hơn
+    let compactedInfo = productInfo.replace(/\s+/g, "");
+
+    if (
+      productInfo.includes(keyword) ||
+      compactedInfo.includes(keyword.replace(/\s+/g, ""))
+    ) {
+      filteredProducts.push(product);
+    }
+  }
+
+  let titleElem = document.getElementById("categoryTitle");
+  if (titleElem)
+    titleElem.innerText = 'Kết quả tìm kiếm cho: "' + keyword + '"';
+
+  currentPage = 1;
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
+}
+
+if (searchIconHeader) searchIconHeader.addEventListener("click", searchBasic);
+if (searchInputHeader) {
+  searchInputHeader.addEventListener("keyup", function (e) {
+    if (e.key === "Enter") searchBasic();
+  });
+}
+
+// ---------------------------------------------------------
+// HÀM 4: Lọc theo hãng khi bấm trên Menu
+// ---------------------------------------------------------
+function filterByCategory(category, event) {
+  if (event) event.preventDefault();
+  filteredProducts = [];
+
+  if (category === "all") {
+    for (let i = 0; i < allProducts.length; i++) {
+      filteredProducts.push(allProducts[i]);
+    }
+    let titleElem = document.getElementById("categoryTitle");
+    if (titleElem) titleElem.innerText = "Tất cả sản phẩm";
+  } else {
+    for (let i = 0; i < allProducts.length; i++) {
+      let product = allProducts[i];
+      if (product.category === category) {
+        filteredProducts.push(product);
+      }
+    }
+    let titleElem = document.getElementById("categoryTitle");
+    if (titleElem) titleElem.innerText = "Sản phẩm " + category.toUpperCase();
+  }
+
+  currentPage = 1;
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
+}
+
+// HÀM MỚI Lọc theo TÊN SẢN PHẨM (từ Submenu)
+window.filterByName = function (keyword, event) {
+  if (event) event.preventDefault(); // Chặn load lại trang
+
+  filteredProducts = []; // Làm rỗng mảng kết quả
+
+  // Dùng vòng lặp tìm các máy có tên chứa từ khóa
+  for (let i = 0; i < allProducts.length; i++) {
+    let product = allProducts[i];
+
+    // So sánh chữ thường: nếu tên máy chứa từ khóa thì đưa vào mảng
+    if (product.name.toLowerCase().includes(keyword.toLowerCase())) {
+      filteredProducts.push(product);
+    }
+  }
+
+  // Đổi tiêu đề hiển thị
+  let titleElem = document.getElementById("categoryTitle");
+  if (titleElem) titleElem.innerText = "Dòng máy: " + keyword;
+
+  currentPage = 1;
+  hideDetail(); // Ẩn trang chi tiết nếu đang mở
+  renderProducts(currentPage); // Vẽ lại sản phẩm
+  renderPagination(); // Vẽ lại phân trang
+};
+
+// ---------------------------------------------------------
+// HÀM 5: Hiển thị giao diện Chi tiết 1 sản phẩm
+// ---------------------------------------------------------
+function showDetail(id) {
+  let product = null;
+
+  for (let i = 0; i < allProducts.length; i++) {
+    if (allProducts[i].id === id) {
+      product = allProducts[i];
+      break;
+    }
+  }
+
+  if (product === null) return;
+
+  let formatPrice = product.price.toLocaleString("vi-VN") + " đ";
+  let detailView = document.getElementById("detailView");
+  if (!detailView) return;
+
+  detailView.innerHTML = `
+    <button class="back-btn" onclick="hideDetail()">Quay lại danh sách</button>
+    <div class="detail-container">
+      <div class="detail-image">
+        <img src="${product.img}" alt="${product.name}">
+      </div>
+      <div class="detail-info">
+        <h2>${product.name}</h2>
+        <p class="detail-price">${formatPrice}</p>
+        <p><strong>Thương hiệu:</strong> ${product.category.toUpperCase()}</p>
+        <p><strong>Màu sắc:</strong> ${product.color || "Đang cập nhật"}</p>
+        <p style="line-height:1.6; color:#555;">Sản phẩm chính hãng mới 100%, bảo hành 12 tháng tại các trung tâm toàn quốc.</p>
+        <button class="add-to-cart-large" onclick="addToCart(${product.id})">Thêm vào giỏ hàng</button>
+      </div>
+    </div>
+  `;
+
+  let mainView = document.getElementById("mainView");
+  if (mainView) mainView.classList.add("hidden");
+  detailView.classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+// ---------------------------------------------------------
+// HÀM 6: Nút quay lại danh sách
+// ---------------------------------------------------------
+function hideDetail() {
+  let mainView = document.getElementById("mainView");
+  let detailView = document.getElementById("detailView");
+
+  if (mainView) mainView.classList.remove("hidden");
+  if (detailView) detailView.classList.add("hidden");
+}
+
+function addToCart(id) {
+  alert("Bạn vừa chọn thêm sản phẩm có ID: " + id);
+}
+
+// Khởi chạy khi load trang
+renderProducts(currentPage);
+renderPagination();
