@@ -1,56 +1,53 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="
-                                   width=device-width, initial-scale=1.0" />
-    <title>Trang quản trị</title>
-    <link rel="stylesheet" href="css/admin.css" />
-  </head>
 
-  <body>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang quản trị</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!--=================================================================================================
         GIAO DIỆN ĐĂNG NHẬP (B.TRÂM)
     ==================================================================================================-->
     <div id="loginArea" class="login-wrapper">
-      <div class="login-box">
-        <div class="login-logo">
-          <i class="fa-solid fa-mobile-screen-button"></i>
+        <div class="login-box">
+            <div class="login-logo">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+            </div>
+            <h1>LOGIN ADMIN</h1>
+            <p>Welcome back! Please login to your account.</p>
+
+            <div class="input-box">
+                <i class="fa-solid fa-user"></i>
+                <input id="username" type="text" placeholder="Username / Email">
+            </div>
+
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input id="password" type="password" placeholder="Password">
+            </div>
+
+            <!-- Đã gắn thêm sự kiện onclick="handleLogin()" -->
+            <button id="login" onclick="handleLogin()">
+                LOGIN
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <div class="remember">
+                <label><input id="remember" type="checkbox"> Stay Signed In</label>
+            </div>
+
+            <div class="line"><span>OR</span></div>
+
+            <div class="terms">
+                By logging in, you agree to
+                <a href="#">Terms of Service & Privacy Policy</a>
+            </div>
         </div>
-        <h1>LOGIN ADMIN</h1>
-        <p>Welcome back! Please login to your account.</p>
-
-        <div class="input-box">
-          <i class="fa-solid fa-user"></i>
-          <input id="username" type="text" placeholder="Username / Email" />
-        </div>
-
-        <div class="input-box">
-          <i class="fa-solid fa-lock"></i>
-          <input id="password" type="password" placeholder="Password" />
-        </div>
-
-        <!-- Đã gắn thêm sự kiện onclick="handleLogin()" -->
-        <button id="login" onclick="handleLogin()">
-          LOGIN
-          <i class="fa-solid fa-arrow-right"></i>
-        </button>
-
-        <div class="remember">
-          <label><input id="remember" type="checkbox" /> Stay Signed In</label>
-        </div>
-
-        <div class="line"><span>OR</span></div>
-
-        <div class="terms">
-          By logging in, you agree to
-          <a href="#">Terms of Service & Privacy Policy</a>
-        </div>
-      </div>
     </div>
     <!--=================================================================================================
         PHẦN CHUNG CỦA ADMIN (KHÔNG ĐỔI)
@@ -72,14 +69,14 @@
             </ul>
         </aside>
 
-      <!-- KHU NỘI DUNG CHÍNH BÊN PHẢI -->
-      <div class="main-container">
-        <!-- TOPBAR -->
-        <header class="topbar">
-          <div class="topbar-left">
-            <button id="sidebarToggle" class="btn-toggle-menu">☰</button>
-            <div class="topbar-title">Hệ thống quản trị [tên web]</div>
-          </div>
+        <!-- KHU NỘI DUNG CHÍNH BÊN PHẢI -->
+        <div class="main-container">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="sidebarToggle" class="btn-toggle-menu">☰</button>
+                    <div class="topbar-title">Hệ thống quản trị [tên web]</div>
+                </div>
 
                 <div class="topbar-user">
 
@@ -202,241 +199,140 @@
                 <!--============================================================================================
                 TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
             =============================================================================================-->
-                <section id="tab-imports" class="admin-module" style="display: none;">
+                <section id="tab-imports" class="admin-module" style="display: none">
                     <div class="page-header">
-                        <h2 class="page-title">Quản lý sản phẩm</h2>
+                        <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
                     </div>
 
-                    <!-- TÌM KIẾM SẢN PHẨM -->
-                    <div class="type-search-row">
-                        <select id="productCategoryFilter" class="search-input" style="width: auto; min-width: 150px;">
-                            <option value="ALL">-- Tất cả hãng / loại --</option>
-                            <!-- JS tự đổ danh mục vào đây -->
-                        </select>
-
-                        <input type="text" id="productSearch" class="search-input"
-                            placeholder="Nhập mã hoặc tên sản phẩm...">
-
-                        <button type="button" id="productSearchBtn" class="btn-action"
-                            style="background-color: #17a2b8; color: white;">
-                            Tìm kiếm
-                        </button>
-                        <button type="button" id="productResetSearchBtn" class="btn-action"
-                            style="background:#6c757d;color:white;">
-                            Làm mới
-                        </button>
-
-                        <button type="button" id="addProductBtn" class="btn-create">
-                            + Thêm sản phẩm mới
-                        </button>
-                    </div>
-
-                    <!-- BẢNG DANH SÁCH SẢN PHẨM -->
-                    <div class="type-table-wrap card-table" style="margin-top:18px;">
-                        <table class="type-table">
-                            <thead>
-                                <tr>
-                                    <th style="text-align: center;">Hình ảnh</th>
-                                    <th>Mã SP</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Hãng / Loại</th>
-                                    <th style="text-align: right;">Giá bán</th>
-                                    <th>Trạng thái</th>
-                                    <th style="text-align: center;">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody id="productTableBody">
-                                <!-- JS tự đổ dữ liệu sản phẩm vào đây -->
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-                <!--=====================================
-                TRANG QUẢN LÝ LOẠI SẢN PHẨM
-            ======================================================-->
-                <section id="tab-product-types" class="admin-module" style="display: none;">
-                    <div class="page-header">
-                        <h1 class="page-title">Quản lý loại sản phẩm</h1>
-                    </div>
                     <div class="header-actions">
-                        <div class="search-action">
-                            <input type="text" id="typeSearch" class="search-input"
-                                placeholder="Tìm mã hoặc tên loại...">
-                            <button type="button" id="typeSearchBtn" class="btn-action"
-                                style="background-color: #17a2b8; color: white;">Tìm kiếm</button>
-                            <button type="button" id="typeResetSearchBtn" class="btn-action"
-                                style="background-color: #6c757d; color: white;">Làm mới</button>
+                        <div class="date-filter">
+                            <label>Lọc từ ngày: </label>
+                            <input type="date" id="fromDate" />
+                            <label>đến</label>
+                            <input type="date" id="toDate" />
+                            <button class="btn-action" style="
+                            background-color: #17a2b8;
+                            color: white;
+                            margin-left: 10px;
+                          " onclick="applyFilters()">
+                                Lọc
+                            </button>
                         </div>
-                        <button type="button" id="addTypeBtn" class="btn-create">+ Thêm loại mới</button>
+                        <div class="search-action">
+                            <input type="text" id="searchInput" class="search-input"
+                                placeholder="Tìm kiếm theo mã phiếu" onkeyup="applyFilters()" />
+                            <button class="btn-create" onclick="openAddModel()">
+                                + Lập phiếu mới
+                            </button>
+                        </div>
                     </div>
 
+                    <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
                     <div class="card-table">
-                        <table>
+                        <table id="importTable">
                             <thead>
                                 <tr>
-                                    <th style="text-align: center;">Ảnh</th>
-                                    <th>Mã loại</th>
-                                    <th>Tên loại</th>
-                                    <th>Mô tả</th>
+                                    <th>Mã phiếu</th>
+                                    <th>Ngày nhập</th>
+                                    <th>Tổng tiền nhập</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
-                            <tbody id="typeTableBody">
-                                <!-- JS sẽ tự đổ dữ liệu vào đây -->
+                            <tbody id="importTableBody">
+                                <!-- JS render vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!--======================================================================================
+                TRANG QUẢN LÝ GIÁ BÁN
+            =======================================================================================-->
+                <section id="tab-pricing" class="admin-module" style="display: none;">
+                    <div class="page-header">
+                        <h1 class="page-title">Thiết lập giá bán</h1>
+                    </div>
+                    <div class="card-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã SP</th>
+                                    <th>Ảnh</th>
+                                    <th>Tên SP</th>
+                                    <th style="text-align: right;">Giá nhập</th>
+                                    <th style="text-align: right;">Giá bán niêm yết</th>
+                                    <th style="text-align: center;">Lợi nhuận (%)</th>
+                                    <th style="text-align: center;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pricingTableBody">
+                                <!--JS ghi bảng-->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!--======================================================================================
+                TRANG QUẢN LÝ ĐƠN HÀNG
+            =======================================================================================-->
+                <section id="tab-orders" class="admin-module" style="display: none;">
+                    <div class="page-header">
+                        <h1 class="page-title">Danh mục đơn hàng</h1>
+                    </div>
+                    <div class="header-actions">
+                        <div class="date-filter">
+                            <label>Từ ngày:</label>
+                            <input type="date" id="orderFromDate">
+                            <label>đến</label>
+                            <input type="date" id="orderToDate">
+
+                            <select id="orderStatusFilter" class="search-input status-filter"
+                                onchange="applyOrderFilters()">
+                                <option value="ALL">-- Tất cả trạng thái --</option>
+                                <option value="pending">Chờ xác nhận</option>
+                                <option value="processed">Đã xử lý</option>
+                                <option value="completed">Đã giao thành công</option>
+                                <option value="cancelled">Đã hủy</option>
+                            </select>
+
+                            <button class="btn-action"
+                                style="background-color: #17a2b8; color: white; margin-left: 10px;"
+                                onclick="applyOrderFilters()">Lọc</button>
+
+                        </div>
+                        <div class="search-action">
+                            <input type="text" id="orderSearchInput" class="search-input"
+                                placeholder="Tìm mã đơn hoặc SĐT..." onkeyup="applyOrderFilters()">
+                        </div>
+
+                    </div>
+                    <div class="card-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã ĐH</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Khách hàng</th>
+                                    <th style="text-align: right;">Tổng thanh toán</th>
+                                    <th style="text-align: center;">Trạng thái</th>
+                                    <th style="text-align: center;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderTableBody">
+                                <!-- JS render dữ liệu vào đây -->
                             </tbody>
                         </table>
                     </div>
                 </section>
 
                 <!--============================================================================================
-                TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
-            =============================================================================================-->
-                <section id="tab-imports" class="admin-module" style="display: none;">
-                    <div class="page-header">
-                        <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
-                    </div>
-                    <div class="header-actions">
-                        <div class="date-filter">
-                            <label>Lọc từ ngày: </label>
-                            <input type="date" id="fromDate">
-                            <label>đến</label>
-                            <input type="date" id="toDate">
-                            <button class="btn-action"
-                                style="background-color: #17a2b8; color: white; margin-left: 10px;"
-                                onclick="applyFilters()">Lọc</button>
-                        </div>
-                        <div class="search-action">
-                            <input type="text" id="searchInput" class="search-input"
-                                placeholder="Tìm kiếm theo mã phiếu" onkeyup="applyFilters()">
-                            <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
-                        </div>
-                    </div>
-
-            <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
-            <div class="card-table">
-              <table id="importTable">
-                <thead>
-                  <tr>
-                    <th>Mã phiếu</th>
-                    <th>Ngày nhập</th>
-                    <th>Tổng tiền nhập</th>
-                    <th>Trạng thái</th>
-                    <th>Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody id="importTableBody">
-                  <!-- JS render vào đây -->
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!--======================================================================================
-                TRANG QUẢN LÝ GIÁ BÁN
-            =======================================================================================-->
-          <section id="tab-pricing" class="admin-module" style="display: none">
-            <div class="page-header">
-              <h1 class="page-title">Thiết lập giá bán</h1>
-            </div>
-            <div class="card-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Mã SP</th>
-                    <th>Ảnh</th>
-                    <th>Tên SP</th>
-                    <th style="text-align: right">Giá nhập</th>
-                    <th style="text-align: right">Giá bán niêm yết</th>
-                    <th style="text-align: center">Lợi nhuận (%)</th>
-                    <th style="text-align: center">Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody id="pricingTableBody">
-                  <!--JS ghi bảng-->
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!--======================================================================================
-                TRANG QUẢN LÝ ĐƠN HÀNG
-            =======================================================================================-->
-          <section id="tab-orders" class="admin-module" style="display: none">
-            <div class="page-header">
-              <h1 class="page-title">Danh mục đơn hàng</h1>
-            </div>
-            <div class="header-actions">
-              <div class="date-filter">
-                <label>Từ ngày:</label>
-                <input type="date" id="orderFromDate" />
-                <label>đến</label>
-                <input type="date" id="orderToDate" />
-
-                <select
-                  id="orderStatusFilter"
-                  class="search-input status-filter"
-                  onchange="applyOrderFilters()"
-                >
-                  <option value="ALL">-- Tất cả trạng thái --</option>
-                  <option value="pending">Chờ xác nhận</option>
-                  <option value="processed">Đã xử lý</option>
-                  <option value="completed">Đã giao thành công</option>
-                  <option value="cancelled">Đã hủy</option>
-                </select>
-
-                <button
-                  class="btn-action"
-                  style="
-                    background-color: #17a2b8;
-                    color: white;
-                    margin-left: 10px;
-                  "
-                  onclick="applyOrderFilters()"
-                >
-                  Lọc
-                </button>
-              </div>
-              <div class="search-action">
-                <input
-                  type="text"
-                  id="orderSearchInput"
-                  class="search-input"
-                  placeholder="Tìm mã đơn hoặc SĐT..."
-                  onkeyup="applyOrderFilters()"
-                />
-              </div>
-            </div>
-            <div class="card-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Mã ĐH</th>
-                    <th>Ngày đặt</th>
-                    <th>Khách hàng</th>
-                    <th style="text-align: right">Tổng thanh toán</th>
-                    <th style="text-align: center">Trạng thái</th>
-                    <th style="text-align: center">Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody id="orderTableBody">
-                  <!-- JS render dữ liệu vào đây -->
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!--============================================================================================
                 TRANG BÁO CÁO CÁO TỒN KHO
             =============================================================================================-->
-          <section
-            id="tab-inventory"
-            class="admin-module"
-            style="display: none"
-          >
-            <div class="page-header">
-              <h1 class="page-title">Báo cáo tồn kho</h1>
-            </div>
+                <section id="tab-inventory" class="admin-module" style="display: none;">
+                    <div class="page-header">
+                        <h1 class="page-title">Báo cáo tồn kho</h1>
+                    </div>
 
                     <!-- BẢNG THỐNG KÊ TỔNG QUAN -->
                     <div class="inventory-stat-table">
@@ -469,84 +365,70 @@
                         <div class="inventory-filter-group"
                             style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
 
-                <!-- Chức năng 8.3: Khoảng thời gian (Nhập-Xuất-Tồn) -->
-                <div class="inventory-filter">
-                  <label>Từ ngày:</label>
-                  <input
-                    type="date"
-                    id="invFromDate"
-                    class="search-input"
-                    style="width: auto"
-                  />
-                </div>
-                <div class="inventory-filter">
-                  <label>Đến ngày (Mốc tồn kho):</label>
-                  <input
-                    type="date"
-                    id="invToDate"
-                    class="search-input"
-                    style="width: auto"
-                  />
-                </div>
+                            <!-- Chức năng 8.1: Lọc theo Loại sản phẩm -->
+                            <div class="inventory-filter">
+                                <label>Loại sản phẩm:</label>
+                                <select id="invCategoryFilter" class="search-input status-filter" style="width: 150px;">
+                                    <option value="ALL">-- Tất cả loại --</option>
+                                    <!-- JS sẽ tự đổ dữ liệu danh mục vào đây -->
+                                </select>
+                            </div>
 
-                <!-- Nút bấm tra cứu -->
-                <div class="inventory-filter">
-                  <button
-                    class="btn-action"
-                    style="background-color: #17a2b8; color: white"
-                    onclick="applyInventoryFilters()"
-                  >
-                    Tra cứu dữ liệu
-                  </button>
-                </div>
-              </div>
+                            <!-- Chức năng 8.3: Khoảng thời gian (Nhập-Xuất-Tồn) -->
+                            <div class="inventory-filter">
+                                <label>Từ ngày:</label>
+                                <input type="date" id="invFromDate" class="search-input" style="width: auto;">
+                            </div>
+                            <div class="inventory-filter">
+                                <label>Đến ngày (Mốc tồn kho):</label>
+                                <input type="date" id="invToDate" class="search-input" style="width: auto;">
+                            </div>
 
-              <div class="search-action" style="margin-top: 15px">
-                <input
-                  type="text"
-                  id="inventorySearchInput"
-                  class="search-input"
-                  placeholder="Tìm mã / tên sản phẩm..."
-                  onkeyup="applyInventoryFilters()"
-                />
-              </div>
-            </div>
+                            <!-- Nút bấm tra cứu -->
+                            <div class="inventory-filter">
+                                <button class="btn-action" style="background-color: #17a2b8; color: white;"
+                                    onclick="applyInventoryFilters()">Tra cứu</button>
+                            </div>
+                        </div>
 
-            <!-- BẢNG BÁO CÁO CHI TIẾT (3 CỘT: NHẬP - XUẤT - TỒN) -->
-            <div class="card-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th style="width: 10%; text-align: center">Mã SP</th>
-                    <th style="width: 10%; text-align: center">Ảnh</th>
-                    <th style="width: 25%">Tên sản phẩm</th>
-                    <th style="text-align: center">Loại SP</th>
-                    <th style="text-align: center">
-                      Tổng Nhập<br /><small>(Trong kỳ)</small>
-                    </th>
-                    <th style="text-align: center">
-                      Tổng Xuất<br /><small>(Trong kỳ)</small>
-                    </th>
-                    <th style="text-align: center">
-                      Tồn Cuối Kỳ<br /><small>(Tại mốc thời gian)</small>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody id="inventoryTableBody">
-                  <!-- JS render dữ liệu vào -->
-                </tbody>
-              </table>
-            </div>
-          </section>
-        </main>
-      </div>
-      <!-- Kết thúc main-container -->
+                        <div class="search-action" style="margin-top: 15px;">
+                            <input type="text" id="inventorySearchInput" class="search-input"
+                                placeholder="Tìm mã / tên sản phẩm..." onkeyup="applyInventoryFilters()">
+                        </div>
+                    </div>
 
-      <!---==========================================================================================
+                    <!-- BẢNG BÁO CÁO CHI TIẾT (3 CỘT: NHẬP - XUẤT - TỒN) -->
+                    <div class="card-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%; text-align: center;">Mã SP</th>
+                                    <th style="width: 10%; text-align: center;">Ảnh</th>
+                                    <th style="width: 25%;">Tên sản phẩm</th>
+                                    <th style="text-align: center;">Loại SP</th>
+                                    <th style="text-align: center;">Tổng Nhập<br><small>(Trong
+                                            kỳ)</small></th>
+                                    <th style="text-align: center;">Tổng Xuất<br><small>(Trong
+                                            kỳ)</small></th>
+                                    <th style="text-align: center; ">Tồn Cuối Kỳ<br><small>(Tại mốc thời
+                                            gian)</small></th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <!-- JS render dữ liệu vào -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </main>
+        </div> <!-- Kết thúc main-container -->
+
+        <!---==========================================================================================
             CÁC MODAL
     =============================================================================================-->
 
-      <!--MODAL ĐỔI MẬT KHẨU ADMIN-->
+        <!--MODAL ĐỔI MẬT KHẨU ADMIN-->
         <div id="changePassModal" class="modal" style="display: none;">
             <div class="modal-content" style="width: 450px;">
                 <div class="modal-header">
