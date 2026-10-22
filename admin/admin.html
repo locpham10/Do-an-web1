@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="
+                                   width=device-width, initial-scale=1.0" />
     <title>Trang quản trị</title>
     <link rel="stylesheet" href="css/admin.css" />
   </head>
@@ -54,30 +55,6 @@
     <!--=================================================================================================
         PHẦN CHUNG CỦA ADMIN (KHÔNG ĐỔI)
     ==================================================================================================-->
-<<<<<<< HEAD
-    <div id="dashboardArea" style="display: none; width: 100%; height: 100%">
-      <!-- SIDEBAR BÊN TRÁI -->
-      <aside class="sidebar collapsed" id="sidebar">
-        <div class="sidebar-brand">DASHBOARD</div>
-        <ul class="sidebar-menu">
-          <li><a href="#">Quản lý khách hàng</a></li>
-          <li><a href="#">Quản lý sản phẩm</a></li>
-          <!-- Gắn ID và sự kiện chuyển Tab cho Menu -->
-          <li id="menu-imports" onclick="switchTab('imports')">
-            <a href="#">Quản lý nhập hàng</a>
-          </li>
-          <li id="menu-pricing" onclick="switchTab('pricing')">
-            <a href="#">Quản lý giá bán</a>
-          </li>
-          <li id="menu-orders" onclick="switchTab('orders')">
-            <a href="#">Quản lý đơn hàng</a>
-          </li>
-          <li id="menu-inventory" onclick="switchTab('inventory')">
-            <a href="#">Báo cáo tồn kho</a>
-          </li>
-        </ul>
-      </aside>
-=======
     <div id="dashboardArea" style="display: none; width: 100%; height: 100%;">
         <!-- SIDEBAR BÊN TRÁI -->
         <aside class="sidebar collapsed" id="sidebar">
@@ -94,7 +71,6 @@
                 <li id="menu-inventory" onclick="switchTab('inventory')"><a href="#">Báo cáo tồn kho</a></li>
             </ul>
         </aside>
->>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
       <!-- KHU NỘI DUNG CHÍNH BÊN PHẢI -->
       <div class="main-container">
@@ -105,55 +81,6 @@
             <div class="topbar-title">Hệ thống quản trị [tên web]</div>
           </div>
 
-<<<<<<< HEAD
-          <div class="topbar-user">
-            <span>Xin chào, <strong>Admin</strong></span>
-            <button class="btn-logout" onclick="alert('Đã đăng xuất!')">
-              Đăng xuất
-            </button>
-          </div>
-        </header>
-
-        <main class="content">
-          <!--============================================================================================
-                TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
-            =============================================================================================-->
-          <section id="tab-imports" class="admin-module" style="display: block">
-            <div class="page-header">
-              <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
-            </div>
-            <div class="header-actions">
-              <div class="date-filter">
-                <label>Lọc từ ngày: </label>
-                <input type="date" id="fromDate" />
-                <label>đến</label>
-                <input type="date" id="toDate" />
-                <button
-                  class="btn-action"
-                  style="
-                    background-color: #17a2b8;
-                    color: white;
-                    margin-left: 10px;
-                  "
-                  onclick="applyFilters()"
-                >
-                  Lọc
-                </button>
-              </div>
-              <div class="search-action">
-                <input
-                  type="text"
-                  id="searchInput"
-                  class="search-input"
-                  placeholder="Tìm kiếm theo mã phiếu"
-                  onkeyup="applyFilters()"
-                />
-                <button class="btn-create" onclick="openAddModel()">
-                  + Lập phiếu mới
-                </button>
-              </div>
-            </div>
-=======
                 <div class="topbar-user">
 
                     <span>Xin chào, </span>
@@ -277,6 +204,96 @@
             =============================================================================================-->
                 <section id="tab-imports" class="admin-module" style="display: none;">
                     <div class="page-header">
+                        <h2 class="page-title">Quản lý sản phẩm</h2>
+                    </div>
+
+                    <!-- TÌM KIẾM SẢN PHẨM -->
+                    <div class="type-search-row">
+                        <select id="productCategoryFilter" class="search-input" style="width: auto; min-width: 150px;">
+                            <option value="ALL">-- Tất cả hãng / loại --</option>
+                            <!-- JS tự đổ danh mục vào đây -->
+                        </select>
+
+                        <input type="text" id="productSearch" class="search-input"
+                            placeholder="Nhập mã hoặc tên sản phẩm...">
+
+                        <button type="button" id="productSearchBtn" class="btn-action"
+                            style="background-color: #17a2b8; color: white;">
+                            Tìm kiếm
+                        </button>
+                        <button type="button" id="productResetSearchBtn" class="btn-action"
+                            style="background:#6c757d;color:white;">
+                            Làm mới
+                        </button>
+
+                        <button type="button" id="addProductBtn" class="btn-create">
+                            + Thêm sản phẩm mới
+                        </button>
+                    </div>
+
+                    <!-- BẢNG DANH SÁCH SẢN PHẨM -->
+                    <div class="type-table-wrap card-table" style="margin-top:18px;">
+                        <table class="type-table">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Hình ảnh</th>
+                                    <th>Mã SP</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Hãng / Loại</th>
+                                    <th style="text-align: right;">Giá bán</th>
+                                    <th>Trạng thái</th>
+                                    <th style="text-align: center;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                <!-- JS tự đổ dữ liệu sản phẩm vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <!--=====================================
+                TRANG QUẢN LÝ LOẠI SẢN PHẨM
+            ======================================================-->
+                <section id="tab-product-types" class="admin-module" style="display: none;">
+                    <div class="page-header">
+                        <h1 class="page-title">Quản lý loại sản phẩm</h1>
+                    </div>
+                    <div class="header-actions">
+                        <div class="search-action">
+                            <input type="text" id="typeSearch" class="search-input"
+                                placeholder="Tìm mã hoặc tên loại...">
+                            <button type="button" id="typeSearchBtn" class="btn-action"
+                                style="background-color: #17a2b8; color: white;">Tìm kiếm</button>
+                            <button type="button" id="typeResetSearchBtn" class="btn-action"
+                                style="background-color: #6c757d; color: white;">Làm mới</button>
+                        </div>
+                        <button type="button" id="addTypeBtn" class="btn-create">+ Thêm loại mới</button>
+                    </div>
+
+                    <div class="card-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;">Ảnh</th>
+                                    <th>Mã loại</th>
+                                    <th>Tên loại</th>
+                                    <th>Mô tả</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="typeTableBody">
+                                <!-- JS sẽ tự đổ dữ liệu vào đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!--============================================================================================
+                TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
+            =============================================================================================-->
+                <section id="tab-imports" class="admin-module" style="display: none;">
+                    <div class="page-header">
                         <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
                     </div>
                     <div class="header-actions">
@@ -295,7 +312,6 @@
                             <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
                         </div>
                     </div>
->>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
             <!-- BẢNG DANH MỤC PHIẾU NHẬP -->
             <div class="card-table">
@@ -422,67 +438,6 @@
               <h1 class="page-title">Báo cáo tồn kho</h1>
             </div>
 
-<<<<<<< HEAD
-            <!-- BẢNG THỐNG KÊ TỔNG QUAN -->
-            <div class="inventory-stat-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th colspan="2">
-                      Bảng thống kê tồn kho tại thời điểm tra cứu
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Tổng sản phẩm tồn kho:</td>
-                    <td><strong id="invTotalQty">0</strong> sản phẩm</td>
-                  </tr>
-                  <tr>
-                    <td>Tổng giá trị tồn kho:</td>
-                    <td>
-                      <strong id="invTotalValue" style="color: #007bff"
-                        >0 đ</strong
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Cảnh báo sắp hết (&lt; 5):</td>
-                    <td>
-                      <strong id="invLowStockAlert" style="color: #dc3545"
-                        >0</strong
-                      >
-                      mặt hàng
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- BỘ LỌC TÌM KIẾM THEO YÊU CẦU ĐỒ ÁN -->
-            <div class="header-actions" style="flex-wrap: wrap">
-              <div
-                class="inventory-filter-group"
-                style="
-                  display: flex;
-                  gap: 15px;
-                  align-items: flex-end;
-                  flex-wrap: wrap;
-                "
-              >
-                <!-- Chức năng 8.1: Lọc theo Loại sản phẩm -->
-                <div class="inventory-filter">
-                  <label>Loại sản phẩm:</label>
-                  <select
-                    id="invCategoryFilter"
-                    class="search-input status-filter"
-                    style="width: 150px"
-                  >
-                    <option value="ALL">-- Tất cả loại --</option>
-                    <!-- JS sẽ tự đổ dữ liệu danh mục vào đây -->
-                  </select>
-                </div>
-=======
                     <!-- BẢNG THỐNG KÊ TỔNG QUAN -->
                     <div class="inventory-stat-table">
                         <table>
@@ -513,7 +468,6 @@
                     <div class="header-actions" style="flex-wrap: wrap;">
                         <div class="inventory-filter-group"
                             style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
->>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
                 <!-- Chức năng 8.3: Khoảng thời gian (Nhập-Xuất-Tồn) -->
                 <div class="inventory-filter">
@@ -547,7 +501,6 @@
                 </div>
               </div>
 
-<<<<<<< HEAD
               <div class="search-action" style="margin-top: 15px">
                 <input
                   type="text"
@@ -558,14 +511,6 @@
                 />
               </div>
             </div>
-=======
-                            <!-- Nút bấm tra cứu -->
-                            <div class="inventory-filter">
-                                <button class="btn-action" style="background-color: #17a2b8; color: white;"
-                                    onclick="applyInventoryFilters()">Tra cứu</button>
-                            </div>
-                        </div>
->>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
             <!-- BẢNG BÁO CÁO CHI TIẾT (3 CỘT: NHẬP - XUẤT - TỒN) -->
             <div class="card-table">
@@ -601,16 +546,7 @@
             CÁC MODAL
     =============================================================================================-->
 
-<<<<<<< HEAD
-      <!-- MODAL THÊM/SỬA PHIẾU NHẬP -->
-      <div id="importModal" class="modal">
-        <div class="modal-content modal-lg">
-          <div class="modal-header">
-            <h3 class="modal-title" id="modalTitle">Lập phiếu nhập hàng</h3>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-          </div>
-=======
-        <!--MODAL ĐỔI MẬT KHẨU ADMIN-->
+      <!--MODAL ĐỔI MẬT KHẨU ADMIN-->
         <div id="changePassModal" class="modal" style="display: none;">
             <div class="modal-content" style="width: 450px;">
                 <div class="modal-header">
@@ -855,310 +791,220 @@
                     <h3 class="modal-title" id="modalTitle">Lập phiếu nhập hàng</h3>
                     <button class="modal-close" onclick="closeModal()">&times;</button>
                 </div>
->>>>>>> a23f580ca660029cabded8463f3f752317bd30b9
 
-          <div class="modal-body">
-            <div class="form-row">
-              <div class="form-group col-half">
-                <label>Mã phiếu:</label>
-                <input type="text" id="modalCode" />
-              </div>
-              <div class="form-group col-half">
-                <label>Ngày nhập hàng:</label>
-                <input type="date" id="modalDate" />
-              </div>
-            </div>
-
-            <!-- THANH THÊM HÀNG HÓA -->
-            <div class="add-item-box" id="addItemControls">
-              <div class="form-group flex-2">
-                <label>Chọn sản phẩm:</label>
-                <select
-                  id="itemProductSelect"
-                  style="
-                    width: 100%;
-                    padding: 8px;
-                    border: 1px solid #ced4da;
-                    border-radius: 4px;
-                    outline: none;
-                  "
-                >
-                  <option value="">-- Vui lòng chọn sản phẩm --</option>
-                  <!-- JS sẽ tự động lấy SP từ Tab 4 đổ vào đây -->
-                </select>
-              </div>
-
-              <div class="form-group flex-1">
-                <label>Số lượng:</label>
-                <input type="number" id="itemQuantity" min="1" value="1" />
-              </div>
-
-              <div class="form-group flex-1">
-                <label>Đơn giá nhập (VNĐ):</label>
-                <input type="number" id="itemPrice" min="0" step="1" />
-              </div>
-
-              <div class="form-group btn-add-wrapper">
-                <button
-                  type="button"
-                  class="btn-add-item"
-                  onclick="addItemToDraft()"
-                >
-                  + Thêm vào phiếu
-                </button>
-              </div>
-            </div>
-
-            <!-- BẢNG DANH SÁCH CHI TIẾT CÁC MÓN ĐƯỢC NHẬP -->
-            <div class="detail-table-wrapper">
-              <table class="detail-table">
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th style="text-align: center">Ảnh</th>
-                    <th>Tên mặt hàng</th>
-                    <th style="text-align: center">Số lượng</th>
-                    <th style="text-align: right">Đơn giá nhập</th>
-                    <th style="text-align: right">Thành tiền</th>
-                    <th style="text-align: center" id="actionHeader">Xóa</th>
-                  </tr>
-                </thead>
-                <tbody id="detailTableBody">
-                  <!-- JS đổ ds hàng hóa tại đây -->
-                </tbody>
-              </table>
-            </div>
-
-            <!-- TỔNG TIỀN -->
-            <div class="modal-total-summary">
-              Tổng giá trị: <span id="modalTotalDisplay">0 đ</span>
-            </div>
-          </div>
-
-          <div class="modal-footer" id="modalFooter">
-            <button
-              class="btn-action"
-              style="background-color: #6c757d; color: white"
-              onclick="closeModal()"
-            >
-              Đóng (Hủy)
-            </button>
-            <button
-              class="btn-action btn-create"
-              id="btnSaveDraft"
-              onclick="saveForm('pending')"
-            >
-              Lưu tạm
-            </button>
-            <button
-              class="btn-action btn-complete"
-              id="btnSaveComplete"
-              onclick="saveForm('completed')"
-            >
-              Hoàn thành
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- MODAL GIÁ BÁN -->
-      <div id="pricingModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2 class="modal-title" id="modalTitle">Thiết lập Giá Bán</h2>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-          </div>
-
-          <div class="modal-body">
-            <div class="form-row">
-              <div class="form-group col-half">
-                <label>Mã sản phẩm</label>
-                <input
-                  type="text"
-                  id="modalProdCode"
-                  readonly
-                  style="background-color: #e9ecef; font-weight: bold"
-                />
-              </div>
-              <div class="form-group col-half">
-                <label>Tên sản phẩm</label>
-                <input
-                  type="text"
-                  id="modalProdName"
-                  readonly
-                  style="background-color: #e9ecef"
-                />
-              </div>
-            </div>
-
-            <!-- Khu vực tính toán giá gắn Class từ pricing.css -->
-            <div class="calculator-box">
-              <div class="form-row">
-                <div class="form-group col-half">
-                  <label>Giá nhập (VNĐ)</label>
-                  <input
-                    type="text"
-                    id="modalImportPrice"
-                    class="price-input-cost"
-                    readonly
-                  />
-                </div>
-                <div class="form-group col-half">
-                  <label>Giá bán (VNĐ)</label>
-                  <input
-                    type="number"
-                    id="modalRetailPrice"
-                    class="price-input-retail"
-                    placeholder="Nhập giá bán..."
-                    oninput="calculateMargin()"
-                  />
-                </div>
-              </div>
-
-              <div class="form-row" style="margin-bottom: 0">
-                <div class="form-group col-half">
-                  <label>Hoặc tăng theo tỷ lệ lợi nhuận (%)</label>
-                  <div style="display: flex; gap: 10px">
-                    <input
-                      type="number"
-                      id="modalMarginPercent"
-                      placeholder="VD: 30"
-                      oninput="calculateRetailPrice()"
-                    />
-                  </div>
-                </div>
-                <div class="form-group col-half">
-                  <div class="profit-display-container">
-                    <div class="profit-label">Lợi nhuận dự kiến</div>
-                    <div id="expectedProfit" class="profit-amount">
-                      0 đ / SP
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-half">
+                            <label>Mã phiếu:</label>
+                            <input type="text" id="modalCode">
+                        </div>
+                        <div class="form-group col-half">
+                            <label>Ngày nhập hàng:</label>
+                            <input type="date" id="modalDate">
+                        </div>
                     </div>
-                  </div>
+
+                    <!-- THANH THÊM HÀNG HÓA -->
+                    <div class="add-item-box" id="addItemControls">
+
+                        <div class="form-group flex-2">
+                            <label>Chọn sản phẩm:</label>
+                            <select id="itemProductSelect"
+                                style="width: 100%; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; outline: none;">
+                                <option value="">-- Vui lòng chọn sản phẩm --</option>
+                                <!-- JS sẽ tự động lấy SP từ Tab 4 đổ vào đây -->
+                            </select>
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label>Số lượng:</label>
+                            <input type="number" id="itemQuantity" min="1" value="1">
+                        </div>
+
+                        <div class="form-group flex-1">
+                            <label>Đơn giá nhập (VNĐ):</label>
+                            <input type="number" id="itemPrice" min="0" step="1">
+                        </div>
+
+                        <div class="form-group btn-add-wrapper">
+                            <button type="button" class="btn-add-item" onclick="addItemToDraft()">+ Thêm vào
+                                phiếu</button>
+                        </div>
+                    </div>
+
+                    <!-- BẢNG DANH SÁCH CHI TIẾT CÁC MÓN ĐƯỢC NHẬP -->
+                    <div class="detail-table-wrapper">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th style="text-align: center;">Ảnh</th>
+                                    <th>Tên mặt hàng</th>
+                                    <th style="text-align: center;">Số lượng</th>
+                                    <th style="text-align: right;">Đơn giá nhập</th>
+                                    <th style="text-align: right;">Thành tiền</th>
+                                    <th style="text-align: center;" id="actionHeader">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailTableBody">
+                                <!-- JS đổ ds hàng hóa tại đây -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- TỔNG TIỀN -->
+                    <div class="modal-total-summary">
+                        Tổng giá trị: <span id="modalTotalDisplay">0 đ</span>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </div>
 
-          <div class="modal-footer">
-            <button
-              class="btn-action"
-              style="background-color: #6c757d; color: white"
-              onclick="closeModal()"
-            >
-              Hủy bỏ
-            </button>
-            <button class="btn-create" onclick="savePricing()">
-              Lưu Bảng Giá
-            </button>
-          </div>
+                <div class="modal-footer" id="modalFooter">
+                    <button class="btn-action" style="background-color: #6c757d; color: white;"
+                        onclick="closeModal()">Đóng
+                        (Hủy)</button>
+                    <button class="btn-action btn-create" id="btnSaveDraft" onclick="saveForm('pending')">Lưu
+                        tạm</button>
+                    <button class="btn-action btn-complete" id="btnSaveComplete" onclick="saveForm('completed')">Hoàn
+                        thành</button>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <!-- MODAL XỬ LÝ ĐƠN HÀNG -->
-      <div id="orderModal" class="modal">
-        <div class="modal-content modal-lg">
-          <div class="modal-header">
-            <h3 class="modal-title">
-              Chi Tiết Đơn Hàng:
-              <span id="modalOrderId" style="color: #007bff"></span>
-            </h3>
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-          </div>
+        <!-- MODAL GIÁ BÁN -->
+        <div id="pricingModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalTitle">Thiết lập Giá Bán</h2>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
 
-          <div class="modal-body">
-            <h4 style="margin-bottom: 10px; color: #495057">
-              Thông tin người nhận
-            </h4>
-            <div class="form-row">
-              <div class="form-group col-half">
-                <label>Tên khách hàng:</label>
-                <input
-                  type="text"
-                  id="modalCustomerName"
-                  readonly
-                  style="background-color: #e9ecef"
-                />
-              </div>
-              <div class="form-group col-half">
-                <label>Số điện thoại:</label>
-                <input
-                  type="text"
-                  id="modalCustomerPhone"
-                  readonly
-                  style="background-color: #e9ecef"
-                />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group" style="width: 100%">
-                <label>Địa chỉ giao hàng:</label>
-                <input
-                  type="text"
-                  id="modalCustomerAddress"
-                  readonly
-                  style="background-color: #e9ecef"
-                />
-              </div>
-            </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group col-half">
+                            <label>Mã sản phẩm</label>
+                            <input type="text" id="modalProdCode" readonly
+                                style="background-color: #e9ecef; font-weight: bold;">
+                        </div>
+                        <div class="form-group col-half">
+                            <label>Tên sản phẩm</label>
+                            <input type="text" id="modalProdName" readonly style="background-color: #e9ecef;">
+                        </div>
+                    </div>
 
-            <h4 style="margin-top: 20px; margin-bottom: 10px; color: #495057">
-              Danh sách sản phẩm mua
-            </h4>
-            <div class="detail-table-wrapper">
-              <table class="detail-table">
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th>Tên sản phẩm</th>
-                    <th style="text-align: center">Số lượng</th>
-                    <th style="text-align: right">Đơn giá</th>
-                    <th style="text-align: right">Thành tiền</th>
-                  </tr>
-                </thead>
-                <tbody id="orderDetailBody">
-                  <!-- JS đổ ds sản phẩm -->
-                </tbody>
-              </table>
-            </div>
+                    <!-- Khu vực tính toán giá gắn Class từ pricing.css -->
+                    <div class="calculator-box">
+                        <div class="form-row">
+                            <div class="form-group col-half">
+                                <label>Giá nhập (VNĐ)</label>
+                                <input type="text" id="modalImportPrice" class="price-input-cost" readonly>
+                            </div>
+                            <div class="form-group col-half">
+                                <label>Giá bán (VNĐ)</label>
+                                <input type="number" id="modalRetailPrice" class="price-input-retail"
+                                    placeholder="Nhập giá bán..." oninput="calculateMargin()">
+                            </div>
+                        </div>
 
-            <div class="modal-total-summary">
-              Tổng cộng: <span id="modalOrderTotal">0 đ</span>
-            </div>
-          </div>
+                        <div class="form-row" style="margin-bottom: 0;">
+                            <div class="form-group col-half">
+                                <label>Hoặc tăng theo tỷ lệ lợi nhuận (%)</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="number" id="modalMarginPercent" placeholder="VD: 30"
+                                        oninput="calculateRetailPrice()">
+                                </div>
+                            </div>
+                            <div class="form-group col-half">
+                                <div class="profit-display-container">
+                                    <div class="profit-label">Lợi nhuận dự kiến</div>
+                                    <div id="expectedProfit" class="profit-amount">0 đ / SP</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-          <div class="modal-footer" style="justify-content: space-between">
-            <div style="display: flex; align-items: center; gap: 10px">
-              <label style="font-weight: bold; font-size: 14px"
-                >Trạng thái đơn:</label
-              >
-              <select
-                id="modalOrderStatusUpdate"
-                class="search-input order-status-filter"
-                style="border: 2px solid #80bdff; font-weight: bold"
-              >
-                <option value="pending">Chờ xác nhận</option>
-                <option value="processing">Đang giao hàng</option>
-                <option value="completed">Đã giao thành công</option>
-                <option value="cancelled">Hủy đơn hàng</option>
-              </select>
+                <div class="modal-footer">
+                    <button class="btn-action" style="background-color: #6c757d; color: white;"
+                        onclick="closeModal()">Hủy
+                        bỏ</button>
+                    <button class="btn-create" onclick="savePricing()">Lưu Bảng Giá</button>
+                </div>
             </div>
-            <div>
-              <button
-                class="btn-action"
-                style="background-color: #6c757d; color: white"
-                onclick="closeModal()"
-              >
-                Đóng
-              </button>
-              <button class="btn-create" onclick="saveOrderStatus()">
-                Cập nhật & Lưu
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
+
+        <!-- MODAL XỬ LÝ ĐƠN HÀNG -->
+        <div id="orderModal" class="modal">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h3 class="modal-title">Chi Tiết Đơn Hàng: <span id="modalOrderId" style="color: #007bff;"></span>
+                    </h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <h4 style="margin-bottom: 10px; color: #495057;">Thông tin người nhận</h4>
+                    <div class="form-row">
+                        <div class="form-group col-half">
+                            <label>Tên khách hàng:</label>
+                            <input type="text" id="modalCustomerName" readonly style="background-color: #e9ecef;">
+                        </div>
+                        <div class="form-group col-half">
+                            <label>Số điện thoại:</label>
+                            <input type="text" id="modalCustomerPhone" readonly style="background-color: #e9ecef;">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="width: 100%;">
+                            <label>Địa chỉ giao hàng:</label>
+                            <input type="text" id="modalCustomerAddress" readonly style="background-color: #e9ecef;">
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top: 20px; margin-bottom: 10px; color: #495057;">Danh sách sản phẩm mua</h4>
+                    <div class="detail-table-wrapper">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th style="text-align: center;">Số lượng</th>
+                                    <th style="text-align: right;">Đơn giá</th>
+                                    <th style="text-align: right;">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orderDetailBody">
+                                <!-- JS đổ ds sản phẩm -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="modal-total-summary">
+                        Tổng cộng: <span id="modalOrderTotal">0 đ</span>
+                    </div>
+                </div>
+
+                <div class="modal-footer" style="justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <label style="font-weight: bold; font-size: 14px;">Trạng thái đơn:</label>
+                        <select id="modalOrderStatusUpdate" class="search-input order-status-filter"
+                            style="border: 2px solid #80bdff; font-weight: bold;">
+                            <option value="pending">Chờ xác nhận</option>
+                            <option value="processing">Đang giao hàng</option>
+                            <option value="completed">Đã giao thành công</option>
+                            <option value="cancelled">Hủy đơn hàng</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button class="btn-action" style="background-color: #6c757d; color: white;"
+                            onclick="closeModal()">Đóng</button>
+                        <button class="btn-create" onclick="saveOrderStatus()">Cập nhật & Lưu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/admin.js"></script>
-  </body>
+</body>
+
 </html>
