@@ -81,7 +81,7 @@ a {
   /* flex: 3; */
   display: flex;
   justify-content: center;
-  padding: 14px 50px;
+  padding: 0 50px;
   background-color: #d70027;
   width: 100%;
 }
@@ -97,6 +97,7 @@ a {
   font-size: 14px;
   font-weight: bold;
   color: #fff;
+  padding: 14px 0;
   line-height: 10px;
   display: block;
 }
@@ -108,7 +109,8 @@ a {
   display: none;
   position: absolute;
   width: 150px;
-  margin: 5px;
+  top: 100%;
+  margin: 0;
   border: solid 1px #ccc;
   background-color: #fff;
   padding: 2px 0 2px 3px;
