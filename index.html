@@ -82,22 +82,37 @@
       </div>
     </header>
     <main>
-      <section class="banner-slider">
-        <div class="slideshow-container">
-          <div class="slides">
-            <img src="slide1.jpg" alt="Banner Điện Thoại 1" style="width:100%">
+      <div id="mainView">
+        <!-- PHẦN BANNER -->
+        <section class="banner-slider">
+          <div class="slideshow-container">
+            <div class="slides">
+              <img src="slide1.jpg" alt="Banner Điện Thoại 1" style="width:100%">
+            </div>
+            <div class="slides">
+              <img src="slide22.jpg" alt="Banner Điện Thoại 2" style="width:100%">
+            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            <div class="dot-container">
+              <span class="dot" onclick="currentSlide(1)"></span> 
+              <span class="dot" onclick="currentSlide(2)"></span> 
+            </div>
           </div>
-          <div class="slides">
-            <img src="slide22.jpg" alt="Banner Điện Thoại 2" style="width:100%">
+        </section>
+
+        <!-- PHẦN HIỂN THỊ SẢN PHẨM (BẮT BUỘC PHẢI CÓ) -->
+        <section class="product-section">  
+          <div class="product-list-container">
+            <h2 id="categoryTitle">Tất cả sản phẩm</h2>
+            <div id="productGrid" class="product-grid"></div> 
+            <div id="pagination" class="pagination"></div>
           </div>
-          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-          <a class="next" onclick="plusSlides(1)">&#10095;</a>
-          <div class="dot-container">
-            <span class="dot" onclick="currentSlide(1)"></span> 
-            <span class="dot" onclick="currentSlide(2)"></span> 
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
+
+      <!-- MÀN HÌNH CHI TIẾT SẢN PHẨM -->
+      <div id="detailView" class="hidden"></div>
     </main>
     <footer>
       <div class="topfooter">

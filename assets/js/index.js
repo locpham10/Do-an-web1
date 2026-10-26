@@ -1,69 +1,94 @@
 function khoiTaoDuLieuMau() {
-    // 1. Tạo loại sản phẩm mẫu nếu chưa có
-    if (!localStorage.getItem("loaiSanPham")) {
-        const loaiMau = [{ maLoai: "L01", tenLoai: "Điện thoại", moTa: "Danh mục gốc", trangThai: "hoatdong", hinh: "" }];
-        localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
-    }
+  // 1. Tạo loại sản phẩm mẫu nếu chưa có
+  if (!localStorage.getItem("loaiSanPham")) {
+    const loaiMau = [
+      { maLoai: "L01", tenLoai: "apple", moTa: "Điện thoại iPhone", trangThai: "hoatdong", hinh: "" },
+      { maLoai: "L02", tenLoai: "samsung", moTa: "Điện thoại Samsung", trangThai: "hoatdong", hinh: "" },
+      { maLoai: "L03", tenLoai: "oppo", moTa: "Điện thoại OPPO", trangThai: "hoatdong", hinh: "" }
+    ];
+    localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
+  }
 
-    // 2. Tạo sản phẩm mẫu nếu chưa có
-    if (!localStorage.getItem("danhMucSanPham")) {
-        const spMau = [
-            { maSP: "SP01", maLoai: "L01", tenLoai: "Điện thoại", tenSP: "Sản phẩm mẫu 1", moTa: "Mô tả mẫu", trangThai: "hoatdong", hinh: "../assets/images/default-image.jpeg" }
-        ];
-        localStorage.setItem("danhMucSanPham", JSON.stringify(spMau));
-    }
+  // 2. Tạo sản phẩm mẫu nếu chưa có
+  if (!localStorage.getItem("danhMucSanPham")) {
+    const spMau = [
+      { maSP: "SP01", maLoai: "L01", tenLoai: "apple", tenSP: "iPhone 15 Pro Max", price: 29990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "assets/images/default-image.jpeg", color: "Titan Tự Nhiên" },
+      { maSP: "SP02", maLoai: "L02", tenLoai: "samsung", tenSP: "Galaxy S24 Ultra", price: 33990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "assets/images/default-image.jpeg", color: "Đen Titan" },
+      { maSP: "SP03", maLoai: "L03", tenLoai: "oppo", tenSP: "OPPO Find N3", price: 24990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "assets/images/default-image.jpeg", color: "Vàng Đồng" }
+    ];
+    localStorage.setItem("danhMucSanPham", JSON.stringify(spMau));
+  }
+
+  // 3. Tạo phiếu nhập mẫu (Để đồng bộ với Admin Nhập hàng & Tồn kho)
+  if (!localStorage.getItem("saved_imports")) {
+    const phieuNhapMau = [
+      {
+        code: "PN001",
+        date: "2026-10-25",
+        status: "completed",
+        totalAmount: 520000000,
+        items: [
+          { code: "SP01", name: "iPhone 15 Pro Max", image: "../assets/images/default-image.jpeg", qty: 10, price: 25000000 },
+          { code: "SP02", name: "Galaxy S24 Ultra", image: "../assets/images/default-image.jpeg", qty: 5, price: 28000000 },
+          { code: "SP03", name: "OPPO Find N3", image: "../assets/images/default-image.jpeg", qty: 6, price: 20000000 }
+        ]
+      }
+    ];
+    localStorage.setItem("saved_imports", JSON.stringify(phieuNhapMau));
+  }
+
+  // 4. Tạo bảng giá bán mẫu (ĐỂ TRANG CHỦ CÓ GIÁ BÁN HIỂN THỊ NGAY)
+  if (!localStorage.getItem("saved_pricing")) {
+    const giaMau = [
+      { code: "SP001", name: "iPhone 15 Pro Max", image: "../assets/images/default-image.jpeg", totalQty: 10, totalCost: 250000000, importPrice: 25000000, retailPrice: 29990000 },
+      { code: "SP002", name: "Galaxy S24 Ultra", image: "../assets/images/default-image.jpeg", totalQty: 5, totalCost: 140000000, importPrice: 28000000, retailPrice: 33990000 },
+      { code: "SP003", name: "OPPO Find N3", image: "../assets/images/default-image.jpeg", totalQty: 6, totalCost: 120000000, importPrice: 20000000, retailPrice: 24990000 }
+    ];
+    localStorage.setItem("saved_pricing", JSON.stringify(giaMau));
+  }
 }
 
 // Chạy tự động ngay khi mở web
 khoiTaoDuLieuMau();
-let slideIndex = 1;
 
-// Gọi hàm để hiển thị slide đầu tiên khi vừa tải trang
+let slideIndex = 1;
 showSlides(slideIndex);
 
-// Hàm xử lý khi bấm nút Next (Phải) hoặc Prev (Trái)
 function plusSlides(n) {
   showSlides((slideIndex += n));
 }
 
-// Hàm xử lý khi bấm vào các dấu chấm tròn bên dưới
 function currentSlide(n) {
   showSlides((slideIndex = n));
 }
 
-// Hàm chính xử lý logic ẩn/hiện ảnh
 function showSlides(n) {
   let i;
   let slides = document.getElementsByClassName("slides");
   let dots = document.getElementsByClassName("dot");
+  if (slides.length === 0) return;
 
-  // Nếu vuốt quá ảnh cuối cùng -> quay lại ảnh số 1
   if (n > slides.length) {
     slideIndex = 1;
   }
-
-  // Nếu vuốt ngược qua ảnh số 1 -> đi tới ảnh cuối cùng
   if (n < 1) {
     slideIndex = slides.length;
   }
 
-  // Vòng lặp ẩn tất cả các ảnh đi
   for (i = 0; i < slides.length; i++) {
     slides[i].style.display = "none";
   }
-
-  // Vòng lặp xóa trạng thái "active" (màu trắng sáng) của tất cả dấu chấm
   for (i = 0; i < dots.length; i++) {
     dots[i].className = dots[i].className.replace(" active", "");
   }
 
-  // Hiển thị ảnh hiện tại và bật sáng dấu chấm tương ứng
   slides[slideIndex - 1].style.display = "block";
-  dots[slideIndex - 1].className += " active";
+  if (dots[slideIndex - 1]) {
+    dots[slideIndex - 1].className += " active";
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // ==================== CÁC PHẦN TỬ MODAL & USER ====================
   const authModal = document.getElementById("authModal");
   const closeAuthModal = document.getElementById("closeAuthModal");
   const userBtn = document.getElementById("userBtn");
@@ -71,21 +96,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const userItem = document.querySelector(".user-item");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  // ==================== KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP ====================
   function checkLoginStatus() {
     const user = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
     if (user) {
-      // Đã đăng nhập: Thêm class .logged-in để rê chuột vào hiện 2 dòng
       userItem.classList.add("logged-in");
     } else {
-      // Chưa đăng nhập: Gỡ class, rê chuột vào KHÔNG hiện dòng nào
       userItem.classList.remove("logged-in");
     }
   }
 
   checkLoginStatus();
 
-  // Bật/tắt popup
   function openModal() {
     authModal.classList.remove("hidden");
     showLogin();
@@ -102,17 +123,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // ==================== CÁC SỰ KIỆN CLICK ====================
-  // Bấm vào icon tài khoản: nếu chưa đăng nhập thì bật form đăng nhập/đăng ký
-  userBtn.addEventListener("click", function (e) {
+  userBtn.addEventListener("click", function () {
     const user = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
     if (!user) {
       openModal();
     }
   });
 
-  // Bấm vào giỏ hàng: nếu chưa đăng nhập thì không vào được và hiện form đăng nhập
-  cartBtn.addEventListener("click", function (e) {
+  cartBtn.addEventListener("click", function () {
     const user = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
     if (!user) {
       alert("Vui lòng đăng nhập để xem giỏ hàng!");
@@ -122,7 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Bấm Đăng xuất: xóa trạng thái và vẫn ở trang index.html
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function () {
       localStorage.removeItem("nguoiDungDangNhap");
@@ -131,7 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ==================== TOÀN BỘ LOGIC CỦA AUTH.JS ====================
   const loginTab = document.getElementById("loginTab");
   const registerTab = document.getElementById("registerTab");
 
@@ -151,7 +167,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const forgotPassword = document.getElementById("forgotPassword");
   const backToLogin = document.getElementById("backToLogin");
 
-  // HIỂN THỊ ĐĂNG NHẬP
   function showLogin() {
     loginForm.classList.remove("hidden");
     registerForm.classList.add("hidden");
@@ -161,7 +176,6 @@ document.addEventListener("DOMContentLoaded", function () {
     registerTab.classList.remove("active");
   }
 
-  // HIỂN THỊ ĐĂNG KÝ
   function showRegister() {
     loginForm.classList.add("hidden");
     registerForm.classList.remove("hidden");
@@ -171,7 +185,6 @@ document.addEventListener("DOMContentLoaded", function () {
     registerTab.classList.add("active");
   }
 
-  // HIỂN THỊ QUÊN MẬT KHẨU
   function showForgot() {
     loginForm.classList.add("hidden");
     registerForm.classList.add("hidden");
@@ -181,7 +194,6 @@ document.addEventListener("DOMContentLoaded", function () {
     registerTab.classList.remove("active");
   }
 
-  // CHUYỂN FORM
   loginTab.addEventListener("click", showLogin);
   registerTab.addEventListener("click", showRegister);
   document.getElementById("goRegister").addEventListener("click", showRegister);
@@ -189,7 +201,6 @@ document.addEventListener("DOMContentLoaded", function () {
   forgotPassword.addEventListener("click", showForgot);
   backToLogin.addEventListener("click", showLogin);
 
-  // ĐĂNG KÝ
   registerForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -233,7 +244,6 @@ document.addEventListener("DOMContentLoaded", function () {
     showLogin();
   });
 
-  // ĐĂNG NHẬP
   loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -255,7 +265,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Kiểm tra tài khoản trong danh sách ngunghoatdong
     const danhSachNgungHoatDong =
       JSON.parse(localStorage.getItem("ngunghoatdong")) || [];
 
@@ -282,15 +291,13 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Đăng nhập thành công
     localStorage.setItem("nguoiDungDangNhap", JSON.stringify(nguoiDung));
     alert("Đăng nhập thành công!");
     loginForm.reset();
     closeModal();
-    checkLoginStatus(); // Cập nhật lại trạng thái giao diện ngay tại index
+    checkLoginStatus();
   });
 
-  // QUÊN MẬT KHẨU
   forgotForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -344,25 +351,51 @@ document.addEventListener("DOMContentLoaded", function () {
     showLogin();
   });
 });
-<<<<<<< HEAD
-=======
 
 // ======================================================================
-// PHẦN HIỂN THỊ VÀ TÌM KIẾM SẢN PHẨM (DÙNG JS CƠ BẢN NHẤT)
+// PHẦN HIỂN THỊ VÀ TÌM KIẾM SẢN PHẨM
 // ======================================================================
 
-// 1. Lấy dữ liệu từ localStorage ra và gán vào biến
-let allProducts = JSON.parse(localStorage.getItem("danhMucSanPham")) || [];
+let rawProducts = JSON.parse(localStorage.getItem("danhMucSanPham")) || [];
+let pricingData = JSON.parse(localStorage.getItem("saved_pricing")) || [];
 
-// Tạo một mảng mới để chứa các sản phẩm sẽ hiển thị ra màn hình
+// SỬA LỖI: Khởi tạo mảng rỗng hoàn toàn trước khi lọc
+let allProducts = [];
+
+for (let i = 0; i < rawProducts.length; i++) {
+  let sp = rawProducts[i];
+
+  // Bỏ qua nếu sản phẩm đang bị ẩn
+  if (sp.trangThai !== "an") {
+    // Tìm giá bán trong saved_pricing hoặc lấy giá mặc định có sẵn trong sp
+    let giaBanObj = pricingData.find((p) => p.name === sp.tenSP);
+    let giaHienThi =
+      giaBanObj && giaBanObj.retailPrice > 0
+        ? giaBanObj.retailPrice
+        : sp.price || 0;
+
+    // Chỉ hiển thị sản phẩm có giá bán > 0
+    if (giaHienThi > 0) {
+      allProducts.push({
+        maSP: sp.maSP,
+        tenSP: sp.tenSP,
+        tenLoai: sp.tenLoai || "Khác",
+        hinh: sp.hinh || "assets/images/default-image.jpeg",
+        price: Number(giaHienThi),
+        color: sp.color || "Tiêu chuẩn",
+        moTa: sp.moTa || "",
+      });
+    }
+  }
+}
+
 let filteredProducts = [];
-// Dùng vòng lặp for để copy toàn bộ sản phẩm từ allProducts sang filteredProducts
 for (let i = 0; i < allProducts.length; i++) {
   filteredProducts.push(allProducts[i]);
 }
 
 let currentPage = 1;
-let itemsPerPage = 8; // Hiện 8 sản phẩm 1 trang
+let itemsPerPage = 8;
 
 // ---------------------------------------------------------
 // HÀM 1: Vẽ sản phẩm ra màn hình
@@ -371,28 +404,31 @@ function renderProducts(page) {
   let productGrid = document.getElementById("productGrid");
   if (!productGrid) return;
 
-  productGrid.innerHTML = ""; // Xóa các sản phẩm cũ
+  productGrid.innerHTML = "";
 
   let startIndex = (page - 1) * itemsPerPage;
   let endIndex = startIndex + itemsPerPage;
   let hasProduct = false;
 
-  // Dùng vòng lặp for cơ bản duyệt qua mảng để in sản phẩm ra
   for (let i = startIndex; i < endIndex; i++) {
     if (i >= filteredProducts.length) break;
 
     hasProduct = true;
     let product = filteredProducts[i];
-    let formatPrice = product.price.toLocaleString("vi-VN") + " đ";
+
+    // SỬA LỖI: Khai báo đầy đủ imgSrc, prodName, formatPrice
+    let formatPrice = Number(product.price || 0).toLocaleString("vi-VN") + " đ";
+    let imgSrc = product.hinh || "assets/images/default-image.jpeg";
+    let prodName = product.tenSP || "Sản phẩm";
 
     let cardHTML = `
       <div class="product-card">
-        <div onclick="showDetail(${product.maSP})">
-          <img src="${product.hinh}" alt="${product.tenSP}">
-          <h4>${product.tenSP}</h4>
+        <div onclick="showDetail('${product.maSP}')">
+          <img src="${imgSrc}" alt="${prodName}" onerror="this.src='https://via.placeholder.com/200'">
+          <h4>${prodName}</h4>
           <p class="price">${formatPrice}</p>
         </div>
-        <button onclick="addToCart(${product.maSP})">Thêm vào giỏ</button>
+        <button onclick="addToCart('${product.maSP}')">Thêm vào giỏ</button>
       </div>
     `;
     productGrid.innerHTML += cardHTML;
@@ -405,7 +441,7 @@ function renderProducts(page) {
 }
 
 // ---------------------------------------------------------
-// HÀM 2: Tạo các nút Phân trang (1, 2, 3...)
+// HÀM 2: Tạo các nút Phân trang
 // ---------------------------------------------------------
 function renderPagination() {
   let paginationDiv = document.getElementById("pagination");
@@ -448,13 +484,14 @@ function searchBasic() {
 
   for (let i = 0; i < allProducts.length; i++) {
     let product = allProducts[i];
-
-    // Ghép tên, hãng và màu sắc thành 1 câu dài chữ thường
     let productInfo =
-      product.tenSP + " " + product.tenLoai + " " + (product.color || "");
+      (product.tenSP || "") +
+      " " +
+      (product.tenLoai || "") +
+      " " +
+      (product.color || "");
     productInfo = productInfo.toLowerCase();
 
-    // Loại bỏ dấu cách trống trong chuỗi info để đối chiếu dễ hơn
     let compactedInfo = productInfo.replace(/\s+/g, "");
 
     if (
@@ -483,7 +520,7 @@ if (searchInputHeader) {
 }
 
 // ---------------------------------------------------------
-// HÀM 4: Lọc theo hãng khi bấm trên Menu
+// HÀM 4: Lọc theo hãng & tên trên Menu
 // ---------------------------------------------------------
 function filterByCategory(category, event) {
   if (event) event.preventDefault();
@@ -498,7 +535,7 @@ function filterByCategory(category, event) {
   } else {
     for (let i = 0; i < allProducts.length; i++) {
       let product = allProducts[i];
-      if (product.tenLoai === category) {
+      if ((product.tenLoai || "").toLowerCase() === category.toLowerCase()) {
         filteredProducts.push(product);
       }
     }
@@ -512,40 +549,37 @@ function filterByCategory(category, event) {
   renderPagination();
 }
 
-// HÀM MỚI Lọc theo TÊN SẢN PHẨM (từ Submenu)
 window.filterByName = function (keyword, event) {
-  if (event) event.preventDefault(); // Chặn load lại trang
+  if (event) event.preventDefault();
 
-  filteredProducts = []; // Làm rỗng mảng kết quả
+  filteredProducts = [];
 
-  // Dùng vòng lặp tìm các máy có tên chứa từ khóa
   for (let i = 0; i < allProducts.length; i++) {
     let product = allProducts[i];
-
-    // So sánh chữ thường: nếu tên máy chứa từ khóa thì đưa vào mảng
-    if (product.tenSP.toLowerCase().includes(keyword.toLowerCase())) {
+    if (
+      (product.tenSP || "").toLowerCase().includes(keyword.toLowerCase())
+    ) {
       filteredProducts.push(product);
     }
   }
 
-  // Đổi tiêu đề hiển thị
   let titleElem = document.getElementById("categoryTitle");
   if (titleElem) titleElem.innerText = "Dòng máy: " + keyword;
 
   currentPage = 1;
-  hideDetail(); // Ẩn trang chi tiết nếu đang mở
-  renderProducts(currentPage); // Vẽ lại sản phẩm
-  renderPagination(); // Vẽ lại phân trang
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
 };
 
 // ---------------------------------------------------------
 // HÀM 5: Hiển thị giao diện Chi tiết 1 sản phẩm
 // ---------------------------------------------------------
-function showDetail(id) {
+function showDetail(maSP) {
   let product = null;
 
   for (let i = 0; i < allProducts.length; i++) {
-    if (allProducts[i].id === id) {
+    if (allProducts[i].maSP === maSP) {
       product = allProducts[i];
       break;
     }
@@ -553,7 +587,7 @@ function showDetail(id) {
 
   if (product === null) return;
 
-  let formatPrice = product.price.toLocaleString("vi-VN") + " đ";
+  let formatPrice = Number(product.price || 0).toLocaleString("vi-VN") + " đ";
   let detailView = document.getElementById("detailView");
   if (!detailView) return;
 
@@ -561,15 +595,15 @@ function showDetail(id) {
     <button class="back-btn" onclick="hideDetail()">Quay lại danh sách</button>
     <div class="detail-container">
       <div class="detail-image">
-        <img src="${product.hinh}" alt="${product.tenSP}">
+        <img src="${product.hinh}" alt="${product.tenSP}" onerror="this.src='https://via.placeholder.com/400'">
       </div>
       <div class="detail-info">
         <h2>${product.tenSP}</h2>
         <p class="detail-price">${formatPrice}</p>
-        <p><strong>Thương hiệu:</strong> ${product.tenLoai.toUpperCase()}</p>
+        <p><strong>Thương hiệu:</strong> ${(product.tenLoai || "").toUpperCase()}</p>
         <p><strong>Màu sắc:</strong> ${product.color || "Đang cập nhật"}</p>
-        <p style="line-height:1.6; color:#555;">Sản phẩm chính hãng mới 100%, bảo hành 12 tháng tại các trung tâm toàn quốc.</p>
-        <button class="add-to-cart-large" onclick="addToCart(${product.maSP})">Thêm vào giỏ hàng</button>
+        <p style="line-height:1.6; color:#555;">${product.moTa || "Sản phẩm chính hãng mới 100%, bảo hành 12 tháng tại các trung tâm toàn quốc."}</p>
+        <button class="add-to-cart-large" onclick="addToCart('${product.maSP}')">Thêm vào giỏ hàng</button>
       </div>
     </div>
   `;
@@ -591,11 +625,14 @@ function hideDetail() {
   if (detailView) detailView.classList.add("hidden");
 }
 
+// ---------------------------------------------------------
+// HÀM 7: Quản lý Giỏ hàng & Chấm đỏ (Đồng bộ với cart.js)
+// ---------------------------------------------------------
 function updateCartBadge() {
   let badge = document.getElementById("cartBadge");
   if (!badge) return;
 
-  let cart = JSON.parse(localStorage.getItem("gioHang")) || [];
+  let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
   let totalQty = 0;
 
   for (let i = 0; i < cart.length; i++) {
@@ -610,13 +647,15 @@ function updateCartBadge() {
   }
 }
 
-// Hàm thêm vào giỏ hàng thực tế
-function addToCart(id) {
-  let cart = JSON.parse(localStorage.getItem("gioHang")) || [];
-  
+function addToCart(maSP) {
+  let product = allProducts.find((p) => p.maSP === maSP);
+  if (!product) return;
+
+  let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+
   let daCo = false;
   for (let i = 0; i < cart.length; i++) {
-    if (cart[i].id === id) {
+    if (cart[i].id === maSP) {
       cart[i].quantity = (cart[i].quantity || 1) + 1;
       daCo = true;
       break;
@@ -624,21 +663,25 @@ function addToCart(id) {
   }
 
   if (!daCo) {
-    cart.push({ id: id, quantity: 1 });
+    cart.push({
+      id: product.maSP,
+      name: product.tenSP,
+      price: product.price,
+      image: product.hinh,
+      color: product.color || "Tiêu chuẩn",
+      quantity: 1,
+      selected: true,
+    });
   }
 
-  localStorage.setItem("gioHang", JSON.stringify(cart));
-  
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+
   updateCartBadge();
-  alert("Đã thêm sản phẩm vào giỏ hàng!");
+  alert("Đã thêm " + product.tenSP + " vào giỏ hàng!");
 }
 
-// Bật chấm đỏ ngay khi tải trang
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   updateCartBadge();
+  renderProducts(currentPage);
+  renderPagination();
 });
-
-// Khởi chạy khi load trang
-renderProducts(currentPage);
-renderPagination();
->>>>>>> 7496561 (Them cham do gio hang, sua cac san pham mac dinh)

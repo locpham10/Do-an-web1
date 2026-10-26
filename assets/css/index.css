@@ -132,6 +132,7 @@ a {
   color: #d70027;
 }
 
+/*  MAIN  */
 main {
   min-height: 60vh;
   background-color: #f9f9f9;
@@ -210,6 +211,7 @@ main {
   background-color: #fff;
 }
 
+/* FOOTER */
 footer {
   background-color: #f8f9fa;
   border-top: 1px solid #d70027;
@@ -266,6 +268,170 @@ footer {
 p {
   font-size: 13px;
   color: #333;
+}
+
+/* =================PHẦN SẢN PHẨM ================= */
+.product-section {
+  display: flex;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.product-list-container {
+  flex: 3;
+}
+
+.product-list-container h2 {
+  margin-bottom: 20px;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.product-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.product-card h4 {
+  font-size: 15px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.product-card .price {
+  color: #d70027;
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 13x;
+}
+
+.product-card button {
+  padding: 8px 15px;
+  color: #333;
+  border: solid 1px #333;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+
+.product-card button:hover {
+  background: #d70027;
+}
+
+/* phân trang */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  gap: 8px;
+}
+
+.pagination button {
+  padding: 8px 15px;
+  border: 0px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #d70027;
+  color: #fff;
+  border-color: #d70027;
+}
+
+/* ================= CHI TIẾT SẢN PHẨM  ================= */
+.hidden {
+  display: none !important;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.back-btn:hover {
+  color: #d70027;
+}
+
+.detail-container {
+  display: flex;
+  gap: 40px;
+  background: #fff;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-image {
+  flex: 1;
+  text-align: center;
+}
+
+.detail-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: contain;
+}
+
+.detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.detail-info h2 {
+  font-size: 28px;
+  margin: 0;
+  color: #333;
+}
+
+.detail-price {
+  font-size: 26px;
+  color: #d70027;
+  font-weight: bold;
+  margin: 0;
+}
+
+.add-to-cart-large {
+  padding: 15px;
+  font-size: 16px;
+  margin-top: 20px;
+  background-color: #d70027;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-to-cart-large:hover {
+  background-color: #a0001d;
 }
 
 /* ================== USER MENU (HOVER) ================== */
