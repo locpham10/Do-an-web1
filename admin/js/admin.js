@@ -1,3 +1,39 @@
+function khoiTaoDuLieuMau() {
+    // 1. Tạo loại sản phẩm mẫu
+    if (!localStorage.getItem("loaiSanPham")) {
+        const loaiMau = [{ maLoai: "L01", tenLoai: "Điện thoại", moTa: "Danh mục gốc", trangThai: "hoatdong", hinh: "" }];
+        localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
+    }
+
+    // 2. Tạo sản phẩm mẫu (khớp biến tiếng Anh với index)
+    if (!localStorage.getItem("danhMucSanPham")) {
+        const spMau = [
+            { maSP: "SP01", maLoai: "L01", tenLoai: "apple", tenSP: "iPhone 15 Pro Max", price: 29990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../assets/images/default-image.jpeg", color: "Titan" },
+            { maSP: "SP02", maLoai: "L01", tenLoai: "samsung", tenSP: "Galaxy S24 Ultra", price: 33990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../assets/images/default-image.jpeg", color: "Đen" }
+        ];
+        localStorage.setItem("danhMucSanPham", JSON.stringify(spMau));
+    }
+
+    // 3. Tạo phiếu nhập mẫu (ĐỂ SẢN PHẨM HIỆN TRONG GIÁ BÁN VÀ TỒN KHO)
+    if (!localStorage.getItem("saved_imports")) {
+        const phieuNhapMau = [
+            {
+                code: "PN001",
+                date: "2026-10-25",
+                status: "completed",
+                totalAmount: 50000000,
+                items: [
+                    { code: "SP01", name: "iPhone 15 Pro Max", image: "../assets/images/default-image.jpeg", qty: 10, price: 25000000 },
+                    { code: "SP02", name: "Galaxy S24 Ultra", image: "../assets/images/default-image.jpeg", qty: 5, price: 30000000 }
+                ]
+            }
+        ];
+        localStorage.setItem("saved_imports", JSON.stringify(phieuNhapMau));
+    }
+}
+
+// Chạy tự động ngay khi mở web
+khoiTaoDuLieuMau();
 /*======================================================================
     ĐĂNG NHẬP CHO TRANG ADMIN
 ======================================================================*/

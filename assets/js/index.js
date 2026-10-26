@@ -1,3 +1,21 @@
+function khoiTaoDuLieuMau() {
+    // 1. Tạo loại sản phẩm mẫu nếu chưa có
+    if (!localStorage.getItem("loaiSanPham")) {
+        const loaiMau = [{ maLoai: "L01", tenLoai: "Điện thoại", moTa: "Danh mục gốc", trangThai: "hoatdong", hinh: "" }];
+        localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
+    }
+
+    // 2. Tạo sản phẩm mẫu nếu chưa có
+    if (!localStorage.getItem("danhMucSanPham")) {
+        const spMau = [
+            { maSP: "SP01", maLoai: "L01", tenLoai: "Điện thoại", tenSP: "Sản phẩm mẫu 1", moTa: "Mô tả mẫu", trangThai: "hoatdong", hinh: "../assets/images/default-image.jpeg" }
+        ];
+        localStorage.setItem("danhMucSanPham", JSON.stringify(spMau));
+    }
+}
+
+// Chạy tự động ngay khi mở web
+khoiTaoDuLieuMau();
 let slideIndex = 1;
 
 // Gọi hàm để hiển thị slide đầu tiên khi vừa tải trang
@@ -326,3 +344,301 @@ document.addEventListener("DOMContentLoaded", function () {
     showLogin();
   });
 });
+<<<<<<< HEAD
+=======
+
+// ======================================================================
+// PHẦN HIỂN THỊ VÀ TÌM KIẾM SẢN PHẨM (DÙNG JS CƠ BẢN NHẤT)
+// ======================================================================
+
+// 1. Lấy dữ liệu từ localStorage ra và gán vào biến
+let allProducts = JSON.parse(localStorage.getItem("danhMucSanPham")) || [];
+
+// Tạo một mảng mới để chứa các sản phẩm sẽ hiển thị ra màn hình
+let filteredProducts = [];
+// Dùng vòng lặp for để copy toàn bộ sản phẩm từ allProducts sang filteredProducts
+for (let i = 0; i < allProducts.length; i++) {
+  filteredProducts.push(allProducts[i]);
+}
+
+let currentPage = 1;
+let itemsPerPage = 8; // Hiện 8 sản phẩm 1 trang
+
+// ---------------------------------------------------------
+// HÀM 1: Vẽ sản phẩm ra màn hình
+// ---------------------------------------------------------
+function renderProducts(page) {
+  let productGrid = document.getElementById("productGrid");
+  if (!productGrid) return;
+
+  productGrid.innerHTML = ""; // Xóa các sản phẩm cũ
+
+  let startIndex = (page - 1) * itemsPerPage;
+  let endIndex = startIndex + itemsPerPage;
+  let hasProduct = false;
+
+  // Dùng vòng lặp for cơ bản duyệt qua mảng để in sản phẩm ra
+  for (let i = startIndex; i < endIndex; i++) {
+    if (i >= filteredProducts.length) break;
+
+    hasProduct = true;
+    let product = filteredProducts[i];
+    let formatPrice = product.price.toLocaleString("vi-VN") + " đ";
+
+    let cardHTML = `
+      <div class="product-card">
+        <div onclick="showDetail(${product.maSP})">
+          <img src="${product.hinh}" alt="${product.tenSP}">
+          <h4>${product.tenSP}</h4>
+          <p class="price">${formatPrice}</p>
+        </div>
+        <button onclick="addToCart(${product.maSP})">Thêm vào giỏ</button>
+      </div>
+    `;
+    productGrid.innerHTML += cardHTML;
+  }
+
+  if (hasProduct === false) {
+    productGrid.innerHTML =
+      "<h3 style='grid-column: span 4; text-align:center;'>Không tìm thấy sản phẩm nào!</h3>";
+  }
+}
+
+// ---------------------------------------------------------
+// HÀM 2: Tạo các nút Phân trang (1, 2, 3...)
+// ---------------------------------------------------------
+function renderPagination() {
+  let paginationDiv = document.getElementById("pagination");
+  if (!paginationDiv) return;
+  paginationDiv.innerHTML = "";
+
+  let totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    let btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) {
+      btn.className = "active";
+    }
+
+    btn.addEventListener("click", function () {
+      currentPage = i;
+      renderProducts(currentPage);
+      renderPagination();
+      let titleElem = document.getElementById("categoryTitle");
+      if (titleElem) titleElem.scrollIntoView({ behavior: "smooth" });
+    });
+
+    paginationDiv.appendChild(btn);
+  }
+}
+
+// ---------------------------------------------------------
+// HÀM 3: Tìm kiếm thông minh trên Header
+// ---------------------------------------------------------
+let searchInputHeader = document.querySelector(".search-container input");
+let searchIconHeader = document.querySelector(".search-container .fa-search");
+
+function searchBasic() {
+  if (!searchInputHeader) return;
+  let keyword = searchInputHeader.value.toLowerCase().trim();
+
+  filteredProducts = [];
+
+  for (let i = 0; i < allProducts.length; i++) {
+    let product = allProducts[i];
+
+    // Ghép tên, hãng và màu sắc thành 1 câu dài chữ thường
+    let productInfo =
+      product.tenSP + " " + product.tenLoai + " " + (product.color || "");
+    productInfo = productInfo.toLowerCase();
+
+    // Loại bỏ dấu cách trống trong chuỗi info để đối chiếu dễ hơn
+    let compactedInfo = productInfo.replace(/\s+/g, "");
+
+    if (
+      productInfo.includes(keyword) ||
+      compactedInfo.includes(keyword.replace(/\s+/g, ""))
+    ) {
+      filteredProducts.push(product);
+    }
+  }
+
+  let titleElem = document.getElementById("categoryTitle");
+  if (titleElem)
+    titleElem.innerText = 'Kết quả tìm kiếm cho: "' + keyword + '"';
+
+  currentPage = 1;
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
+}
+
+if (searchIconHeader) searchIconHeader.addEventListener("click", searchBasic);
+if (searchInputHeader) {
+  searchInputHeader.addEventListener("keyup", function (e) {
+    if (e.key === "Enter") searchBasic();
+  });
+}
+
+// ---------------------------------------------------------
+// HÀM 4: Lọc theo hãng khi bấm trên Menu
+// ---------------------------------------------------------
+function filterByCategory(category, event) {
+  if (event) event.preventDefault();
+  filteredProducts = [];
+
+  if (category === "all") {
+    for (let i = 0; i < allProducts.length; i++) {
+      filteredProducts.push(allProducts[i]);
+    }
+    let titleElem = document.getElementById("categoryTitle");
+    if (titleElem) titleElem.innerText = "Tất cả sản phẩm";
+  } else {
+    for (let i = 0; i < allProducts.length; i++) {
+      let product = allProducts[i];
+      if (product.tenLoai === category) {
+        filteredProducts.push(product);
+      }
+    }
+    let titleElem = document.getElementById("categoryTitle");
+    if (titleElem) titleElem.innerText = "Sản phẩm " + category.toUpperCase();
+  }
+
+  currentPage = 1;
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
+}
+
+// HÀM MỚI Lọc theo TÊN SẢN PHẨM (từ Submenu)
+window.filterByName = function (keyword, event) {
+  if (event) event.preventDefault(); // Chặn load lại trang
+
+  filteredProducts = []; // Làm rỗng mảng kết quả
+
+  // Dùng vòng lặp tìm các máy có tên chứa từ khóa
+  for (let i = 0; i < allProducts.length; i++) {
+    let product = allProducts[i];
+
+    // So sánh chữ thường: nếu tên máy chứa từ khóa thì đưa vào mảng
+    if (product.tenSP.toLowerCase().includes(keyword.toLowerCase())) {
+      filteredProducts.push(product);
+    }
+  }
+
+  // Đổi tiêu đề hiển thị
+  let titleElem = document.getElementById("categoryTitle");
+  if (titleElem) titleElem.innerText = "Dòng máy: " + keyword;
+
+  currentPage = 1;
+  hideDetail(); // Ẩn trang chi tiết nếu đang mở
+  renderProducts(currentPage); // Vẽ lại sản phẩm
+  renderPagination(); // Vẽ lại phân trang
+};
+
+// ---------------------------------------------------------
+// HÀM 5: Hiển thị giao diện Chi tiết 1 sản phẩm
+// ---------------------------------------------------------
+function showDetail(id) {
+  let product = null;
+
+  for (let i = 0; i < allProducts.length; i++) {
+    if (allProducts[i].id === id) {
+      product = allProducts[i];
+      break;
+    }
+  }
+
+  if (product === null) return;
+
+  let formatPrice = product.price.toLocaleString("vi-VN") + " đ";
+  let detailView = document.getElementById("detailView");
+  if (!detailView) return;
+
+  detailView.innerHTML = `
+    <button class="back-btn" onclick="hideDetail()">Quay lại danh sách</button>
+    <div class="detail-container">
+      <div class="detail-image">
+        <img src="${product.hinh}" alt="${product.tenSP}">
+      </div>
+      <div class="detail-info">
+        <h2>${product.tenSP}</h2>
+        <p class="detail-price">${formatPrice}</p>
+        <p><strong>Thương hiệu:</strong> ${product.tenLoai.toUpperCase()}</p>
+        <p><strong>Màu sắc:</strong> ${product.color || "Đang cập nhật"}</p>
+        <p style="line-height:1.6; color:#555;">Sản phẩm chính hãng mới 100%, bảo hành 12 tháng tại các trung tâm toàn quốc.</p>
+        <button class="add-to-cart-large" onclick="addToCart(${product.maSP})">Thêm vào giỏ hàng</button>
+      </div>
+    </div>
+  `;
+
+  let mainView = document.getElementById("mainView");
+  if (mainView) mainView.classList.add("hidden");
+  detailView.classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+// ---------------------------------------------------------
+// HÀM 6: Nút quay lại danh sách
+// ---------------------------------------------------------
+function hideDetail() {
+  let mainView = document.getElementById("mainView");
+  let detailView = document.getElementById("detailView");
+
+  if (mainView) mainView.classList.remove("hidden");
+  if (detailView) detailView.classList.add("hidden");
+}
+
+function updateCartBadge() {
+  let badge = document.getElementById("cartBadge");
+  if (!badge) return;
+
+  let cart = JSON.parse(localStorage.getItem("gioHang")) || [];
+  let totalQty = 0;
+
+  for (let i = 0; i < cart.length; i++) {
+    totalQty += cart[i].quantity || 1;
+  }
+
+  if (totalQty > 0) {
+    badge.innerText = totalQty;
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+}
+
+// Hàm thêm vào giỏ hàng thực tế
+function addToCart(id) {
+  let cart = JSON.parse(localStorage.getItem("gioHang")) || [];
+  
+  let daCo = false;
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].id === id) {
+      cart[i].quantity = (cart[i].quantity || 1) + 1;
+      daCo = true;
+      break;
+    }
+  }
+
+  if (!daCo) {
+    cart.push({ id: id, quantity: 1 });
+  }
+
+  localStorage.setItem("gioHang", JSON.stringify(cart));
+  
+  updateCartBadge();
+  alert("Đã thêm sản phẩm vào giỏ hàng!");
+}
+
+// Bật chấm đỏ ngay khi tải trang
+document.addEventListener("DOMContentLoaded", function() {
+  updateCartBadge();
+});
+
+// Khởi chạy khi load trang
+renderProducts(currentPage);
+renderPagination();
+>>>>>>> 7496561 (Them cham do gio hang, sua cac san pham mac dinh)

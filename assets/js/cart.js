@@ -75,6 +75,7 @@ function renderCart() {
     cartItemsList.innerHTML =
       '<div class="card" style="text-align: center; padding: 40px; color: #888;">Giỏ hàng của bạn đang trống!</div>';
     updateSummary();
+    updateCartBadge();
     return;
   }
 
@@ -112,6 +113,7 @@ function renderCart() {
 
   checkAllStatusSync();
   updateSummary();
+  updateCartBadge();
 }
 
 // 2. Tăng / Giảm số lượng
@@ -281,6 +283,7 @@ document.getElementById("btnFinishOrder").addEventListener("click", () => {
   // Xóa các món đã mua khỏi giỏ hàng
   cart = cart.filter((item) => !item.selected);
   saveCart(cart);
+  updateCartBadge();
 
   // Xóa trắng địa chỉ và quay lại trang đơn hàng profile.html
   document.getElementById("custAddress").value = "";
