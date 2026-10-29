@@ -54,6 +54,11 @@ function handleLogin() {
 
         // Lưu trạng thái đăng nhập để xài Live Server không bị out ra ngoài
         sessionStorage.setItem('isAdminLoggedIn', 'true');
+
+        const defaultMenu = document.getElementById('menu-customers');
+        if (defaultMenu) {
+            defaultMenu.click();
+        }
     } else {
         alert('Sai tài khoản hoặc mật khẩu!\n');
     }

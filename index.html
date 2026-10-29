@@ -13,6 +13,8 @@
     
   </head>
   <body>
+
+    <!-- HEADER -->
     <header>
       <div class="header-top">
         <div class="logo">
@@ -32,55 +34,55 @@
               <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
             </ul>
           </li>
-
           <!-- BIỂU TƯỢNG GIỎ HÀNG -->
           <li style="position: relative;">
             <a class="fa fa-shopping-bag" href="javascript:void(0)" id="cartBtn"></a>
             <span id="cartBadge" class="cart-badge hidden">0</span>
           </li>
-          <!-- <li>
-            <a class="fa fa-user" > 
-              <div>
-                
-              </div>
-            </a>
-          </li> -->
-          <!-- <li><a class="fa fa-shopping-bag" href=""></a></li> -->
         </ul>
       </div>
       <div class="header-bottom">
         <ul class="menu">
           <li>
-            <a href="">APPLE</a>
+            <a href="#" onclick="filterByCategory('apple', event)">APPLE</a>
             <ul class="submenu">
-              <li><a href="">iPhone 18</a></li>
-              <li><a href="">iPhone Duo</a></li>
-              <li><a href="">iPhone 17</a></li>
-              <li><a href="">iPhone Air</a></li>
-              <li><a href="">iPhone 16</a></li>
-              <li><a href="">iPhone 15</a></li>
+              <li><a href="#" onclick="filterByName('iPhone 18', event)">iPhone 18</a></li>
+              <li><a href="#" onclick="filterByName('iPhone Duo', event)">iPhone Duo</a></li>
+              <li><a href="#" onclick="filterByName('iPhone 17', event)">iPhone 17</a></li>
+              <li><a href="#" onclick="filterByName('iPhone 16', event)">iPhone 16</a></li>
+              <li><a href="#" onclick="filterByName('iPhone 15', event)">iPhone 15</a></li>
             </ul>
           </li>
           <li>
-            <a href="">SAMSUNG</a>
+            <a href="#" onclick="filterByCategory('samsung', event)">SAMSUNG</a>
             <ul class="submenu">
-              <li><a href="">Galaxy S26 </a></li>
-              <li><a href="">Galaxy Z7</a></li>
-              <li><a href="">Galaxy Z8</a></li>
-              <li><a href="">Galaxy A</a></li>
+              <li><a href="#" onclick="filterByName('Galaxy S26', event)">Galaxy S26</a></li>
+              <li><a href="#" onclick="filterByName('Galaxy Z', event)">Galaxy Z Fold/Flip</a></li>
+              <li><a href="#" onclick="filterByName('Galaxy A', event)">Galaxy A</a></li>
             </ul>
           </li>
           <li>
-            <a href="">OPPO</a>
+            <a href="#" onclick="filterByCategory('oppo', event)">OPPO</a>
             <ul class="submenu">
-              <li><a href="">OPPO Reno </a></li>
-              <li><a href="">OPPO A</a></li>
+              <li><a href="#" onclick="filterByName('OPPO Find', event)">OPPO Find</a></li>
+              <li><a href="#" onclick="filterByName('OPPO Reno', event)">OPPO Reno</a></li>
+              <li><a href="#" onclick="filterByName('OPPO A', event)">OPPO A</a></li>
             </ul>
           </li>
-          <li><a href="">KHÁC</a></li>
+          <li><a href="#" onclick="filterByCategory('all', event)">KHÁC</a>
+            <ul class="submenu">
+              <li><a href="#" onclick="filterByName('Honor', event)">Honor</a></li>
+              <li><a href="#" onclick="filterByName('Xiaomi', event)">Xiaomi</a></li>
+              <li><a href="#" onclick="filterByName('realme', event)">Realme</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </header>
+
+
+
+    <!-- MAIN -->
     <main>
       <div id="mainView">
         <!-- PHẦN BANNER -->
@@ -114,6 +116,10 @@
       <!-- MÀN HÌNH CHI TIẾT SẢN PHẨM -->
       <div id="detailView" class="hidden"></div>
     </main>
+
+    
+
+    <!-- FOOTER -->
     <footer>
       <div class="topfooter">
         <div class="content">
@@ -298,6 +304,7 @@
     </div>
 
     <!-- Nhúng file JS từ assets/js/index.js -->
+    <script src="assets/js/data.js"></script>
     <script src="assets/js/index.js"></script>
   </body>
 </html>
