@@ -35,8 +35,9 @@
             </ul>
           </li>
           <!-- BIỂU TƯỢNG GIỎ HÀNG -->
-          <li>
+          <li style="position: relative;">
             <a class="fa fa-shopping-bag" href="javascript:void(0)" id="cartBtn"></a>
+            <span id="cartBadge" class="cart-badge hidden">0</span>
           </li>
         </ul>
       </div>
@@ -101,12 +102,11 @@
             </div>
           </div>
         </section>
-        
-  
-        <!-- PHẦN SẢN PHẨM -->
+
+        <!-- PHẦN HIỂN THỊ SẢN PHẨM (BẮT BUỘC PHẢI CÓ) -->
         <section class="product-section">  
           <div class="product-list-container">
-            <h2>Tất cả sản phẩm</h2>
+            <h2 id="categoryTitle">Tất cả sản phẩm</h2>
             <div id="productGrid" class="product-grid"></div> 
             <div id="pagination" class="pagination"></div>
           </div>
@@ -114,8 +114,7 @@
       </div>
 
       <!-- MÀN HÌNH CHI TIẾT SẢN PHẨM -->
-      <div id="detailView" class="hidden">
-      </div>
+      <div id="detailView" class="hidden"></div>
     </main>
 
     
