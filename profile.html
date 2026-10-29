@@ -1,144 +1,243 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tài khoản & Đơn hàng - Shop</title>
-    <link rel="stylesheet" href="assets/css/profile.css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tài khoản & Đơn hàng - Cửa Hàng Điện Thoại</title>
+    <!-- Font Awesome cho icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/profile.css">
+    <link rel="stylesheet" href="assets/css/index.css">
   </head>
-  <body>
-    <!-- Header đồng bộ tone màu với cart.html -->
-    <header class="topbar">
-      <div class="header-inner">
-        <a class="brand" href="index.html"
-          ><span class="brand-mark">S</span><b>SHOP</b></a
-        >
-        <button class="category">☰ <span>Danh mục</span></button>
-        <div class="search">
-          <input
-            type="text"
-            placeholder="Nhập tên điện thoại, laptop, phụ kiện... cần tìm"
-          />
-          <button>⌕</button>
-        </div>
+<body>
 
-        <!-- Cụm icon tài khoản kèm Dropdown khi rê chuột -->
-        <div class="user-menu-dropdown-wrap">
-          <a
-            class="head-icon active"
-            href="profile.html#info"
-            title="Tài khoản cá nhân"
-            >👤</a
-          >
-          <div class="user-dropdown-menu">
-            <a href="profile.html#info" class="menu-item"
-              >👤 Thông tin cá nhân</a
-            >
-            <a href="profile.html#delete" class="menu-item danger"
-              >🗑️ Xóa tài khoản</a
-            >
-            <div class="menu-divider"></div>
-            <a href="#" id="headerBtnLogout" class="menu-item logout-link"
-              >🚪 Đăng xuất</a
-            >
-          </div>
+    <!-- ================= HEADER ĐỒNG BỘ INDEX ================= -->
+    <header>
+      <div class="header-top">
+        <div class="logo">
+          <img src="" alt="SHOPDienthoai" />
         </div>
+        <div class="search-container">
+          <input type="text" placeholder="Tìm kiếm..." />
+          <i class="fas fa-search"></i>
+        </div>
+        <ul class="others">
+          <li><a class="fa fa-paw" href=""></a></li>
+          <li class="user-item">
+            <a class="fa fa-user" href="javascript:void(0)" id="userBtn"></a>
+            <!-- Menu 2 dòng chỉ xuất hiện khi hover NẾU đã đăng nhập -->
+            <ul class="user-menu" id="userMenu">
+              <li><a href="profile.html">Thông tin cá nhân</a></li>
+              <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
+            </ul>
+          </li>
 
-        <a class="cart-head" href="cart.html">🛒 <b>Giỏ hàng</b></a>
+          <!-- BIỂU TƯỢNG GIỎ HÀNG -->
+          <li>
+            <a class="fa fa-shopping-bag" href="javascript:void(0)" id="cartBtn"></a>
+          </li>
+          <!-- <li>
+            <a class="fa fa-user" > 
+              <div>
+                
+              </div>
+            </a>
+          </li> -->
+          <!-- <li><a class="fa fa-shopping-bag" href=""></a></li> -->
+        </ul>
+      </div>
+      <div class="header-bottom">
+        <ul class="menu">
+          <li>
+            <a href="">APPLE</a>
+            <ul class="submenu">
+              <li><a href="">iPhone 18</a></li>
+              <li><a href="">iPhone Duo</a></li>
+              <li><a href="">iPhone 17</a></li>
+              <li><a href="">iPhone Air</a></li>
+              <li><a href="">iPhone 16</a></li>
+              <li><a href="">iPhone 15</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="">SAMSUNG</a>
+            <ul class="submenu">
+              <li><a href="">Galaxy S26 </a></li>
+              <li><a href="">Galaxy Z7</a></li>
+              <li><a href="">Galaxy Z8</a></li>
+              <li><a href="">Galaxy A</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="">OPPO</a>
+            <ul class="submenu">
+              <li><a href="">OPPO Reno </a></li>
+              <li><a href="">OPPO A</a></li>
+            </ul>
+          </li>
+          <li><a href="">KHÁC</a></li>
+        </ul>
       </div>
     </header>
 
     <main class="container">
-      <div class="breadcrumb">
-        <a href="index.html">Trang chủ</a> /
-        <span id="breadcrumbCurrent">Thông tin tài khoản</span>
-      </div>
-
-      <!-- KHU VỰC 1: THÔNG TIN CÁ NHÂN VÀ ĐƠN HÀNG (Mặc định) -->
-      <div id="sectionProfile" class="profile-layout">
-        <!-- Cột trái: Thông tin cá nhân -->
-        <aside class="profile-sidebar">
-          <div class="card user-info-card">
-            <div class="user-avatar-wrap">
-              <div class="user-avatar" id="avatarText">U</div>
-            </div>
-            <h2 class="user-name" id="profileName">Chưa đăng nhập</h2>
-            <span class="user-badge">Khách hàng thành viên</span>
-
-            <div class="user-details-list">
-              <div class="detail-item">
-                <span class="detail-label">📧 Email:</span>
-                <span class="detail-value" id="profileEmail">---</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label">📞 Số điện thoại:</span>
-                <span class="detail-value" id="profilePhone">---</span>
-              </div>
-            </div>
-
-            <div class="sidebar-action-group">
-              <a href="profile.html#delete" class="btn-sidebar-delete"
-                >Yêu cầu xóa tài khoản</a
-              >
-              <button id="btnLogout" class="btn-logout">Đăng xuất</button>
-            </div>
-          </div>
-        </aside>
-
-        <!-- Cột phải: Lịch sử đơn hàng đã mua -->
-        <section class="orders-section">
-          <div class="card order-list-card">
-            <div class="section-header">
-              <h2>Đơn hàng đã mua (<span id="orderCount">0</span>)</h2>
-            </div>
-
-            <!-- Danh sách đơn hàng render tự động -->
-            <div id="orderList" class="order-items-container"></div>
-          </div>
-        </section>
-      </div>
-
-      <!-- KHU VỰC 2: XÓA TÀI KHOẢN (Hiển thị khi URL là #delete) -->
-      <div
-        id="sectionDelete"
-        class="delete-account-wrapper"
-        style="display: none"
-      >
-        <div class="card delete-card">
-          <div class="delete-header">
-            <h2>⚠️ Yêu cầu xóa vĩnh viễn tài khoản</h2>
-            <p class="delete-desc">
-              Hành động này không thể hoàn tác. Mọi thông tin tài khoản, lịch sử
-              mua hàng và các quyền lợi thành viên sẽ bị vô hiệu hóa hoàn toàn
-              khỏi hệ thống.
-            </p>
-          </div>
-
-          <form id="formConfirmDelete" class="delete-form">
-            <div class="form-group">
-              <label for="confirmPassword"
-                >Nhập mật khẩu hiện tại để xác nhận:</label
-              >
-              <input
-                type="password"
-                id="confirmPassword"
-                placeholder="Nhập chính xác mật khẩu của bạn..."
-                required
-              />
-            </div>
-            <div class="delete-btn-group">
-              <button type="submit" class="btn-confirm-delete">
-                Xác nhận xóa tài khoản
-              </button>
-              <a href="profile.html#info" class="btn-cancel"
-                >Hủy bỏ & Quay lại</a
-              >
-            </div>
-          </form>
+        <div class="breadcrumb">
+            <a href="index.html">Trang chủ</a> / <span id="breadcrumbCurrent">Thông tin tài khoản</span>
         </div>
-      </div>
+
+        <!-- KHU VỰC 1: THÔNG TIN CÁ NHÂN VÀ ĐƠN HÀNG -->
+        <div id="sectionProfile" class="profile-layout">
+            <!-- Cột trái: Thông tin cá nhân -->
+            <aside class="profile-sidebar">
+                <div class="card user-info-card">
+                    <div class="user-avatar-wrap">
+                        <div class="user-avatar" id="avatarText">U</div>
+                    </div>
+                    <h2 class="user-name" id="profileName">Chưa đăng nhập</h2>
+                    <span class="user-badge">Khách hàng thành viên</span>
+
+                    <div class="user-details-list">
+                        <div class="detail-item">
+                            <span class="detail-label">📧 Email:</span>
+                            <span class="detail-value" id="profileEmail">---</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">📞 Số điện thoại:</span>
+                            <span class="detail-value" id="profilePhone">---</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">⚥ Giới tính:</span>
+                            <span class="detail-value" id="profileGender">Chưa cập nhật</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">📍 Địa chỉ nhận hàng:</span>
+                            <span class="detail-value" id="profileAddress" style="color: #d70027;">Chưa có địa chỉ</span>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-action-group">
+                        <button id="btnOpenEditModal" class="btn-sidebar-edit"><i class="fas fa-user-edit"></i> Chỉnh sửa thông tin & Địa chỉ</button>
+                        <a href="profile.html#delete" class="btn-sidebar-delete">Yêu cầu xóa tài khoản</a>
+                        <button id="btnLogout" class="btn-logout">Đăng xuất</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Cột phải: Lịch sử đơn hàng đã mua -->
+            <section class="orders-section">
+                <div class="card order-list-card">
+                    <div class="section-header">
+                        <h2>Đơn hàng đã mua (<span id="orderCount">0</span>)</h2>
+                    </div>
+                    <div id="orderList" class="order-items-container"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- KHU VỰC 2: XÓA TÀI KHOẢN (Hiển thị khi URL là #delete) -->
+        <div id="sectionDelete" class="delete-account-wrapper" style="display: none;">
+            <div class="card delete-card">
+                <div class="delete-header">
+                    <h2>⚠️ Yêu cầu xóa vĩnh viễn tài khoản</h2>
+                    <p class="delete-desc">
+                        Hành động này không thể hoàn tác. Mọi thông tin tài khoản, lịch sử mua hàng và các quyền lợi thành viên sẽ bị vô hiệu hóa hoàn toàn khỏi hệ thống.
+                    </p>
+                </div>
+
+                <form id="formConfirmDelete" class="delete-form">
+                    <div class="form-group">
+                        <label for="confirmPassword">Nhập mật khẩu hiện tại để xác nhận:</label>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            placeholder="Nhập chính xác mật khẩu của bạn..." 
+                            required
+                        >
+                    </div>
+                    <div class="delete-btn-group">
+                        <button type="submit" class="btn-confirm-delete">Xác nhận xóa tài khoản</button>
+                        <a href="profile.html#info" class="btn-cancel">Hủy bỏ & Quay lại</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
 
+    <!-- MODAL CHỈNH SỬA THÔNG TIN & ĐỊA CHỈ -->
+    <div id="editProfileModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="closeEditModal">&times;</span>
+            <div class="auth-card">
+                <h2>Cập nhật thông tin tài khoản</h2>
+                <p class="sub">Vui lòng nhập đầy đủ địa chỉ để tiện giao hàng</p>
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label>Họ và tên (*)</label>
+                        <input type="text" id="editName" required placeholder="Nhập họ và tên">
+                    </div>
+                    <div class="form-group">
+                        <label>Số điện thoại (*)</label>
+                        <input type="tel" id="editPhone" pattern="0[0-9]{9}" maxlength="10" required placeholder="Nhập số điện thoại">
+                    </div>
+                    <div class="form-group">
+                        <label>Email (*)</label>
+                        <input type="email" id="editEmail" required placeholder="Nhập địa chỉ email">
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <select id="editGender" class="form-select">
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                            <option value="Khác">Khác</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Địa chỉ nhận hàng (*)</label>
+                        <textarea id="editAddress" rows="3" required placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố..."></textarea>
+                    </div>
+                    <div class="modal-btn-row">
+                        <button type="button" class="btn-cancel" id="btnCancelEdit">Hủy</button>
+                        <button type="submit" class="btn-save">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FOOTER GIỐNG Y CHANG INDEX.HTML ================= -->
+    <footer>
+      <div class="topfooter">
+        <div class="content">
+          <div>
+            <h3 class="Foot-footer-title">INTRODUCE</h3>
+            <ul>
+              <li><button class="Foot-footer-list">Về Chúng Tôi</button></li>
+              <li>
+                <button class="Foot-footer-list">Thoả Thuận Sử Dụng</button>
+              </li>
+              <li>
+                <button class="Foot-footer-list">Quy Chế Hoạt Động</button>
+              </li>
+              <li>
+                <button class="Foot-footer-list">Chính Sách Bảo Mật</button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="Foot-footer-title">SUPPORT</h3>
+            <ul>
+              <li><button class="Foot-footer-list">Góp Ý</button></li>
+              <li><button class="Foot-footer-list">Tuyển Dụng</button></li>
+              <li><button class="Foot-footer-list">FAQ</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
+      </div>
+    </footer>
+
     <script src="assets/js/profile.js"></script>
-  </body>
+</body>
 </html>

@@ -1,195 +1,185 @@
-// Hàm format tiền tệ VNĐ
-const formatMoney = (amount) =>
-  new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" })
-    .format(amount)
-    .replace("₫", "đ");
+document.addEventListener("DOMContentLoaded", function () {
+    // 1. Kiểm tra đăng nhập
+    const currentUser = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
+    if (!currentUser) {
+        alert("Vui lòng đăng nhập để xem thông tin!");
+        window.location.href = "index.html"; 
+        return;
+    }
 
-// 1. Kiểm tra tài khoản đã đăng nhập chưa
-const loggedInUser = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
+    // 2. Đổ dữ liệu cá nhân ra Profile
+    document.getElementById("profileName").innerText = currentUser.hoTen || "Chưa cập nhật";
+    document.getElementById("profileEmail").innerText = currentUser.email || "---";
+    document.getElementById("profilePhone").innerText = currentUser.soDienThoai || "---";
+    
+    // Xử lý địa chỉ và giới tính (nếu có)
+    const addressEl = document.getElementById("profileAddress");
+    addressEl.innerText = currentUser.diaChi || "Chưa có địa chỉ";
+    addressEl.style.color = currentUser.diaChi ? "#333" : "#d70027";
+    
+    document.getElementById("profileGender").innerText = currentUser.gioiTinh || "Chưa cập nhật";
+    document.getElementById("avatarText").innerText = currentUser.hoTen ? currentUser.hoTen.charAt(0).toUpperCase() : "U";
 
-if (!loggedInUser) {
-  alert("Vui lòng đăng nhập để xem thông tin tài khoản!");
-  window.location.href = "auth.html";
-} else {
-  // Hiển thị thông tin cá nhân
-  document.getElementById("profileName").innerText =
-    loggedInUser.hoTen || "Khách hàng";
-  document.getElementById("profileEmail").innerText =
-    loggedInUser.email || "Chưa cập nhật";
-  document.getElementById("profilePhone").innerText =
-    loggedInUser.soDienThoai || "Chưa cập nhật";
+    // 3. LẤY VÀ ĐỒNG BỘ TRẠNG THÁI ĐƠN HÀNG TỪ ADMIN
+    const allOrders = JSON.parse(localStorage.getItem("saved_orders")) || [];
+    
+    // Lọc ra các đơn hàng đúng của user này (dựa vào số điện thoại)
+    const myOrders = allOrders.filter(order => order.customerPhone === currentUser.soDienThoai);
 
-  // Tạo avatar ký tự đầu của họ tên
-  if (loggedInUser.hoTen) {
-    document.getElementById("avatarText").innerText = loggedInUser.hoTen
-      .trim()
-      .charAt(0)
-      .toUpperCase();
-  }
-}
+    document.getElementById("orderCount").innerText = myOrders.length;
+    const orderListContainer = document.getElementById("orderList");
 
-// 2. Chuyển đổi qua lại giữa mục [Thông tin & Đơn hàng] và [Xóa tài khoản] theo URL Hash
-function handleViewRouting() {
-  const hash = window.location.hash;
-  const sectionProfile = document.getElementById("sectionProfile");
-  const sectionDelete = document.getElementById("sectionDelete");
-  const breadcrumbCurrent = document.getElementById("breadcrumbCurrent");
+    if (myOrders.length === 0) {
+        orderListContainer.innerHTML = `<div style="text-align:center; padding: 30px; color:#888;">Bạn chưa mua đơn hàng nào.</div>`;
+    } else {
+        // Đảo ngược mảng để đơn mới nhất (vừa đặt) nhảy lên đầu tiên
+        orderListContainer.innerHTML = myOrders.reverse().map(order => {
+            
+            // MAP TRẠNG THÁI ĐỒNG BỘ VỚI ADMIN
+            let statusText = "";
+            let statusColor = "";
+            let statusBg = "";
+            
+            switch(order.status) {
+                case 'pending': 
+                    statusText = "Chờ xác nhận"; 
+                    statusColor = "#856404"; 
+                    statusBg = "#fff3cd";
+                    break;
+                case 'processed': 
+                    statusText = "Đang giao hàng"; 
+                    statusColor = "#004085"; 
+                    statusBg = "#cce5ff";
+                    break;
+                case 'completed': 
+                    statusText = "Đã giao thành công"; 
+                    statusColor = "#155724"; 
+                    statusBg = "#d4edda";
+                    break;
+                case 'cancelled': 
+                    statusText = "Đã hủy"; 
+                    statusColor = "#721c24"; 
+                    statusBg = "#f8d7da";
+                    break;
+                default:
+                    statusText = "Không xác định";
+                    statusColor = "#383d41";
+                    statusBg = "#e2e3e5";
+            }
 
-  if (hash === "#delete") {
-    sectionProfile.style.display = "none";
-    sectionDelete.style.display = "block";
-    breadcrumbCurrent.innerText = "Xóa tài khoản";
-  } else {
-    sectionProfile.style.display = "grid";
-    sectionDelete.style.display = "none";
-    breadcrumbCurrent.innerText = "Thông tin tài khoản";
-  }
-}
+            // In danh sách các món hàng trong đơn này
+            const itemsHtml = order.items.map(item => `
+                <div style="display:flex; justify-content:space-between; border-bottom:1px dashed #ddd; padding:8px 0; font-size: 14px;">
+                    <span>${item.name} <strong>(x${item.qty})</strong></span>
+                    <span>${Number(item.price).toLocaleString('vi-VN')} đ</span>
+                </div>
+            `).join('');
 
-window.addEventListener("DOMContentLoaded", handleViewRouting);
-window.addEventListener("hashchange", handleViewRouting);
-
-// 3. Tải danh sách đơn hàng đã mua từ localStorage
-function getOrders() {
-  let orders = JSON.parse(localStorage.getItem("danhSachDonHang"));
-
-  if (!orders || orders.length === 0) {
-    orders = [
-      {
-        orderId: "DH1001",
-        orderDate: "05/10/2026",
-        receiver: loggedInUser ? loggedInUser.hoTen : "Khách hàng",
-        phone: loggedInUser ? loggedInUser.soDienThoai : "0900000000",
-        address: "Hồ Chí Minh",
-        total: 18990000,
-        items: [
-          {
-            name: "Samsung Galaxy S25 5G 12GB 256GB",
-            color: "Đen",
-            quantity: 1,
-            price: 18990000,
-            image: "https://via.placeholder.com/80?text=S25",
-          },
-        ],
-      },
-    ];
-    localStorage.setItem("danhSachDonHang", JSON.stringify(orders));
-  }
-  return orders;
-}
-
-// 4. Render danh sách đơn hàng
-function renderOrders() {
-  const orders = getOrders();
-  const orderListContainer = document.getElementById("orderList");
-  const orderCount = document.getElementById("orderCount");
-
-  orderCount.innerText = orders.length;
-
-  if (orders.length === 0) {
-    orderListContainer.innerHTML =
-      '<div class="empty-orders">Bạn chưa có đơn hàng nào đã mua.</div>';
-    return;
-  }
-
-  orderListContainer.innerHTML = "";
-
-  orders.forEach((order) => {
-    let itemsHtml = "";
-    order.items.forEach((item) => {
-      const itemTotal = Number(item.price) * Number(item.quantity);
-      itemsHtml += `
-                <div class="order-product-row">
-                    <img src="${item.image || "https://via.placeholder.com/80"}" alt="${item.name}">
-                    <div class="order-product-info">
-                        <div class="order-product-name">${item.name}</div>
-                        <div class="order-product-meta">Phân loại: ${item.color || "Mặc định"} | Số lượng: x${item.quantity}</div>
+            // Khung giao diện cho từng đơn hàng
+            return `
+                <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                        <strong style="font-size: 16px;">Mã ĐH: ${order.id}</strong>
+                        <span style="color: ${statusColor}; background-color: ${statusBg}; font-weight: bold; padding: 5px 10px; border-radius: 20px; font-size: 13px;">
+                            ${statusText}
+                        </span>
                     </div>
-                    <div class="order-product-price">${formatMoney(itemTotal)}</div>
+                    <div style="margin-bottom: 12px; font-size: 14px; color: #555; line-height: 1.6;">
+                        <div>📅 Ngày đặt: <strong>${order.date}</strong></div>
+                        <div>📍 Giao đến: <strong>${order.customerAddress || currentUser.diaChi}</strong></div>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 10px 15px; border-radius: 6px; margin-bottom: 15px;">
+                        ${itemsHtml}
+                    </div>
+                    <div style="text-align: right; font-size: 16px;">
+                        Tổng thanh toán: <strong style="color: #d70027; font-size: 18px;">${Number(order.totalAmount).toLocaleString('vi-VN')} đ</strong>
+                    </div>
                 </div>
             `;
-    });
+        }).join('');
+    }
+    // ==========================================================
+    // 4. XỬ LÝ MODAL CHỈNH SỬA THÔNG TIN & ĐỊA CHỈ
+    // ==========================================================
+    const btnOpenEditModal = document.getElementById("btnOpenEditModal");
+    const editProfileModal = document.getElementById("editProfileModal");
+    const closeEditModal = document.getElementById("closeEditModal");
+    const btnCancelEdit = document.getElementById("btnCancelEdit");
+    const editProfileForm = document.getElementById("editProfileForm");
 
-    const orderBox = document.createElement("div");
-    orderBox.className = "order-box";
-    orderBox.innerHTML = `
-            <div class="order-header">
-                <span><b>Mã đơn:</b> #${order.orderId || "DH" + Math.floor(Math.random() * 10000)} | <b>Ngày đặt:</b> ${order.orderDate || "Mới đặt"}</span>
-                <span class="order-status">✔ Đang giao hàng</span>
-            </div>
-            <div class="order-items">
-                ${itemsHtml}
-            </div>
-            <div class="order-footer">
-                <div class="order-address-info">
-                    <b>Giao đến:</b> ${order.receiver} (${order.phone}) - ${order.address}
-                </div>
-                <div>
-                    Tổng tiền: <span class="order-total-price">${formatMoney(order.total)}</span>
-                </div>
-            </div>
-        `;
-    orderListContainer.appendChild(orderBox);
-  });
-}
-
-// 5. Hàm thực hiện đăng xuất -> Đưa về trang index.html
-function executeLogout(event) {
-  if (event) event.preventDefault();
-  if (confirm("Bạn có chắc chắn muốn đăng xuất tài khoản?")) {
-    localStorage.removeItem("nguoiDungDangNhap");
-    window.location.href = "index.html";
-  }
-}
-
-// Gán sự kiện đăng xuất cho cả nút trên sidebar và trên dropdown header
-const btnLogout = document.getElementById("btnLogout");
-const headerBtnLogout = document.getElementById("headerBtnLogout");
-
-if (btnLogout) btnLogout.addEventListener("click", executeLogout);
-if (headerBtnLogout) headerBtnLogout.addEventListener("click", executeLogout);
-
-// 6. Xử lý xóa tài khoản (Yêu cầu xác nhận mật khẩu)
-const formConfirmDelete = document.getElementById("formConfirmDelete");
-if (formConfirmDelete) {
-  formConfirmDelete.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const inputPassword = document.getElementById("confirmPassword").value;
-
-    // Kiểm tra khớp mật khẩu đã lưu khi đăng ký/đăng nhập
-    if (
-      loggedInUser &&
-      loggedInUser.matKhau &&
-      inputPassword !== loggedInUser.matKhau
-    ) {
-      alert("Mật khẩu không chính xác! Vui lòng thử lại.");
-      return;
+    // Mở popup và tự động điền dữ liệu cũ vào form
+    if (btnOpenEditModal) {
+        btnOpenEditModal.addEventListener("click", function() {
+            document.getElementById("editName").value = currentUser.hoTen || "";
+            document.getElementById("editPhone").value = currentUser.soDienThoai || "";
+            document.getElementById("editEmail").value = currentUser.email || "";
+            document.getElementById("editGender").value = currentUser.gioiTinh || "Nam";
+            document.getElementById("editAddress").value = currentUser.diaChi || "";
+            
+            // Hiện Modal
+            editProfileModal.classList.remove("hidden");
+        });
     }
 
-    const confirmAction = confirm(
-      "Bạn có chắc chắn 100% muốn xóa/khóa tài khoản này không? Toàn bộ thông tin sẽ bị hủy!",
-    );
-    if (confirmAction) {
-      // Lấy danh sách tài khoản tổng và xóa người dùng này
-      let danhSachNguoiDung =
-        JSON.parse(localStorage.getItem("danhSachNguoiDung")) || [];
-      danhSachNguoiDung = danhSachNguoiDung.filter(
-        (u) => u.email !== loggedInUser.email,
-      );
-      localStorage.setItem(
-        "danhSachNguoiDung",
-        JSON.stringify(danhSachNguoiDung),
-      );
-
-      // Xóa session và danh sách đơn hàng
-      localStorage.removeItem("nguoiDungDangNhap");
-      localStorage.removeItem("danhSachDonHang");
-
-      alert("Tài khoản của bạn đã được xóa thành công!");
-      window.location.href = "index.html";
+    // Hàm đóng Modal
+    function closeEdit() {
+        editProfileModal.classList.add("hidden");
     }
-  });
-}
+    if (closeEditModal) closeEditModal.addEventListener("click", closeEdit);
+    if (btnCancelEdit) btnCancelEdit.addEventListener("click", closeEdit);
 
-// Chạy khởi tạo danh sách đơn hàng
-renderOrders();
+    // Xử lý khi nhấn "Lưu thay đổi"
+    if (editProfileForm) {
+        editProfileForm.addEventListener("submit", function(e) {
+            e.preventDefault(); // Chặn tải lại trang mặc định
+            
+            // Lấy dữ liệu người dùng vừa sửa
+            const newName = document.getElementById("editName").value.trim();
+            const newPhone = document.getElementById("editPhone").value.trim();
+            const newEmail = document.getElementById("editEmail").value.trim();
+            const newGender = document.getElementById("editGender").value;
+            const newAddress = document.getElementById("editAddress").value.trim();
+
+            // Cập nhật vào phiên đăng nhập hiện tại
+            currentUser.hoTen = newName;
+            currentUser.soDienThoai = newPhone;
+            currentUser.email = newEmail;
+            currentUser.gioiTinh = newGender;
+            currentUser.diaChi = newAddress;
+            localStorage.setItem("nguoiDungDangNhap", JSON.stringify(currentUser));
+
+            // Cập nhật ngược lại vào kho "taiKhoan" tổng để Admin có thể xem được
+            let taiKhoan = JSON.parse(localStorage.getItem("taiKhoan")) || [];
+            
+            // Tìm tài khoản này trong mảng tổng (tìm theo SDT cũ hoặc Email cũ phòng khi bị đổi)
+            const index = taiKhoan.findIndex(tk => tk.soDienThoai === currentUser.soDienThoai || tk.email === currentUser.email);
+            if (index !== -1) {
+                taiKhoan[index].hoTen = newName;
+                taiKhoan[index].soDienThoai = newPhone;
+                taiKhoan[index].email = newEmail;
+                taiKhoan[index].gioiTinh = newGender;
+                taiKhoan[index].diaChi = newAddress;
+                localStorage.setItem("taiKhoan", JSON.stringify(taiKhoan));
+            }
+
+            alert("Cập nhật thông tin và địa chỉ thành công!");
+            closeEdit();
+            
+            // Tải lại trang để các thông tin mới được in ra HTML ngay lập tức
+            window.location.reload();
+        });
+    }
+
+    // ==========================================================
+    // 5. XỬ LÝ NÚT ĐĂNG XUẤT TRONG TRANG PROFILE
+    // ==========================================================
+    const btnLogoutProfile = document.getElementById("btnLogout");
+    if (btnLogoutProfile) {
+        btnLogoutProfile.addEventListener("click", function() {
+            if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
+                localStorage.removeItem("nguoiDungDangNhap");
+                window.location.href = "index.html"; // Đẩy về trang chủ
+            }
+        });
+    }
+});

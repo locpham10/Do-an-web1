@@ -1,8 +1,8 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ hàng & Thanh toán - Cửa Hàng Điện Thoại</title>
     <!-- Font Awesome cho icons -->
     <link
@@ -10,11 +10,12 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <!-- CSS header & footer từ index -->
-    <link rel="stylesheet" href="assets/css/index.css" />
+    <link rel="stylesheet" href="assets/css/index.css">
     <!-- CSS nội dung giỏ hàng -->
-    <link rel="stylesheet" href="assets/css/cart.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="assets/css/cart.css">
+</head>
+<body>
+
     <!-- ================= HEADER GIỐNG INDEX.HTML ================= -->
     <header>
       <div class="header-top">
@@ -82,164 +83,134 @@
 
     <!-- ================= MAIN CONTAINER ================= -->
     <main class="container">
-      <!-- ================= BƯỚC 1: GIỎ HÀNG ================= -->
-      <div id="cartStep" class="step-section">
-        <div class="breadcrumb">
-          <a href="index.html">Trang chủ</a> / <span>Giỏ hàng</span>
+        <!-- ================= BƯỚC 1: GIỎ HÀNG ================= -->
+        <div id="cartStep" class="step-section">
+            <div class="breadcrumb">
+                <a href="index.html">Trang chủ</a> / <span>Giỏ hàng</span>
+            </div>
+            
+            <div class="cart-layout">
+                <!-- Cột trái: Danh sách sản phẩm -->
+                <section class="cart-items-section">
+                    <div class="card select-all-bar">
+                        <label class="custom-checkbox">
+                            <input id="selectAll" type="checkbox" checked>
+                            <b>Chọn tất cả (<span id="selectedCountText">0</span>)</b>
+                        </label>
+                        <button id="deleteAllBtn" class="btn-icon" title="Xóa tất cả">🗑️ Xóa tất cả</button>
+                    </div>
+
+                    <!-- Danh sách sản phẩm render qua JS -->
+                    <div id="cartItemsList"></div>
+                </section>
+
+                <!-- Cột phải: Tính tổng & Xác nhận đơn -->
+                <aside class="summary-section">
+                    <div class="card summary-card">
+                        <h2>Thông tin đơn hàng</h2>
+                        <div class="line">
+                            <span>Số lượng sản phẩm:</span>
+                            <b id="totalItemsCount">0</b>
+                        </div>
+                        <div class="pay-line">
+                            <span>Tổng tiền:</span>
+                            <b id="finalPayText" class="text-danger">0đ</b>
+                        </div>
+                        
+                        <button id="btnProceedCheckout" class="btn-checkout">Xác nhận đơn</button>
+                    </div>
+                </aside>
+            </div>
         </div>
 
-        <div class="cart-layout">
-          <!-- Cột trái: Danh sách sản phẩm -->
-          <section class="cart-items-section">
-            <div class="card select-all-bar">
-              <label class="custom-checkbox">
-                <input id="selectAll" type="checkbox" checked />
-                <b>Chọn tất cả (<span id="selectedCountText">0</span>)</b>
-              </label>
-              <button id="deleteAllBtn" class="btn-icon" title="Xóa tất cả">
-                🗑️ Xóa tất cả
-              </button>
+        <!-- ================= BƯỚC 2: THANH TOÁN ================= -->
+        <div id="checkoutStep" class="step-section" style="display: none;">
+            <div class="breadcrumb">
+                <a href="#" id="backToCartBtn">← Quay lại giỏ hàng</a> / <span>Thanh toán đơn hàng</span>
             </div>
 
-            <!-- Danh sách sản phẩm render qua JS -->
-            <div id="cartItemsList"></div>
-          </section>
+            <div class="checkout-layout">
+                <!-- Cột trái: Thông tin nhận hàng & hình thức thanh toán -->
+                <div class="checkout-form-area">
+                    <div class="card">
+                        <div class="card-title-row">
+                            <h3>1. Thông tin người nhận & Địa chỉ giao hàng</h3>
+                            <a href="profile.html#editAddress" class="edit-addr-link"><i class="fas fa-edit"></i> Đổi địa chỉ mặc định</a>
+                        </div>
+                        <div class="form-grid">
+                            <input type="text" id="custName" placeholder="Họ và tên người nhận (*)" class="form-input" required>
+                            <input type="tel" id="custPhone" placeholder="Số điện thoại (*)" class="form-input" required>
+                            <input type="text" id="custAddress" placeholder="Địa chỉ nhận hàng chi tiết (*)" class="form-input full-width" required>
+                            <textarea placeholder="Ghi chú đơn hàng (nếu có)" class="form-input full-width" rows="2"></textarea>
+                        </div>
+                    </div>
 
-          <!-- Cột phải: Tính tổng & Xác nhận đơn -->
-          <aside class="summary-section">
-            <div class="card summary-card">
-              <h2>Thông tin đơn hàng</h2>
-              <div class="line">
-                <span>Số lượng sản phẩm:</span>
-                <b id="totalItemsCount">0</b>
-              </div>
-              <div class="pay-line">
-                <span>Tổng tiền:</span>
-                <b id="finalPayText" class="text-danger">0đ</b>
-              </div>
+                    <div class="card">
+                        <h3>2. Phương thức thanh toán</h3>
+                        <div class="payment-methods">
+                            <label class="pay-method-item">
+                                <input type="radio" name="payMethod" value="cod" checked>
+                                <span>💵 Thanh toán khi nhận hàng (COD)</span>
+                            </label>
+                            <label class="pay-method-item">
+                                <input type="radio" name="payMethod" value="banking">
+                                <span>🏦 Chuyển khoản ngân hàng qua mã QR</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
 
-              <button id="btnProceedCheckout" class="btn-checkout">
-                Xác nhận đơn
-              </button>
+                <!-- Cột phải: Chi tiết các sản phẩm đã chọn mua -->
+                <div class="checkout-summary-area">
+                    <div class="card">
+                        <h3>Chi tiết đơn hàng đã chọn</h3>
+                        <div id="selectedCheckoutProducts" class="checkout-product-list"></div>
+
+                        <div class="pay-line">
+                            <span>Tổng cần thanh toán:</span>
+                            <b id="chkFinalTotal" class="text-danger">0đ</b>
+                        </div>
+
+                        <button id="btnFinishOrder" class="btn-checkout">Đặt hàng</button>
+                    </div>
+                </div>
             </div>
-          </aside>
         </div>
-      </div>
-
-      <!-- ================= BƯỚC 2: THANH TOÁN ================= -->
-      <div id="checkoutStep" class="step-section" style="display: none">
-        <div class="breadcrumb">
-          <a href="#" id="backToCartBtn">← Quay lại giỏ hàng</a> /
-          <span>Thanh toán đơn hàng</span>
-        </div>
-
-        <div class="checkout-layout">
-          <!-- Cột trái: Thông tin nhận hàng & hình thức thanh toán -->
-          <div class="checkout-form-area">
-            <div class="card">
-              <h3>1. Thông tin người nhận</h3>
-              <div class="form-grid">
-                <input
-                  type="text"
-                  id="custName"
-                  placeholder="Họ và tên người nhận (*)"
-                  class="form-input"
-                  required
-                />
-                <input
-                  type="tel"
-                  id="custPhone"
-                  placeholder="Số điện thoại (*)"
-                  class="form-input"
-                  required
-                />
-                <input
-                  type="text"
-                  id="custAddress"
-                  placeholder="Địa chỉ nhận hàng (*)"
-                  class="form-input full-width"
-                  required
-                />
-                <textarea
-                  placeholder="Ghi chú đơn hàng (nếu có)"
-                  class="form-input full-width"
-                  rows="3"
-                ></textarea>
-              </div>
-            </div>
-            <div class="card">
-              <h3>2. Phương thức thanh toán</h3>
-              <div class="payment-methods">
-                <label class="pay-method-item">
-                  <input type="radio" name="payMethod" value="cod" checked />
-                  <span>💵 Thanh toán khi nhận hàng (COD)</span>
-                </label>
-                <label class="pay-method-item">
-                  <input type="radio" name="payMethod" value="banking" />
-                  <span>🏦 Chuyển khoản ngân hàng qua mã QR</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Cột phải: Chi tiết các sản phẩm đã chọn mua -->
-          <div class="checkout-summary-area">
-            <div class="card">
-              <h3>Chi tiết đơn hàng đã chọn</h3>
-              <div
-                id="selectedCheckoutProducts"
-                class="checkout-product-list"
-              ></div>
-
-              <div class="pay-line">
-                <span>Tổng cần thanh toán:</span>
-                <b id="chkFinalTotal" class="text-danger">0đ</b>
-              </div>
-
-              <button id="btnFinishOrder" class="btn-checkout">Đặt hàng</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </main>
 
-    <!-- ================= FOOTER GIỐNG INDEX.HTML ================= -->
+<!-- ================= FOOTER ĐỒNG BỘ INDEX.HTML ================= -->
     <footer>
       <div class="topfooter">
         <div class="content">
           <div>
-            <h3 class="Foot_footer_title">INTRODUCE</h3>
+            <h3 class="Foot-footer-title">INTRODUCE</h3>
             <ul>
-              <li><button class="Foot_footer_list">Về Chúng Tôi</button></li>
+              <li><button class="Foot-footer-list">Về Chúng Tôi</button></li>
               <li>
-                <button class="Foot_footer_list">Thoả Thuận Sử Dụng</button>
+                <button class="Foot-footer-list">Thoả Thuận Sử Dụng</button>
               </li>
               <li>
-                <button class="Foot_footer_list">Quy Chế Hoạt Động</button>
+                <button class="Foot-footer-list">Quy Chế Hoạt Động</button>
               </li>
               <li>
-                <button class="Foot_footer_list">Chính Sách Bảo Mật</button>
+                <button class="Foot-footer-list">Chính Sách Bảo Mật</button>
               </li>
             </ul>
           </div>
           <div>
-            <h3 class="Foot_footer_title">SUPPORT</h3>
+            <h3 class="Foot-footer-title">SUPPORT</h3>
             <ul>
-              <li><button class="Foot_footer_list">Góp Ý</button></li>
-              <li><button class="Foot_footer_list">Tuyển Dụng</button></li>
-              <li><button class="Foot_footer_list">FAQ</button></li>
+              <li><button class="Foot-footer-list">Góp Ý</button></li>
+              <li><button class="Foot-footer-list">Tuyển Dụng</button></li>
+              <li><button class="Foot-footer-list">FAQ</button></li>
             </ul>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>
-          © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai |
-          Design by The LNTT
-        </p>
+        <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
       </div>
     </footer>
-
     <script src="assets/js/cart.js"></script>
-  </body>
+</body>
 </html>

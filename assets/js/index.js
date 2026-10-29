@@ -1,51 +1,95 @@
-let slideIndex = 1;
+// DỮ LIỆU MẪU PHẢI GIỐNG HỆT admin.js (dùng chung localStorage) - trang nào mở trước cũng tạo ra cùng một bộ dữ liệu.
+function khoiTaoDuLieuMau() {
+    // 1. Tạo loại sản phẩm mẫu
+    if (!localStorage.getItem("loaiSanPham")) {
+        const loaiMau = [
+            { maLoai: "L01", tenLoai: "Apple", moTa: "Các điện thoại iPhone", trangThai: "hoatdong", hinh: "../Img/Apple/hangApple.png" },
+            { maLoai: "L02", tenLoai: "Samsung", moTa: "Các điện thoại của hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/hangSamsung.png" },
+            { maLoai: "L03", tenLoai: "Oppo", moTa: "Các điện thoại của hãng OPPO", trangThai: "hoatdong", hinh: "../Img/Oppo/hangOppo.png" }
+        ];
+        localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
+    }
 
-// Gọi hàm để hiển thị slide đầu tiên khi vừa tải trang
+    // 2. Tạo sản phẩm mẫu
+    if (!localStorage.getItem("danhMucSanPham")) {
+        const spMau = [
+            { maSP: "SP01", maLoai: "L01", tenLoai: "Apple", tenSP: "iPhone 15 Pro Max", price: 29990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../Img/Apple/iPhone15_den.png", color: "Titan Tự Nhiên" },
+            { maSP: "SP02", maLoai: "L02", tenLoai: "Samsung", tenSP: "Galaxy S24 Ultra", price: 33990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../assets/images/default-image.jpeg", color: "Đen Titan" },
+            { maSP: "SP03", maLoai: "L03", tenLoai: "Oppo", tenSP: "OPPO Find N3", price: 24990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../assets/images/default-image.jpeg", color: "Vàng Đồng" }
+        ];
+        localStorage.setItem("danhMucSanPham", JSON.stringify(spMau));
+    }
+
+    // 3. Tạo phiếu nhập mẫu (Dùng maSP, tenSP, hinh)
+    if (!localStorage.getItem("saved_imports")) {
+        const phieuNhapMau = [
+            {
+                code: "PN001",
+                date: "2026-10-25",
+                status: "completed",
+                totalAmount: 510000000,
+                items: [
+                    { maSP: "SP01", tenSP: "iPhone 15 Pro Max", hinh: "../assets/images/default-image.jpeg", qty: 10, price: 25000000 },
+                    { maSP: "SP02", tenSP: "Galaxy S24 Ultra", hinh: "../assets/images/default-image.jpeg", qty: 5, price: 28000000 },
+                    { maSP: "SP03", tenSP: "OPPO Find N3", hinh: "../assets/images/default-image.jpeg", qty: 6, price: 20000000 }
+                ]
+            }
+        ];
+        localStorage.setItem("saved_imports", JSON.stringify(phieuNhapMau));
+    }
+
+    // 4. Tạo bảng giá bán mẫu
+    if (!localStorage.getItem("saved_pricing")) {
+        const giaMau = [
+            { maSP: "SP01", tenSP: "iPhone 15 Pro Max", hinh: "../assets/images/default-image.jpeg", totalQty: 10, totalCost: 250000000, importPrice: 25000000, retailPrice: 29990000 },
+            { maSP: "SP02", tenSP: "Galaxy S24 Ultra", hinh: "../assets/images/default-image.jpeg", totalQty: 5, totalCost: 140000000, importPrice: 28000000, retailPrice: 33990000 },
+            { maSP: "SP03", tenSP: "OPPO Find N3", hinh: "../assets/images/default-image.jpeg", totalQty: 6, totalCost: 120000000, importPrice: 20000000, retailPrice: 24990000 }
+        ];
+        localStorage.setItem("saved_pricing", JSON.stringify(giaMau));
+    }
+}
+
+// Chạy tự động ngay khi mở web
+khoiTaoDuLieuMau();
+
+let slideIndex = 1;
 showSlides(slideIndex);
 
-// Hàm xử lý khi bấm nút Next (Phải) hoặc Prev (Trái)
 function plusSlides(n) {
   showSlides((slideIndex += n));
 }
 
-// Hàm xử lý khi bấm vào các dấu chấm tròn bên dưới
 function currentSlide(n) {
   showSlides((slideIndex = n));
 }
 
-// Hàm chính xử lý logic ẩn/hiện ảnh
 function showSlides(n) {
   let i;
   let slides = document.getElementsByClassName("slides");
   let dots = document.getElementsByClassName("dot");
+  if (slides.length === 0) return;
 
-  // Nếu vuốt quá ảnh cuối cùng -> quay lại ảnh số 1
   if (n > slides.length) {
     slideIndex = 1;
   }
-
-  // Nếu vuốt ngược qua ảnh số 1 -> đi tới ảnh cuối cùng
   if (n < 1) {
     slideIndex = slides.length;
   }
 
-  // Vòng lặp ẩn tất cả các ảnh đi
   for (i = 0; i < slides.length; i++) {
     slides[i].style.display = "none";
   }
-
-  // Vòng lặp xóa trạng thái "active" (màu trắng sáng) của tất cả dấu chấm
   for (i = 0; i < dots.length; i++) {
     dots[i].className = dots[i].className.replace(" active", "");
   }
 
-  // Hiển thị ảnh hiện tại và bật sáng dấu chấm tương ứng
   slides[slideIndex - 1].style.display = "block";
-  dots[slideIndex - 1].className += " active";
+  if (dots[slideIndex - 1]) {
+    dots[slideIndex - 1].className += " active";
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  // ==================== CÁC PHẦN TỬ MODAL & USER ====================
   const authModal = document.getElementById("authModal");
   const closeAuthModal = document.getElementById("closeAuthModal");
   const userBtn = document.getElementById("userBtn");
@@ -53,21 +97,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const userItem = document.querySelector(".user-item");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  // ==================== KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP ====================
   function checkLoginStatus() {
     const user = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
     if (user) {
-      // Đã đăng nhập: Thêm class .logged-in để rê chuột vào hiện 2 dòng
       userItem.classList.add("logged-in");
     } else {
-      // Chưa đăng nhập: Gỡ class, rê chuột vào KHÔNG hiện dòng nào
       userItem.classList.remove("logged-in");
     }
   }
 
   checkLoginStatus();
 
-  // Bật/tắt popup
   function openModal() {
     authModal.classList.remove("hidden");
     showLogin();
@@ -77,6 +117,9 @@ document.addEventListener("DOMContentLoaded", function () {
     authModal.classList.add("hidden");
   }
 
+  // Cho phép các hàm ngoài (vd: addToCart) mở popup đăng nhập
+  window.openAuthModal = openModal;
+
   if (closeAuthModal) closeAuthModal.addEventListener("click", closeModal);
   window.addEventListener("click", function (e) {
     if (e.target === authModal) {
@@ -84,17 +127,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // ==================== CÁC SỰ KIỆN CLICK ====================
-  // Bấm vào icon tài khoản: nếu chưa đăng nhập thì bật form đăng nhập/đăng ký
-  userBtn.addEventListener("click", function (e) {
+  userBtn.addEventListener("click", function () {
     const user = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
     if (!user) {
       openModal();
     }
   });
 
-  // Bấm vào giỏ hàng: nếu chưa đăng nhập thì không vào được và hiện form đăng nhập
-  cartBtn.addEventListener("click", function (e) {
+  cartBtn.addEventListener("click", function () {
     const user = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
     if (!user) {
       alert("Vui lòng đăng nhập để xem giỏ hàng!");
@@ -104,16 +144,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Bấm Đăng xuất: xóa trạng thái và vẫn ở trang index.html
   if (logoutBtn) {
     logoutBtn.addEventListener("click", function () {
       localStorage.removeItem("nguoiDungDangNhap");
       alert("Đăng xuất thành công!");
       checkLoginStatus();
+      updateCartBadge(); // ẩn chấm đỏ khi đã đăng xuất
     });
   }
 
-  // ==================== TOÀN BỘ LOGIC CỦA AUTH.JS ====================
   const loginTab = document.getElementById("loginTab");
   const registerTab = document.getElementById("registerTab");
 
@@ -133,7 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const forgotPassword = document.getElementById("forgotPassword");
   const backToLogin = document.getElementById("backToLogin");
 
-  // HIỂN THỊ ĐĂNG NHẬP
   function showLogin() {
     loginForm.classList.remove("hidden");
     registerForm.classList.add("hidden");
@@ -143,7 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
     registerTab.classList.remove("active");
   }
 
-  // HIỂN THỊ ĐĂNG KÝ
   function showRegister() {
     loginForm.classList.add("hidden");
     registerForm.classList.remove("hidden");
@@ -153,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function () {
     registerTab.classList.add("active");
   }
 
-  // HIỂN THỊ QUÊN MẬT KHẨU
   function showForgot() {
     loginForm.classList.add("hidden");
     registerForm.classList.add("hidden");
@@ -163,7 +199,6 @@ document.addEventListener("DOMContentLoaded", function () {
     registerTab.classList.remove("active");
   }
 
-  // CHUYỂN FORM
   loginTab.addEventListener("click", showLogin);
   registerTab.addEventListener("click", showRegister);
   document.getElementById("goRegister").addEventListener("click", showRegister);
@@ -171,7 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
   forgotPassword.addEventListener("click", showForgot);
   backToLogin.addEventListener("click", showLogin);
 
-  // ĐĂNG KÝ
   registerForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -215,7 +249,6 @@ document.addEventListener("DOMContentLoaded", function () {
     showLogin();
   });
 
-  // ĐĂNG NHẬP
   loginForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -237,7 +270,6 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Kiểm tra tài khoản trong danh sách ngunghoatdong
     const danhSachNgungHoatDong =
       JSON.parse(localStorage.getItem("ngunghoatdong")) || [];
 
@@ -264,15 +296,14 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    // Đăng nhập thành công
     localStorage.setItem("nguoiDungDangNhap", JSON.stringify(nguoiDung));
     alert("Đăng nhập thành công!");
     loginForm.reset();
     closeModal();
-    checkLoginStatus(); // Cập nhật lại trạng thái giao diện ngay tại index
+    checkLoginStatus();
+    updateCartBadge(); // hiện lại chấm đỏ sau khi đăng nhập
   });
 
-  // QUÊN MẬT KHẨU
   forgotForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -325,4 +356,364 @@ document.addEventListener("DOMContentLoaded", function () {
     forgotForm.reset();
     showLogin();
   });
+});
+
+// ======================================================================
+// PHẦN HIỂN THỊ VÀ TÌM KIẾM SẢN PHẨM
+// ======================================================================
+
+const DEFAULT_IMG = "assets/images/default-image.jpeg";
+
+// Ảnh lưu từ trang admin có thể là "../assets/..." (đúng với trang admin, sai với index.html)
+// -> bỏ "../" để đúng với thư mục gốc; rỗng thì dùng ảnh mặc định.
+function layAnhSP(hinh) {
+  if (!hinh) return DEFAULT_IMG;
+  hinh = String(hinh).trim();
+  if (hinh === "") return DEFAULT_IMG;
+  while (hinh.startsWith("../")) hinh = hinh.slice(3);
+  return hinh;
+}
+
+let rawProducts = JSON.parse(localStorage.getItem("danhMucSanPham")) || [];
+let pricingData = JSON.parse(localStorage.getItem("saved_pricing")) || [];
+
+// SỬA LỖI: Khởi tạo mảng rỗng hoàn toàn trước khi lọc
+let allProducts = [];
+
+for (let i = 0; i < rawProducts.length; i++) {
+  let sp = rawProducts[i];
+
+  // Bỏ qua nếu sản phẩm đang bị ẩn
+  if (sp.trangThai !== "an") {
+    // Tìm giá bán trong saved_pricing hoặc lấy giá mặc định có sẵn trong sp
+    let giaBanObj = pricingData.find(p => (p.maSP || p.code) === sp.maSP)
+      || pricingData.find(p => (p.tenSP || p.name) === sp.tenSP);
+    let giaHienThi =
+      giaBanObj && giaBanObj.retailPrice > 0
+        ? giaBanObj.retailPrice
+        : sp.price || 0;
+
+    // Chỉ hiển thị sản phẩm có giá bán > 0
+    if (giaHienThi > 0) {
+      allProducts.push({
+        maSP: sp.maSP,
+        tenSP: sp.tenSP,
+        tenLoai: sp.tenLoai || "Khác",
+        hinh: layAnhSP(sp.hinh),
+        price: Number(giaHienThi),
+        color: sp.color || "Tiêu chuẩn",
+        moTa: sp.moTa || "",
+      });
+    }
+  }
+}
+
+let filteredProducts = [];
+for (let i = 0; i < allProducts.length; i++) {
+  filteredProducts.push(allProducts[i]);
+}
+
+let currentPage = 1;
+let itemsPerPage = 8;
+
+// ---------------------------------------------------------
+// HÀM 1: Vẽ sản phẩm ra màn hình
+// ---------------------------------------------------------
+function renderProducts(page) {
+  let productGrid = document.getElementById("productGrid");
+  if (!productGrid) return;
+
+  productGrid.innerHTML = "";
+
+  let startIndex = (page - 1) * itemsPerPage;
+  let endIndex = startIndex + itemsPerPage;
+  let hasProduct = false;
+
+  for (let i = startIndex; i < endIndex; i++) {
+    if (i >= filteredProducts.length) break;
+
+    hasProduct = true;
+    let product = filteredProducts[i];
+
+    // SỬA LỖI: Khai báo đầy đủ imgSrc, prodName, formatPrice
+    let formatPrice = Number(product.price || 0).toLocaleString("vi-VN") + " đ";
+    let imgSrc = layAnhSP(product.hinh);
+    let prodName = product.tenSP || "Sản phẩm";
+
+    let cardHTML = `
+      <div class="product-card">
+        <div onclick="showDetail('${product.maSP}')">
+          <img src="${imgSrc}" alt="${prodName}" onerror="this.onerror=null; this.src='assets/images/default-image.jpeg'">
+          <h4>${prodName}</h4>
+          <p class="price">${formatPrice}</p>
+        </div>
+        <button onclick="addToCart('${product.maSP}')">Thêm vào giỏ</button>
+      </div>
+    `;
+    productGrid.innerHTML += cardHTML;
+  }
+
+  if (hasProduct === false) {
+    productGrid.innerHTML =
+      "<h3 style='grid-column: span 4; text-align:center;'>Không tìm thấy sản phẩm nào!</h3>";
+  }
+}
+
+// ---------------------------------------------------------
+// HÀM 2: Tạo các nút Phân trang
+// ---------------------------------------------------------
+function renderPagination() {
+  let paginationDiv = document.getElementById("pagination");
+  if (!paginationDiv) return;
+  paginationDiv.innerHTML = "";
+
+  let totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    let btn = document.createElement("button");
+    btn.innerText = i;
+
+    if (i === currentPage) {
+      btn.className = "active";
+    }
+
+    btn.addEventListener("click", function () {
+      currentPage = i;
+      renderProducts(currentPage);
+      renderPagination();
+      let titleElem = document.getElementById("categoryTitle");
+      if (titleElem) titleElem.scrollIntoView({ behavior: "smooth" });
+    });
+
+    paginationDiv.appendChild(btn);
+  }
+}
+
+// ---------------------------------------------------------
+// HÀM 3: Tìm kiếm thông minh trên Header
+// ---------------------------------------------------------
+let searchInputHeader = document.querySelector(".search-container input");
+let searchIconHeader = document.querySelector(".search-container .fa-search");
+
+function searchBasic() {
+  if (!searchInputHeader) return;
+  let keyword = searchInputHeader.value.toLowerCase().trim();
+
+  filteredProducts = [];
+
+  for (let i = 0; i < allProducts.length; i++) {
+    let product = allProducts[i];
+    let productInfo =
+      (product.tenSP || "") +
+      " " +
+      (product.tenLoai || "") +
+      " " +
+      (product.color || "");
+    productInfo = productInfo.toLowerCase();
+
+    let compactedInfo = productInfo.replace(/\s+/g, "");
+
+    if (
+      productInfo.includes(keyword) ||
+      compactedInfo.includes(keyword.replace(/\s+/g, ""))
+    ) {
+      filteredProducts.push(product);
+    }
+  }
+
+  let titleElem = document.getElementById("categoryTitle");
+  if (titleElem)
+    titleElem.innerText = 'Kết quả tìm kiếm cho: "' + keyword + '"';
+
+  currentPage = 1;
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
+}
+
+if (searchIconHeader) searchIconHeader.addEventListener("click", searchBasic);
+if (searchInputHeader) {
+  searchInputHeader.addEventListener("keyup", function (e) {
+    if (e.key === "Enter") searchBasic();
+  });
+}
+
+// ---------------------------------------------------------
+// HÀM 4: Lọc theo hãng & tên trên Menu
+// ---------------------------------------------------------
+function filterByCategory(category, event) {
+  if (event) event.preventDefault();
+  filteredProducts = [];
+
+  if (category === "all") {
+    for (let i = 0; i < allProducts.length; i++) {
+      filteredProducts.push(allProducts[i]);
+    }
+    let titleElem = document.getElementById("categoryTitle");
+    if (titleElem) titleElem.innerText = "Tất cả sản phẩm";
+  } else {
+    for (let i = 0; i < allProducts.length; i++) {
+      let product = allProducts[i];
+      if ((product.tenLoai || "").toLowerCase() === category.toLowerCase()) {
+        filteredProducts.push(product);
+      }
+    }
+    let titleElem = document.getElementById("categoryTitle");
+    if (titleElem) titleElem.innerText = "Sản phẩm " + category.toUpperCase();
+  }
+
+  currentPage = 1;
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
+}
+
+window.filterByName = function (keyword, event) {
+  if (event) event.preventDefault();
+
+  filteredProducts = [];
+
+  for (let i = 0; i < allProducts.length; i++) {
+    let product = allProducts[i];
+    if (
+      (product.tenSP || "").toLowerCase().includes(keyword.toLowerCase())
+    ) {
+      filteredProducts.push(product);
+    }
+  }
+
+  let titleElem = document.getElementById("categoryTitle");
+  if (titleElem) titleElem.innerText = "Dòng máy: " + keyword;
+
+  currentPage = 1;
+  hideDetail();
+  renderProducts(currentPage);
+  renderPagination();
+};
+
+// ---------------------------------------------------------
+// HÀM 5: Hiển thị giao diện Chi tiết 1 sản phẩm
+// ---------------------------------------------------------
+function showDetail(maSP) {
+  let product = null;
+
+  for (let i = 0; i < allProducts.length; i++) {
+    if (allProducts[i].maSP === maSP) {
+      product = allProducts[i];
+      break;
+    }
+  }
+
+  if (product === null) return;
+
+  let formatPrice = Number(product.price || 0).toLocaleString("vi-VN") + " đ";
+  let detailView = document.getElementById("detailView");
+  if (!detailView) return;
+
+  detailView.innerHTML = `
+    <button class="back-btn" onclick="hideDetail()">Quay lại danh sách</button>
+    <div class="detail-container">
+      <div class="detail-image">
+        <img src="${product.hinh}" alt="${product.tenSP}" onerror="this.onerror=null; this.src='assets/images/default-image.jpeg'">
+      </div>
+      <div class="detail-info">
+        <h2>${product.tenSP}</h2>
+        <p class="detail-price">${formatPrice}</p>
+        <p><strong>Thương hiệu:</strong> ${(product.tenLoai || "").toUpperCase()}</p>
+        <p><strong>Màu sắc:</strong> ${product.color || "Đang cập nhật"}</p>
+        <p style="line-height:1.6; color:#555;">${product.moTa || "Sản phẩm chính hãng mới 100%, bảo hành 12 tháng tại các trung tâm toàn quốc."}</p>
+        <button class="add-to-cart-large" onclick="addToCart('${product.maSP}')">Thêm vào giỏ hàng</button>
+      </div>
+    </div>
+  `;
+
+  let mainView = document.getElementById("mainView");
+  if (mainView) mainView.classList.add("hidden");
+  detailView.classList.remove("hidden");
+  window.scrollTo(0, 0);
+}
+
+// ---------------------------------------------------------
+// HÀM 6: Nút quay lại danh sách
+// ---------------------------------------------------------
+function hideDetail() {
+  let mainView = document.getElementById("mainView");
+  let detailView = document.getElementById("detailView");
+
+  if (mainView) mainView.classList.remove("hidden");
+  if (detailView) detailView.classList.add("hidden");
+}
+
+// ---------------------------------------------------------
+// HÀM 7: Quản lý Giỏ hàng & Chấm đỏ (Đồng bộ với cart.js)
+// ---------------------------------------------------------
+function updateCartBadge() {
+  let badge = document.getElementById("cartBadge");
+  if (!badge) return;
+
+  // Chưa đăng nhập -> luôn ẩn chấm đỏ
+  if (!localStorage.getItem("nguoiDungDangNhap")) {
+    badge.classList.add("hidden");
+    return;
+  }
+
+  let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+  let totalQty = 0;
+
+  for (let i = 0; i < cart.length; i++) {
+    totalQty += cart[i].quantity || 1;
+  }
+
+  if (totalQty > 0) {
+    badge.innerText = totalQty;
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+}
+
+function addToCart(maSP) {
+  let product = allProducts.find((p) => p.maSP === maSP);
+  if (!product) return;
+
+  // Bắt buộc đăng nhập mới được thêm vào giỏ hàng
+  if (!localStorage.getItem("nguoiDungDangNhap")) {
+    alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+    if (typeof window.openAuthModal === "function") window.openAuthModal();
+    return;
+  }
+
+  let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+  let daCo = false;
+  for (let i = 0; i < cart.length; i++) {
+    if (cart[i].id === maSP) {
+      cart[i].quantity = (cart[i].quantity || 1) + 1;
+      daCo = true;
+      break;
+    }
+  }
+
+  if (!daCo) {
+    cart.push({
+      id: product.maSP,
+      name: product.tenSP,
+      price: product.price,
+      image: product.hinh,
+      color: product.color || "Tiêu chuẩn",
+      quantity: 1,
+      selected: true,
+    });
+  }
+
+  localStorage.setItem("cartItems", JSON.stringify(cart));
+
+  updateCartBadge();
+  alert("Đã thêm " + product.tenSP + " vào giỏ hàng!");
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  updateCartBadge();
+  renderProducts(currentPage);
+  renderPagination();
 });

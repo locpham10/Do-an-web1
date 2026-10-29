@@ -1,3 +1,56 @@
+function khoiTaoDuLieuMau() {
+    // 1. Tạo loại sản phẩm mẫu
+    if (!localStorage.getItem("loaiSanPham")) {
+        const loaiMau = [
+            { maLoai: "L01", tenLoai: "Apple", moTa: "Các điện thoại iPhone", trangThai: "hoatdong", hinh: "../Img/Apple/hangApple.png" },
+            { maLoai: "L02", tenLoai: "Samsung", moTa: "Các điện thoại của hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/hangSamsung.png" },
+            { maLoai: "L03", tenLoai: "Oppo", moTa: "Các điện thoại của hãng OPPO", trangThai: "hoatdong", hinh: "../Img/Oppo/hangOppo.png" }
+        ];
+        localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
+    }
+
+    // 2. Tạo sản phẩm mẫu
+    if (!localStorage.getItem("danhMucSanPham")) {
+        const spMau = [
+            { maSP: "SP01", maLoai: "L01", tenLoai: "Apple", tenSP: "iPhone 15 Pro Max", price: 29990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../Img/Apple/iPhone15_den.png", color: "Titan Tự Nhiên" },
+            { maSP: "SP02", maLoai: "L02", tenLoai: "Samsung", tenSP: "Galaxy S24 Ultra", price: 33990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../Img/Samsung/Samsung-galaxy-s24-ultra.png", color: "Đen Titan" },
+            { maSP: "SP03", maLoai: "L03", tenLoai: "Oppo", tenSP: "OPPO Find N3", price: 24990000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../Img/Oppo/Oppo-find-N3.png", color: "Vàng Đồng" },
+            { maSP: "SP04", maLoai: "L04", tenLoai: "Apple", tenSP: "iPhone Duo", price: 69000000, moTa: "Máy mới 100%", trangThai: "hoatdong", hinh: "../Img/Apple/iphone_duo_night_sky.png", color: "Xanh Dương Sẫm" }
+        ];
+        localStorage.setItem("danhMucSanPham", JSON.stringify(spMau));
+    }
+
+    // 3. Tạo phiếu nhập mẫu (Dùng maSP, tenSP, hinh)
+    if (!localStorage.getItem("saved_imports")) {
+        const phieuNhapMau = [
+            {
+                code: "PN001",
+                date: "2026-10-25",
+                status: "completed",
+                totalAmount: 510000000,
+                items: [
+                    { maSP: "SP01", tenSP: "iPhone 15 Pro Max", hinh: "../assets/images/default-image.jpeg", qty: 10, price: 25000000 },
+                    { maSP: "SP02", tenSP: "Galaxy S24 Ultra", hinh: "../assets/images/default-image.jpeg", qty: 5, price: 28000000 },
+                    { maSP: "SP03", tenSP: "OPPO Find N3", hinh: "../assets/images/default-image.jpeg", qty: 6, price: 20000000 }
+                ]
+            }
+        ];
+        localStorage.setItem("saved_imports", JSON.stringify(phieuNhapMau));
+    }
+
+    // 4. Tạo bảng giá bán mẫu
+    if (!localStorage.getItem("saved_pricing")) {
+        const giaMau = [
+            { maSP: "SP01", tenSP: "iPhone 15 Pro Max", hinh: "../assets/images/default-image.jpeg", totalQty: 10, totalCost: 250000000, importPrice: 25000000, retailPrice: 29990000 },
+            { maSP: "SP02", tenSP: "Galaxy S24 Ultra", hinh: "../assets/images/default-image.jpeg", totalQty: 5, totalCost: 140000000, importPrice: 28000000, retailPrice: 33990000 },
+            { maSP: "SP03", tenSP: "OPPO Find N3", hinh: "../assets/images/default-image.jpeg", totalQty: 6, totalCost: 120000000, importPrice: 20000000, retailPrice: 24990000 }
+        ];
+        localStorage.setItem("saved_pricing", JSON.stringify(giaMau));
+    }
+}
+
+// Chạy tự động ngay khi mở web
+khoiTaoDuLieuMau();
 /*======================================================================
     ĐĂNG NHẬP CHO TRANG ADMIN
 ======================================================================*/
@@ -23,7 +76,7 @@ function handleLogin() {
     }
 }
 
-function openChangePassModal(){
+function openChangePassModal() {
     document.getElementById('oldAdminPass').value = '';
     document.getElementById('newAdminPass').value = '';
     document.getElementById('confirmAdminPass').value = '';
@@ -36,16 +89,16 @@ function saveAdminPassword() {
     const newPass = document.getElementById('newAdminPass').value;
     const confirmPass = document.getElementById('confirmAdminPass').value;
 
-    if (!oldPass || !newPass || !confirmPass){
+    if (!oldPass || !newPass || !confirmPass) {
         alert('Vui lòng nhập đầy đủ thông tin!');
         return;
     }
-    if (oldPass !== getAdminPassword()){
+    if (oldPass !== getAdminPassword()) {
         alert('Mật khẩu hiện tại không chính xác!');
         document.getElementById('oldAdminPass').focus();
         return;
     }
-    if (newPass !== confirmPass){
+    if (newPass !== confirmPass) {
         alert('Mật khẩu xác nhận không khớp!')
         document.getElementById('confirmAdminPass').focus();
         return;
@@ -734,7 +787,7 @@ function hienThiKhuVucQuanLy(id) {
     PHẦN DÙNG CHO TRANG QUẢN LÝ SẢN PHẨM
 ======================================================================*/
 function layDanhMucSanPham() {
-    try { return JSON.parse(localStorage.getItem("danhMucSanPham")) || []; } 
+    try { return JSON.parse(localStorage.getItem("danhMucSanPham")) || []; }
     catch (e) { return []; }
 }
 
@@ -749,32 +802,32 @@ document.addEventListener("DOMContentLoaded", function () {
         addProductBtn.addEventListener("click", () => moFormSanPham());
         document.getElementById("cancelProductBtn").addEventListener("click", dongFormSanPham);
         document.getElementById("closeProductModalBtn").addEventListener("click", dongFormSanPham);
-        
+
         document.getElementById("productSearchBtn").addEventListener("click", hienThiDanhMucSanPham);
         document.getElementById("productSearch").addEventListener("keydown", function (e) {
             if (e.key === "Enter") { e.preventDefault(); hienThiDanhMucSanPham(); }
         });
-        
+
         document.getElementById("productResetSearchBtn").addEventListener("click", function () {
-            document.getElementById("productSearch").value = ""; 
-            if(document.getElementById("productCategoryFilter")) {
+            document.getElementById("productSearch").value = "";
+            if (document.getElementById("productCategoryFilter")) {
                 document.getElementById("productCategoryFilter").value = "ALL";
             }
             hienThiDanhMucSanPham();
         });
-        
+
         // Form submit
         document.getElementById("productForm").addEventListener("submit", function (e) {
-            e.preventDefault(); 
+            e.preventDefault();
             luuSanPhamTuForm();
         });
-        
+
         // Xử lý ảnh
         document.getElementById("productImageFile").addEventListener("change", xemTruocAnhSanPham);
         document.getElementById("removeProductImageBtn").addEventListener("click", boAnhSanPham);
 
         // Lọc theo danh mục
-        if(document.getElementById("productCategoryFilter")) {
+        if (document.getElementById("productCategoryFilter")) {
             document.getElementById("productCategoryFilter").addEventListener("change", hienThiDanhMucSanPham);
         }
     }
@@ -784,10 +837,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function capNhatLuaChonLoai() {
     const selectForm = document.getElementById("productCategory");
     const selectFilter = document.getElementById("productCategoryFilter");
-    
+
     let dsLoai = [];
     try { dsLoai = JSON.parse(localStorage.getItem("loaiSanPham") || "[]"); } catch (e) { dsLoai = []; }
-    
+
     // Chỉ lấy các loại đang hoạt động
     dsLoai = dsLoai.filter(loai => loai.trangThai !== "an");
 
@@ -801,11 +854,11 @@ function capNhatLuaChonLoai() {
         selectForm.innerHTML = options;
         selectForm.value = giaTriCu;
     }
-    
+
     if (selectFilter) {
         const filterGiaTriCu = selectFilter.value;
         selectFilter.innerHTML = '<option value="ALL">Tất cả danh mục</option>' + options.replace('<option value="">-- Chọn loại sản phẩm --</option>', '');
-        if(filterGiaTriCu) selectFilter.value = filterGiaTriCu;
+        if (filterGiaTriCu) selectFilter.value = filterGiaTriCu;
     }
 }
 
@@ -884,7 +937,7 @@ function xemTruocAnhSanPham() {
     }
 
     const reader = new FileReader();
-    reader.onload = function(e) {
+    reader.onload = function (e) {
         form.dataset.hinhMoi = e.target.result;
         form.dataset.boAnh = "false";
         anHienXemTruocAnhSP(e.target.result);
@@ -937,6 +990,7 @@ function luuSanPhamTuForm() {
     else hinh = spCu ? (spCu.hinh || "") : "";
 
     const danhMucMoi = {
+        ...(spCu || {}),
         maSP: maSP,
         maLoai: maLoai,
         tenLoai: loaiObj ? loaiObj.tenLoai : "Khác",
@@ -955,21 +1009,32 @@ function luuSanPhamTuForm() {
     luuDanhMucSanPham(ds);
     dongFormSanPham();
     hienThiDanhMucSanPham();
-    
+
     // Báo cho tab Nhập hàng cập nhật lại danh sách SP (nếu cần)
-    if(typeof loadProductsForImportDropdown === "function") {
+    if (typeof loadProductsForImportDropdown === "function") {
         loadProductsForImportDropdown();
     }
-    
+
     alert("Đã lưu thành công!");
 }
 
 // 6. Đổ dữ liệu ra Bảng
+function layGiaBanSP(sp) {
+    let gia = 0;
+    try {
+        const ds = JSON.parse(localStorage.getItem("saved_pricing") || "[]");
+        const found = ds.find(p => (p.maSP || p.code) === sp.maSP || (p.tenSP || p.name) === sp.tenSP);
+        if (found && found.retailPrice > 0) gia = found.retailPrice;
+    } catch (e) { }
+    if (!gia && Number(sp.price) > 0) gia = Number(sp.price);
+    return gia > 0 ? `<strong>${formatMoney(gia)}</strong>` : `<span style="color:#dc3545;"><i>Chưa có giá</i></span>`;
+}
+
 function hienThiDanhMucSanPham() {
     const tbody = document.getElementById("productTableBody");
     const search = document.getElementById("productSearch");
     const filter = document.getElementById("productCategoryFilter");
-    
+
     if (!tbody) return;
 
     const tuKhoa = chuanHoaChu(search ? search.value : "");
@@ -989,7 +1054,7 @@ function hienThiDanhMucSanPham() {
     tbody.innerHTML = ds.map(sp => {
         const trangThaiTxt = sp.trangThai === "an" ? "Đang ẩn" : "Đang hiển thị";
         const nutAnHien = sp.trangThai === "an" ? "Hiện" : "Ẩn";
-        
+
         return `
             <tr>
                 <td style="text-align: center;">
@@ -998,7 +1063,7 @@ function hienThiDanhMucSanPham() {
                 <td><strong>${sp.maSP}</strong></td>
                 <td>${sp.tenSP}</td>
                 <td><span class="badge" style="background:#e9ecef; color:#333;">${sp.tenLoai}</span></td>
-                <td style="text-align: right; color:#888;"><i>Cập nhật trong Giá bán</i></td>
+                <td style="text-align: right;">${layGiaBanSP(sp)}</td>
                 <td>${trangThaiTxt}</td>
                 <td style="text-align: center;">
                     <button type="button" class="btn-action btn-edit-active" onclick="suaSanPham('${sp.maSP}')">Sửa</button>
@@ -1390,15 +1455,15 @@ function hienThiLoaiSanPham() {
             <tr>
                 <td style="text-align: center;">
                     ${item.hinh
-                        ? `<img
+                ? `<img
                             src="${anToanLoai(item.hinh)}"
                             alt="Ảnh loại sản phẩm"
                             style="width:60px;height:60px;object-fit:contain;">`
-                        : `<img 
+                : `<img 
                             src="../assets/images/default-image.jpeg" 
                             alt="Ảnh mặc định" 
                             style="width:60px;height:60px;object-fit:contain;">`
-                    }
+            }
                 </td>
 
                 <td>${anToanLoai(item.maLoai)}</td>
@@ -1590,16 +1655,23 @@ function renderTable() {
 let globalProductList = []; // Biến lưu danh sách sản phẩm từ Tab 4
 
 function loadProductsForImportDropdown() {
-    const storedProducts = localStorage.getItem('saved_products');
+    const storedProducts = localStorage.getItem('danhMucSanPham');
     if (storedProducts) {
-        try { globalProductList = JSON.parse(storedProducts); } catch (e) { globalProductList = []; }
+        try {
+            // Chỉ lấy những sản phẩm không bị ẩn
+            globalProductList = JSON.parse(storedProducts).filter(sp => sp.trangThai !== 'an');
+        } catch (e) {
+            globalProductList = [];
+        }
+    } else {
+        globalProductList = [];
     }
 
     const selectEl = document.getElementById('itemProductSelect');
     if (!selectEl) return;
 
     selectEl.innerHTML = '<option value="">-- Vui lòng chọn sản phẩm --</option>' +
-        globalProductList.map(p => `<option value="${p.code}">${p.code} - ${p.name}</option>`).join('');
+        globalProductList.map(sp => `<option value="${sp.maSP}">${sp.maSP} - ${sp.tenSP}</option>`).join('');
 }
 
 function openAddModel() {
@@ -1668,49 +1740,45 @@ function toggleActionButtons(isCompleted) {
 }
 
 function resetItemInputForm() {
-    document.getElementById('itemImage').value = "";
-    currentImageBase64 = "";
-    document.getElementById('itemProduct').value = "";
+    const selectEl = document.getElementById('itemProductSelect');
+    if (selectEl) selectEl.value = "";
     document.getElementById('itemQuantity').value = "1";
     document.getElementById('itemPrice').value = "";
-    document.getElementById('itemProduct').focus();
+    if (selectEl) selectEl.focus();
 }
 
 function addItemToDraft() {
     const selectEl = document.getElementById('itemProductSelect');
-    const selectedCode = selectEl.value;
+    const selectedMaSP = selectEl.value;
     const qty = parseInt(document.getElementById('itemQuantity').value, 10);
     const price = parseFloat(document.getElementById('itemPrice').value);
 
-    if (!selectedCode) { alert("Vui lòng chọn 1 sản phẩm từ danh sách!"); selectEl.focus(); return; }
+    if (!selectedMaSP) { alert("Vui lòng chọn 1 sản phẩm từ danh sách!"); selectEl.focus(); return; }
     if (isNaN(qty) || qty <= 0) { alert("Số lượng phải lớn hơn 0!"); return; }
     if (isNaN(price) || price < 0) { alert("Đơn giá nhập không hợp lệ!"); return; }
 
-    // Tìm thông tin SP (tên, ảnh) từ danh sách gốc dựa trên Mã
-    const productInfo = globalProductList.find(p => p.code === selectedCode);
+    // Tìm sản phẩm theo maSP
+    const productInfo = globalProductList.find(sp => sp.maSP === selectedMaSP);
     if (!productInfo) return;
 
-    // Kiểm tra xem đã có trong list nháp chưa, nếu có thì cộng dồn số lượng
-    const existing = currentDraftItems.find(i => i.code === selectedCode);
+    // Kiểm tra xem đã có trong phiếu nháp chưa
+    const existing = currentDraftItems.find(i => (i.maSP || i.code) === selectedMaSP);
     if (existing) {
         existing.qty += qty;
         existing.price = price;
     } else {
         currentDraftItems.push({
-            code: productInfo.code,
-            name: productInfo.name,
-            image: productInfo.image,
+            maSP: productInfo.maSP,
+            tenSP: productInfo.tenSP,
+            hinh: productInfo.hinh || DEFAULT_IMAGE,
             qty: qty,
             price: price
         });
     }
 
+    // Vẽ lại bảng chi tiết + tổng tiền, rồi dọn ô nhập để thêm món tiếp theo
     renderDetailTable();
-
-    // Reset form nhanh để nhập món tiếp theo
-    selectEl.value = "";
-    document.getElementById('itemQuantity').value = "1";
-    document.getElementById('itemPrice').value = "";
+    resetItemInputForm();
 }
 
 function removeItemFromDraft(idx) {
@@ -1732,12 +1800,14 @@ function renderDetailTable(isReadOnly = false) {
     detailBody.innerHTML = currentDraftItems.map((item, idx) => {
         const lineTotal = item.qty * item.price;
         grandTotal += lineTotal;
+        const tenHienThi = item.tenSP || item.name || "";
+        const hinhHienThi = item.hinh || item.image || DEFAULT_IMAGE;
         const removeBtn = !isReadOnly ? `<td style="text-align: center;"><button class="btn-remove-item" onclick="removeItemFromDraft(${idx})">&times;</button></td>` : '';
         return `
             <tr>
                 <td>${idx + 1}</td>
-                <td style="text-align: center;"><img src="${item.image}" class="product-thumb" alt="Ảnh"></td>
-                <td><strong>${item.name}</strong></td>
+                <td style="text-align: center;"><img src="${hinhHienThi}" class="product-thumb" alt="Ảnh"></td>
+                <td><strong>${tenHienThi}</strong></td>
                 <td style="text-align: center;">${item.qty}</td>
                 <td style="text-align: right;">${formatMoney(item.price)}</td>
                 <td style="text-align: right;"><strong>${formatMoney(lineTotal)}</strong></td>
@@ -1891,67 +1961,68 @@ let pricingList = [];
 let pendingTicketsCount = 0; // Biến đếm số phiếu đang bị "Lưu tạm"
 
 /* --- 1. TẢI VÀ ĐỒNG BỘ DỮ LIỆU TỪ KHO NHẬP HÀNG --- */
+/* --- CẬP NHẬT TRONG PHẦN GIÁ BÁN --- */
 function loadDataForPricing() {
     pendingTicketsCount = 0;
-    const storedImports = localStorage.getItem('saved_imports');
-    let importList = [];
+    const DEFAULT_IMG = '../assets/images/default-image.jpeg';
 
-    if (storedImports) {
-        try { importList = JSON.parse(storedImports); }
-        catch (e) { console.error("Lỗi file JSON Nhập hàng"); }
-    }
+    // 1. Đọc danh mục sản phẩm, phiếu nhập, bảng giá đã lưu
+    let catalog = [], importList = [], savedPricingList = [];
+    try { catalog = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]'); } catch (e) { console.error("Lỗi JSON Sản phẩm"); }
+    try { importList = JSON.parse(localStorage.getItem('saved_imports') || '[]'); } catch (e) { console.error("Lỗi JSON Nhập hàng"); }
+    try { savedPricingList = JSON.parse(localStorage.getItem('saved_pricing') || '[]'); } catch (e) { console.error("Lỗi JSON Giá bán"); }
 
+    // 2. Khởi tạo từ TOÀN BỘ sản phẩm trong danh mục (kể cả chưa nhập hàng)
     let productMap = {};
-
-    // Quét toàn bộ phiếu nhập
-    importList.forEach(ticket => {
-        // Đếm xem có bao nhiêu phiếu chưa Hoàn thành để báo lỗi cho user
-        if (ticket.status !== 'completed') {
-            pendingTicketsCount++;
-        }
-
-        // CHỈ gom nhóm dữ liệu của những phiếu ĐÃ HOÀN THÀNH
-        if (ticket.status === 'completed' && Array.isArray(ticket.items)) {
-            ticket.items.forEach(item => {
-                if (!item.name) return; // Bỏ qua dữ liệu rác nếu có
-
-                if (!productMap[item.name]) {
-                    productMap[item.name] = {
-                        name: item.name,
-                        image: item.image || '../assets/images/default-image.svg',
-                        totalQty: 0,
-                        totalCost: 0,
-                        importPrice: 0,
-                        retailPrice: 0
-                    };
-                }
-                productMap[item.name].totalQty += item.qty;
-                productMap[item.name].totalCost += (item.qty * item.price);
-            });
-        }
+    const keyByName = {};
+    catalog.forEach(sp => {
+        productMap[sp.maSP] = {
+            maSP: sp.maSP, tenSP: sp.tenSP, code: sp.maSP, name: sp.tenSP,
+            image: sp.hinh || DEFAULT_IMG,
+            totalQty: 0, totalCost: 0, importPrice: 0,
+            retailPrice: 0,
+            catalogPrice: Number(sp.price) || 0
+        };
+        keyByName[sp.tenSP] = sp.maSP;
     });
 
-    // Tính giá nhập bình quân và tạo mã SP
+    // 3. Cộng dồn số lượng / giá vốn từ các phiếu nhập đã hoàn thành
+    importList.forEach(ticket => {
+        if (ticket.status !== 'completed') { pendingTicketsCount++; return; }
+        if (!Array.isArray(ticket.items)) return;
+
+        ticket.items.forEach(item => {
+            const tenSP = item.tenSP || item.name;
+            const maSP = item.maSP || item.code || keyByName[tenSP];
+            if (!tenSP && !maSP) return;
+            const key = maSP || tenSP;
+
+            if (!productMap[key]) {
+                productMap[key] = {
+                    maSP: maSP || "", tenSP: tenSP, code: maSP || "", name: tenSP,
+                    image: item.hinh || item.image || DEFAULT_IMG,
+                    totalQty: 0, totalCost: 0, importPrice: 0, retailPrice: 0, catalogPrice: 0
+                };
+            }
+            productMap[key].totalQty += item.qty;
+            productMap[key].totalCost += (item.qty * item.price);
+        });
+    });
+
+    // 4. Tính giá nhập bình quân + gắn giá bán đã lưu
     pricingList = Object.values(productMap).map((prod, index) => {
         prod.importPrice = prod.totalQty > 0 ? Math.round(prod.totalCost / prod.totalQty) : 0;
-        prod.code = "SP" + String(index + 1).padStart(3, '0');
-        return prod;
-    });
+        if (!prod.code) prod.code = "SP" + String(index + 1).padStart(2, '0');
+        prod.maSP = prod.code;
 
-    // Kéo BẢNG GIÁ ĐÃ LƯU (nếu có) đắp vào danh sách hiện tại
-    const storedPricing = localStorage.getItem('saved_pricing');
-    if (storedPricing) {
-        try {
-            const savedPricingList = JSON.parse(storedPricing);
-            pricingList.forEach(prod => {
-                // TÌM THEO TÊN (Khớp tuyệt đối 100%, không sợ bị lệch mã SP khi thêm hàng mới)
-                const savedProd = savedPricingList.find(p => p.name === prod.name);
-                if (savedProd && savedProd.retailPrice > 0) {
-                    prod.retailPrice = savedProd.retailPrice;
-                }
-            });
-        } catch (e) { console.error("Lỗi file JSON Giá bán"); }
-    }
+        const saved = savedPricingList.find(p =>
+            (p.maSP || p.code) === prod.code || (p.tenSP || p.name) === prod.tenSP);
+        if (saved && saved.retailPrice > 0) prod.retailPrice = saved.retailPrice;
+        else if (prod.catalogPrice > 0) prod.retailPrice = prod.catalogPrice;
+        return prod;
+    })
+    // CHỈ hiển thị sản phẩm đã có nhập hàng (phiếu đã hoàn thành, số lượng > 0)
+    .filter(prod => prod.totalQty > 0);
 
     renderPricingTable();
 }
@@ -1971,7 +2042,7 @@ function renderPricingTable() {
             </td></tr>`;
         } else {
             tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 50px; color: #888;">
-                Chưa có sản phẩm nào trong kho.<br>Vui lòng sang trang Nhập hàng và tạo phiếu mới.
+                Chưa có sản phẩm nào trong kho để thiết lập giá.<br>Vui lòng sang trang Nhập hàng, tạo phiếu và bấm <b>Hoàn thành</b>.
             </td></tr>`;
         }
         return;
@@ -1980,12 +2051,16 @@ function renderPricingTable() {
     // VẼ DANH SÁCH SẢN PHẨM (Kèm logic Đổi màu tự động)
     tbody.innerHTML = pricingList.map(prod => {
         const hasRetailPrice = prod.retailPrice > 0;
-        const margin = hasRetailPrice ? Math.round(((prod.retailPrice - prod.importPrice) / prod.importPrice) * 100) : 0;
+        const hasImport = prod.importPrice > 0;
+        const margin = (hasRetailPrice && hasImport) ? Math.round(((prod.retailPrice - prod.importPrice) / prod.importPrice) * 100) : 0;
 
         let retailPriceHtml, badgeHtml;
         const btnText = hasRetailPrice ? "Cập nhật giá" : "Thiết lập giá";
 
-        if (hasRetailPrice) {
+        if (hasRetailPrice && !hasImport) {
+            retailPriceHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
+            badgeHtml = `<span class="badge badge-pending" style="background: #e9ecef; color: #6c757d;">--</span>`;
+        } else if (hasRetailPrice) {
             if (margin > 0) {
                 retailPriceHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
                 badgeHtml = `<span class="badge badge-completed">+${margin}%</span>`;
@@ -2008,7 +2083,7 @@ function renderPricingTable() {
                 <td><strong>${prod.code}</strong></td>
                 <td><img src="${prod.image}" width="40" height="40" style="border-radius: 4px; object-fit: cover; border: 1px solid #ddd;"></td>
                 <td>${prod.name}</td>
-                <td style="text-align: right; color: #6c757d;">${formatMoney(prod.importPrice)}</td>
+                <td style="text-align: right; color: #6c757d;">${hasImport ? formatMoney(prod.importPrice) : '<i>Chưa nhập hàng</i>'}</td>
                 <td style="text-align: right;">${retailPriceHtml}</td>
                 <td style="text-align: center;">${badgeHtml}</td>
                 <td style="text-align: center;">
@@ -2048,6 +2123,11 @@ function calculateMargin() {
         return;
     }
     const profit = retailPrice - currentImportPrice;
+    if (currentImportPrice <= 0) {
+        document.getElementById('modalMarginPercent').value = "";
+        updateProfitDisplay(0);
+        return;
+    }
     let marginPercent = (profit / currentImportPrice) * 100;
     document.getElementById('modalMarginPercent').value = marginPercent.toFixed(1);
     updateProfitDisplay(profit);
@@ -2098,7 +2178,22 @@ function savePricing() {
     const prodIndex = pricingList.findIndex(p => p.code === currentProductCode);
     if (prodIndex > -1) {
         pricingList[prodIndex].retailPrice = retailPrice;
-        localStorage.setItem('saved_pricing', JSON.stringify(pricingList));
+
+        // Gộp vào bảng giá đã lưu (không ghi đè giá của các SP chưa hiện trong bảng)
+        let savedAll = [];
+        try { savedAll = JSON.parse(localStorage.getItem('saved_pricing') || '[]'); } catch (e) { savedAll = []; }
+        const cur = pricingList[prodIndex];
+        const sIdx = savedAll.findIndex(p => (p.maSP || p.code) === cur.code || (p.tenSP || p.name) === cur.tenSP);
+        if (sIdx > -1) savedAll[sIdx] = Object.assign({}, savedAll[sIdx], cur);
+        else savedAll.push(cur);
+        localStorage.setItem('saved_pricing', JSON.stringify(savedAll));
+
+        // Đồng bộ giá bán sang danh mục sản phẩm (để tab Sản phẩm / trang bán hàng đọc được)
+        try {
+            const dm = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]');
+            dm.forEach(sp => { if (sp.maSP === currentProductCode) sp.price = retailPrice; });
+            localStorage.setItem('danhMucSanPham', JSON.stringify(dm));
+        } catch (e) { console.error("Lỗi đồng bộ giá", e); }
     }
 
     closeModal();
@@ -2251,23 +2346,22 @@ let savedProducts = []; // Lấy từ Tab 4 để biết Sản phẩm thuộc Lo
 function loadDataForInventory() {
     const storedImports = localStorage.getItem('saved_imports');
     const storedOrders = localStorage.getItem('saved_orders');
-    const storedProducts = localStorage.getItem('saved_products');
+    const storedProducts = localStorage.getItem('danhMucSanPham');
 
     rawImports = storedImports ? JSON.parse(storedImports) : [];
     rawOrders = storedOrders ? JSON.parse(storedOrders) : [];
     savedProducts = storedProducts ? JSON.parse(storedProducts) : [];
 
-    // Tự động gom nhóm các "Loại SP" đang có trong kho để đổ vào ô Dropdown (Chức năng 8.1)
+    // Gom nhóm theo tenLoai (tiếng Việt)
     const categorySet = new Set();
-    savedProducts.forEach(p => { if (p.category) categorySet.add(p.category); });
+    savedProducts.forEach(sp => { if (sp.tenLoai) categorySet.add(sp.tenLoai); });
 
     const catFilterEl = document.getElementById('invCategoryFilter');
     if (catFilterEl) {
         catFilterEl.innerHTML = '<option value="ALL">-- Tất cả loại --</option>' +
-            Array.from(categorySet).map(c => `<option value="${c}">${c}</option>`).join('');
+            Array.from(categorySet).map(loai => `<option value="${loai}">${loai}</option>`).join('');
     }
 
-    // Sau khi tải dữ liệu xong thì gọi hàm lọc ngay để vẽ bảng
     applyInventoryFilters();
 }
 
@@ -2277,95 +2371,83 @@ function applyInventoryFilters() {
     const catFilter = document.getElementById('invCategoryFilter').value;
     const searchKeyword = document.getElementById('inventorySearchInput').value.trim().toLowerCase();
 
-    // Chuyển đổi ngày sang Timestamp (Nếu ko nhập thì mặc định quét từ đầu đến tận năm 2100)
     const fromTime = fromDateStr ? new Date(fromDateStr).setHours(0, 0, 0, 0) : 0;
     const toTime = toDateStr ? new Date(toDateStr).setHours(23, 59, 59, 999) : new Date("2100-01-01").getTime();
+    const DEFAULT_IMG = '../assets/images/default-image.jpeg';
 
     let inventoryMap = {};
-
-    // BƯỚC 1: Khởi tạo mốc sản phẩm trống
-    savedProducts.forEach(p => {
-        inventoryMap[p.name] = {
-            code: p.code,
-            name: p.name,
-            image: p.image || '../assets/images/default-image.jpeg',
-            category: p.category || 'Chưa phân loại',
-            importPrice: 0,
-            totalCost: 0,
-            totalImportedQty: 0,
-            importedInRange: 0, // Nhập trong kỳ
-            soldInRange: 0,     // Xuất trong kỳ
-            currentStock: 0     // Tồn cuối kỳ
-        };
+    const keyByName = {};
+    const newRow = (code, name, image, category, inCatalog) => ({
+        code: code, name: name, image: image || DEFAULT_IMG, category: category,
+        inCatalog: inCatalog, importPrice: 0, totalCost: 0, totalImportedQty: 0,
+        importedInRange: 0, soldInRange: 0, currentStock: 0
     });
 
-    // BƯỚC 2: QUÉT HÀNG NHẬP
-    rawImports.forEach(ticket => {
-        if (ticket.status === 'completed') {
-            const ticketTime = new Date(ticket.date).setHours(12, 0, 0, 0);
+    // BƯỚC 1: Khởi tạo từ danh mục sản phẩm (khóa theo mã SP)
+    savedProducts.forEach(sp => {
+        inventoryMap[sp.maSP] = newRow(sp.maSP, sp.tenSP, sp.hinh, sp.tenLoai || 'Chưa phân loại', true);
+        keyByName[sp.tenSP] = sp.maSP;
+    });
 
-            // Chỉ tính những phiếu nhập XẢY RA TRƯỚC mốc ToDate
-            if (ticketTime <= toTime) {
-                ticket.items.forEach(item => {
-                    if (!inventoryMap[item.name]) {
-                        inventoryMap[item.name] = { code: "", name: item.name, image: item.image, category: 'Khác', importPrice: 0, totalCost: 0, totalImportedQty: 0, importedInRange: 0, soldInRange: 0, currentStock: 0 };
-                    }
-                    // Cộng vào Tồn cuối kỳ
-                    inventoryMap[item.name].currentStock += item.qty;
-                    inventoryMap[item.name].totalImportedQty += item.qty;
-                    inventoryMap[item.name].totalCost += (item.qty * item.price);
-
-                    // Nếu phiếu này nằm TRONG KHOẢNG thời gian đang lọc -> Tính vào "Nhập Trong Kỳ"
-                    if (ticketTime >= fromTime) {
-                        inventoryMap[item.name].importedInRange += item.qty;
-                    }
-                });
-            }
+    // Hàm tìm đúng dòng của 1 mặt hàng trong phiếu (ưu tiên mã SP, sau đó theo tên)
+    const getRow = (item, createIfMissing) => {
+        const tenSP = item.tenSP || item.name;
+        const maSP = item.maSP || item.code || keyByName[tenSP];
+        const key = maSP || tenSP;
+        if (!key) return null;
+        if (!inventoryMap[key] && createIfMissing) {
+            inventoryMap[key] = newRow(maSP || "", tenSP, item.hinh || item.image, 'Khác', false);
         }
+        return inventoryMap[key] || null;
+    };
+
+    // BƯỚC 2: QUÉT HÀNG NHẬP (chỉ phiếu đã hoàn thành)
+    let pendingCount = 0;
+    rawImports.forEach(ticket => {
+        if (ticket.status !== 'completed') { pendingCount++; return; }
+        const ticketTime = new Date(ticket.date).setHours(12, 0, 0, 0);
+        if (ticketTime > toTime || !Array.isArray(ticket.items)) return;
+
+        ticket.items.forEach(item => {
+            const row = getRow(item, true);
+            if (!row) return;
+            const qty = Number(item.qty) || 0;
+            const price = Number(item.price) || 0;
+            row.currentStock += qty;
+            row.totalImportedQty += qty;
+            row.totalCost += qty * price;
+            if (ticketTime >= fromTime) row.importedInRange += qty;
+        });
     });
 
-    // Tính lại giá nhập trung bình
     Object.values(inventoryMap).forEach(prod => {
         prod.importPrice = prod.totalImportedQty > 0 ? Math.round(prod.totalCost / prod.totalImportedQty) : 0;
     });
 
     // BƯỚC 3: QUÉT HÀNG XUẤT (ĐƠN HÀNG)
     rawOrders.forEach(order => {
-        if (order.status === 'processed' || order.status === 'completed') {
-            const orderTime = new Date(order.date).setHours(12, 0, 0, 0);
+        if (order.status !== 'processed' && order.status !== 'completed') return;
+        const orderTime = new Date(order.date).setHours(12, 0, 0, 0);
+        if (orderTime > toTime || !Array.isArray(order.items)) return;
 
-            // Chỉ tính những đơn XẢY RA TRƯỚC mốc ToDate
-            if (orderTime <= toTime) {
-                order.items.forEach(item => {
-                    if (inventoryMap[item.name]) {
-                        // Trừ khỏi Tồn cuối kỳ
-                        inventoryMap[item.name].currentStock -= item.qty;
-
-                        // Nếu đơn này nằm TRONG KHOẢNG thời gian đang lọc -> Tính vào "Xuất Trong Kỳ"
-                        if (orderTime >= fromTime) {
-                            inventoryMap[item.name].soldInRange += item.qty;
-                        }
-                    }
-                });
-            }
-        }
+        order.items.forEach(item => {
+            const row = getRow(item, false);
+            if (!row) return;
+            const qty = Number(item.qty) || 0;
+            row.currentStock -= qty;
+            if (orderTime >= fromTime) row.soldInRange += qty;
+        });
     });
 
     // BƯỚC 4: LỌC DỮ LIỆU ĐỂ HIỂN THỊ
     let finalData = Object.values(inventoryMap).filter(item => {
-        // Lọc theo Loại SP
         if (catFilter !== 'ALL' && item.category !== catFilter) return false;
-
-        // Lọc theo Mã / Tên
-        if (searchKeyword && !item.name.toLowerCase().includes(searchKeyword) && !item.code.toLowerCase().includes(searchKeyword)) return false;
-
-        // Ẩn đi các mặt hàng rác (không tồn, không nhập, không xuất)
-        if (item.currentStock === 0 && item.importedInRange === 0 && item.soldInRange === 0) return false;
-
+        if (searchKeyword && !String(item.name).toLowerCase().includes(searchKeyword) && !String(item.code).toLowerCase().includes(searchKeyword)) return false;
+        // Chỉ ẩn mặt hàng "rác" nằm ngoài danh mục; sản phẩm trong danh mục luôn hiển thị (kể cả tồn = 0)
+        if (!item.inCatalog && item.currentStock === 0 && item.importedInRange === 0 && item.soldInRange === 0) return false;
         return true;
     });
 
-    // BƯỚC 5: TÍNH TOÁN DASHBOARD VÀ VẼ BẢNG
     let totalItems = 0;
     let totalValue = 0;
     let lowStockCount = 0;
@@ -2382,6 +2464,28 @@ function applyInventoryFilters() {
 
     updateInventoryDashboard(totalItems, totalValue, lowStockCount);
     renderInventoryTable(finalData);
+    showInventoryPendingNote(pendingCount);
+}
+
+// Nhắc khi còn phiếu nhập "Lưu tạm" (các phiếu này chưa được tính vào tồn kho)
+function showInventoryPendingNote(pendingCount) {
+    const section = document.getElementById('tab-inventory');
+    if (!section) return;
+    let note = document.getElementById('invPendingNote');
+    if (!note) {
+        const tableWrap = section.querySelector('.card-table');
+        if (!tableWrap) return;
+        note = document.createElement('div');
+        note.id = 'invPendingNote';
+        note.style.cssText = 'margin: 0 0 12px; padding: 10px 14px; border-radius: 6px; background: #fff3cd; color: #856404; border: 1px solid #ffeeba;';
+        tableWrap.parentNode.insertBefore(note, tableWrap);
+    }
+    if (pendingCount > 0) {
+        note.innerHTML = `⚠️ Có <b>${pendingCount} phiếu nhập</b> đang ở trạng thái "Lưu tạm" nên chưa được tính vào tồn kho. Hãy vào <b>Quản lý nhập hàng</b>, mở phiếu và bấm <b>Hoàn thành</b>.`;
+        note.style.display = 'block';
+    } else {
+        note.style.display = 'none';
+    }
 }
 
 // HÀM VẼ GIAO DIỆN BẢNG

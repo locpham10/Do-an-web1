@@ -67,6 +67,19 @@ const checkoutStep = document.getElementById("checkoutStep");
 const btnProceedCheckout = document.getElementById("btnProceedCheckout");
 const backToCartBtn = document.getElementById("backToCartBtn");
 
+// Cập nhật chấm đỏ số lượng trên icon giỏ hàng
+function updateCartBadge() {
+  const badge = document.getElementById("cartBadge");
+  if (!badge) return;
+  const totalQty = cart.reduce((sum, i) => sum + (i.quantity || 1), 0);
+  if (loggedInUser && totalQty > 0) {
+    badge.innerText = totalQty;
+    badge.classList.remove("hidden");
+  } else {
+    badge.classList.add("hidden");
+  }
+}
+
 // 1. Hiển thị danh sách sản phẩm trong giỏ hàng
 function renderCart() {
   cartItemsList.innerHTML = "";
@@ -75,6 +88,7 @@ function renderCart() {
     cartItemsList.innerHTML =
       '<div class="card" style="text-align: center; padding: 40px; color: #888;">Giỏ hàng của bạn đang trống!</div>';
     updateSummary();
+    updateCartBadge();
     return;
   }
 
@@ -112,6 +126,7 @@ function renderCart() {
 
   checkAllStatusSync();
   updateSummary();
+  updateCartBadge();
 }
 
 // 2. Tăng / Giảm số lượng
@@ -264,8 +279,9 @@ document.getElementById("btnFinishOrder").addEventListener("click", () => {
 
   // Tạo đơn hàng mới và lưu vào localStorage để profile.html đọc được
   let orders = JSON.parse(localStorage.getItem("danhSachDonHang")) || [];
+  const orderId = "DH" + Math.floor(100000 + Math.random() * 900000);
   const newOrder = {
-    orderId: "DH" + Math.floor(100000 + Math.random() * 900000),
+    orderId: orderId,
     orderDate: new Date().toLocaleDateString("vi-VN"),
     receiver: name,
     phone: phone,
@@ -276,11 +292,47 @@ document.getElementById("btnFinishOrder").addEventListener("click", () => {
   orders.unshift(newOrder); // Đưa đơn mới lên đầu danh sách
   localStorage.setItem("danhSachDonHang", JSON.stringify(orders));
 
+  // ĐỒNG BỘ SANG TRANG ADMIN: admin đọc khóa "saved_orders" với cấu trúc riêng
+  const now = new Date();
+  const isoDate =
+    now.getFullYear() +
+    "-" +
+    String(now.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(now.getDate()).padStart(2, "0"); // yyyy-mm-dd để admin lọc theo ngày được
+  const payMethod = document.querySelector('input[name="payMethod"]:checked');
+  let adminOrders = [];
+  try {
+    adminOrders = JSON.parse(localStorage.getItem("saved_orders")) || [];
+  } catch (e) {
+    adminOrders = [];
+  }
+  adminOrders.unshift({
+    id: orderId,
+    date: isoDate,
+    customerName: name,
+    customerPhone: phone,
+    customerAddress: address,
+    customerEmail: loggedInUser ? loggedInUser.email || "" : "",
+    paymentMethod: payMethod ? payMethod.value : "cod",
+    totalAmount: totalPay,
+    status: "pending", // mới đặt
+    items: selectedItems.map((item) => ({
+      maSP: item.id,
+      name: item.name,
+      qty: item.quantity,
+      price: item.price,
+      hinh: item.image,
+    })),
+  });
+  localStorage.setItem("saved_orders", JSON.stringify(adminOrders));
+
   alert(`🎉 Đặt hàng thành công!\nCảm ơn bạn ${name} đã mua hàng.`);
 
   // Xóa các món đã mua khỏi giỏ hàng
   cart = cart.filter((item) => !item.selected);
   saveCart(cart);
+  updateCartBadge();
 
   // Xóa trắng địa chỉ và quay lại trang đơn hàng profile.html
   document.getElementById("custAddress").value = "";
