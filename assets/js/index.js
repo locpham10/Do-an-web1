@@ -62,7 +62,6 @@ function plusSlides(n) {
 function currentSlide(n) {
   showSlides((slideIndex = n));
 }
-
 function showSlides(n) {
   let i;
   let slides = document.getElementsByClassName("slides");
@@ -414,7 +413,7 @@ for (let i = 0; i < allProducts.length; i++) {
 }
 
 let currentPage = 1;
-let itemsPerPage = 8;
+let itemsPerPage = 8; // Hiện 8 sản phẩm 1 trang
 
 // ---------------------------------------------------------
 // HÀM 1: Vẽ sản phẩm ra màn hình
@@ -423,12 +422,13 @@ function renderProducts(page) {
   let productGrid = document.getElementById("productGrid");
   if (!productGrid) return;
 
-  productGrid.innerHTML = "";
+  productGrid.innerHTML = ""; // Xóa các sản phẩm cũ
 
   let startIndex = (page - 1) * itemsPerPage;
   let endIndex = startIndex + itemsPerPage;
   let hasProduct = false;
 
+  // Dùng vòng lặp for cơ bản duyệt qua mảng để in sản phẩm ra
   for (let i = startIndex; i < endIndex; i++) {
     if (i >= filteredProducts.length) break;
 
@@ -582,13 +582,14 @@ window.filterByName = function (keyword, event) {
     }
   }
 
+  // Đổi tiêu đề hiển thị
   let titleElem = document.getElementById("categoryTitle");
   if (titleElem) titleElem.innerText = "Dòng máy: " + keyword;
 
   currentPage = 1;
-  hideDetail();
-  renderProducts(currentPage);
-  renderPagination();
+  hideDetail(); // Ẩn trang chi tiết nếu đang mở
+  renderProducts(currentPage); // Vẽ lại sản phẩm
+  renderPagination(); // Vẽ lại phân trang
 };
 
 // ---------------------------------------------------------

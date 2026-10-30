@@ -5,6 +5,16 @@
   font-family: Tahoma, Verdana, sans-serif;
 }
 
+html,
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* HEADER */
 header {
   display: flex;
   flex-direction: column;
@@ -81,11 +91,12 @@ a {
 }
 
 .header-bottom {
-  flex: 3;
+  /* flex: 3; */
   display: flex;
   justify-content: center;
   padding: 0 50px; 
   background-color: #d70027;
+  width: 100%;
 }
 
 .menu {
@@ -99,6 +110,7 @@ a {
   font-size: 14px;
   font-weight: bold;
   color: #fff;
+  padding: 14px 0;
   line-height: 10px;
   display: block;
   padding: 14px 0; 
@@ -219,6 +231,7 @@ footer {
   border-top: 1px solid #d70027;
   margin-top: 50px;
   width: 100%;
+  overflow: hidden;
 }
 
 .topfooter {

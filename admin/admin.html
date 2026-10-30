@@ -199,24 +199,31 @@
                 <!--============================================================================================
                 TRANG QUẢN LÝ PHIẾU NHẬP HÀNG (LỘC)
             =============================================================================================-->
-                <section id="tab-imports" class="admin-module" style="display: none;">
+                <section id="tab-imports" class="admin-module" style="display: none">
                     <div class="page-header">
                         <h1 class="page-title">Danh mục phiếu nhập hàng</h1>
                     </div>
+
                     <div class="header-actions">
                         <div class="date-filter">
                             <label>Lọc từ ngày: </label>
-                            <input type="date" id="fromDate">
+                            <input type="date" id="fromDate" />
                             <label>đến</label>
-                            <input type="date" id="toDate">
-                            <button class="btn-action"
-                                style="background-color: #17a2b8; color: white; margin-left: 10px;"
-                                onclick="applyFilters()">Lọc</button>
+                            <input type="date" id="toDate" />
+                            <button class="btn-action" style="
+                            background-color: #17a2b8;
+                            color: white;
+                            margin-left: 10px;
+                          " onclick="applyFilters()">
+                                Lọc
+                            </button>
                         </div>
                         <div class="search-action">
                             <input type="text" id="searchInput" class="search-input"
-                                placeholder="Tìm kiếm theo mã phiếu" onkeyup="applyFilters()">
-                            <button class="btn-create" onclick="openAddModel()">+ Lập phiếu mới</button>
+                                placeholder="Tìm kiếm theo mã phiếu" onkeyup="applyFilters()" />
+                            <button class="btn-create" onclick="openAddModel()">
+                                + Lập phiếu mới
+                            </button>
                         </div>
                     </div>
 
