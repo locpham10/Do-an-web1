@@ -63,6 +63,19 @@ a {
 
 .logo {
   flex: 1;
+  display: flex;
+  align-items: center;
+}
+.logo a {
+  display: flex;
+  align-items: center;
+}
+.header-logo {
+  height: 40px;
+  /* width: auto; */
+  /* max-width: 100%; */
+  object-fit: contain;
+  transition: transform 0.2s ease;
 }
 
 .cart-badge {
@@ -94,7 +107,7 @@ a {
   /* flex: 3; */
   display: flex;
   justify-content: center;
-  padding: 0 50px; 
+  padding: 0 50px;
   background-color: #d70027;
   width: 100%;
 }
@@ -113,7 +126,7 @@ a {
   padding: 14px 0;
   line-height: 10px;
   display: block;
-  padding: 14px 0; 
+  padding: 14px 0;
 }
 .menu li:hover .submenu {
   display: block;
@@ -127,11 +140,12 @@ a {
   margin: 0; /* Bỏ margin 5px để không bị hở khe */
   border: solid 1px #ccc;
   background-color: #fff;
-  padding: 2px 0 2px 3px;
+  padding: 2px 0;
   z-index: 10;
 }
 .submenu li {
-  background-color: #fff
+  background-color: #fff;
+  padding: 0;
 }
 .submenu li a {
   display: block;
@@ -539,4 +553,178 @@ p {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ================= GỢI Ý TÌM KIẾM ================= */
+.search-suggestions {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.suggestion-item {
+  padding: 12px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* =================TÌM KIẾM VÀ LỌC ================= */
+.search-and-filter-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.filter-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #d70027;
+  border-radius: 5px;
+  padding: 6px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  /* font-weight: bold; */
+  transition: all 0.3s;
+}
+
+.filter-toggle-btn:hover {
+  color: #d70027;
+}
+
+.search-container .fa-search {
+  position: absolute;
+  right: 10px;
+  font-size: 15px;
+  cursor: pointer;
+  color: #333;
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 250px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  padding: 15px;
+  z-index: 1002;
+  box-sizing: border-box;
+}
+
+.filter-group {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.filter-group select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.apply-filter-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #d70027;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* ================= THANH BREADCRUMB DANH MỤC ================= */
+.category-breadcrumb {
+  margin-bottom: 25px;
+}
+
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.breadcrumb-indicator {
+  width: 4px;
+  height: 18px;
+  background-color: #333;
+  margin-right: 15px;
+}
+
+.breadcrumb-item {
+  color: #333;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+  padding-bottom: 5px;
+}
+
+.breadcrumb-item:hover {
+  color: #d70027;
+}
+
+.breadcrumb-item.active {
+  color: #d70027;
+  font-weight: bold;
+}
+
+.breadcrumb-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #d70027;
+}
+
+.breadcrumb-sep {
+  margin: 0 12px;
+  color: #333;
+  font-weight: normal;
+}
+
+.search-result-title {
+  margin-top: 15px;
+  font-size: 15px;
+  color: #333;
+  font-style: Tahoma, Verdana, sans-serif;
 }

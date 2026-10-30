@@ -18,12 +18,50 @@
     <header>
       <div class="header-top">
         <div class="logo">
-          <img src="" alt="SHOPDienthoai" />
+          <a href="index.html" title="Về trang chủ">
+            <img src="logo.jpg"  class="header-logo"/>
+          </a>
         </div>
-        <div class="search-container">
-          <input type="text" placeholder="Tìm kiếm..." />
-          <i class="fas fa-search"></i>
+
+
+
+        <div class="search-and-filter-wrapper">
+          <div class="search-container">
+            <input type="text" placeholder="Tìm kiếm..." id="searchInputHeader" />
+            <i class="fas fa-search" id="searchIconHeader"></i>
+            <div id="searchSuggestions" class="search-suggestions hidden"></div>
+          </div>
+          <button id="filterBtn" class="filter-toggle-btn">
+            <i class="fas fa-filter"></i> Bộ lọc
+          </button>
+
+          <div id="filterDropdown" class="filter-dropdown hidden">
+            <div class="filter-group">
+              <label>Thương hiệu:</label>
+              <select id="filterCategory">
+                <option value="all">Tất cả hãng</option>
+                <option value="apple">Apple</option>
+                <option value="samsung">Samsung</option>
+                <option value="oppo">Oppo</option>
+                <option value="xiaomi">Xiaomi</option>
+                <option value="realme">Realme</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Khoảng giá:</label>
+              <select id="filterPrice">
+                <option value="all">Tất cả mức giá</option>
+                <option value="under10">Dưới 10 triệu</option>
+                <option value="10to20">Từ 10 - 20 triệu</option>
+                <option value="over20">Trên 20 triệu</option>
+              </select>
+            </div>
+
+            <button id="applyFilterBtn" class="apply-filter-btn">Áp dụng</button>
+          </div>
         </div>
+
         <ul class="others">
           <li><a class="fa fa-paw" href=""></a></li>
           <li class="user-item">
@@ -57,7 +95,7 @@
             <a href="#" onclick="filterByCategory('samsung', event)">SAMSUNG</a>
             <ul class="submenu">
               <li><a href="#" onclick="filterByName('Galaxy S26', event)">Galaxy S26</a></li>
-              <li><a href="#" onclick="filterByName('Galaxy Z', event)">Galaxy Z Fold/Flip</a></li>
+              <li><a href="#" onclick="filterByName('Galaxy Z', event)">Galaxy Z Fold</a></li>
               <li><a href="#" onclick="filterByName('Galaxy A', event)">Galaxy A</a></li>
             </ul>
           </li>
@@ -103,10 +141,27 @@
           </div>
         </section>
 
-        <!-- PHẦN HIỂN THỊ SẢN PHẨM (BẮT BUỘC PHẢI CÓ) -->
         <section class="product-section">  
           <div class="product-list-container">
-            <h2 id="categoryTitle">Tất cả sản phẩm</h2>
+            <!-- THANH ĐIỀU HƯỚNG -->
+            <div id="categoryBreadcrumb" class="category-breadcrumb">
+              <div class="breadcrumb-nav">
+                <!-- Vạch đứng đầu -->
+                <div class="breadcrumb-indicator"></div>
+                <span class="breadcrumb-item active" onclick="filterByCategory('all', event)">TẤT CẢ</span> 
+                <span class="breadcrumb-sep">/</span>
+                <span class="breadcrumb-item" onclick="filterByCategory('apple', event)">APPLE</span> 
+                <span class="breadcrumb-sep">/</span>
+                <span class="breadcrumb-item" onclick="filterByCategory('samsung', event)">SAMSUNG</span> 
+                <span class="breadcrumb-sep">/</span>
+                <span class="breadcrumb-item" onclick="filterByCategory('oppo', event)">OPPO</span>
+                <span class="breadcrumb-sep">/</span>
+                <span class="breadcrumb-item" onclick="filterByCategory('khac', event)">KHÁC</span>
+              </div>
+              
+              <div id="searchResultTitle" class="search-result-title hidden"></div>
+            </div>
+
             <div id="productGrid" class="product-grid"></div> 
             <div id="pagination" class="pagination"></div>
           </div>
