@@ -449,8 +449,9 @@ for (let i = 0; i < rawProducts.length; i++) {
   // Bỏ qua nếu sản phẩm đang bị ẩn
   if (sp.trangThai !== "an") {
     // Tìm giá bán trong saved_pricing hoặc lấy giá mặc định có sẵn trong sp
-    let giaBanObj = pricingData.find(p => (p.maSP || p.code) === sp.maSP)
-      || pricingData.find(p => (p.tenSP || p.name) === sp.tenSP);
+    let giaBanObj =
+      pricingData.find((p) => (p.maSP || p.code) === sp.maSP) ||
+      pricingData.find((p) => (p.tenSP || p.name) === sp.tenSP);
     let giaHienThi =
       giaBanObj && giaBanObj.retailPrice > 0
         ? giaBanObj.retailPrice
@@ -553,77 +554,228 @@ function renderPagination() {
 }
 
 // ---------------------------------------------------------
-// HÀM 3: Tìm kiếm thông minh trên Header
+// HÀM 3 & 4: Tìm kiếm, Lọc Danh Mục & Lọc theo Tên (CODE THUẦN CƠ BẢN)
 // ---------------------------------------------------------
-let searchInputHeader = document.querySelector(".search-container input");
-let searchIconHeader = document.querySelector(".search-container .fa-search");
+let searchInputHeader = document.getElementById("searchInputHeader");
+let searchIconHeader = document.getElementById("searchIconHeader");
+let searchSuggestions = document.getElementById("searchSuggestions");
 
+// --- Hàm Cập nhật Giao diện Breadcrumb (Dùng IF/FOR cơ bản) ---
+function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
+  let resultTitle = document.getElementById("searchResultTitle");
+
+  // Dùng getElementsByClassName thay cho querySelector nâng cao
+  let bannerElements = document.getElementsByClassName("banner-slider");
+  let bannerSection = null;
+  if (bannerElements.length > 0) bannerSection = bannerElements[0];
+
+  let items = document.getElementsByClassName("breadcrumb-item");
+
+  // 1. Quản lý trạng thái Active trên các nút danh mục
+  if (items.length > 0) {
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove("active");
+
+      let itemText = items[i].innerText.toLowerCase();
+      // Kiểm tra xem chữ trên web có khớp với mục đang chọn không
+      if (
+        itemText === activeCategory ||
+        (activeCategory === "khac" && itemText === "khác")
+      ) {
+        items[i].classList.add("active");
+      }
+    }
+  }
+
+  // 2. Xử lý hiển thị Tiêu đề phụ (Tìm kiếm / Lọc) và Banner
+  if (searchKeyword) {
+    // Đang Tìm Kiếm
+    if (resultTitle) {
+      if (filteredProducts.length > 0) {
+        // NẾU CÓ SẢN PHẨM: Hiện dòng chữ nhỏ
+        resultTitle.innerText =
+          "Tìm thấy " +
+          filteredProducts.length +
+          ' sản phẩm cho "' +
+          searchKeyword +
+          '"';
+        resultTitle.classList.remove("hidden");
+      } else {
+        // NẾU BẰNG 0: Ẩn luôn dòng chữ nhỏ đi cho đỡ rối
+        resultTitle.classList.add("hidden");
+      }
+    }
+    if (bannerSection) bannerSection.classList.add("hide-banner");
+
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove("active");
+    }
+  } else if (isAdvancedFilter) {
+    // Đang dùng Bộ Lọc Nâng Cao
+    if (resultTitle) {
+      if (filteredProducts.length > 0) {
+        // NẾU CÓ SẢN PHẨM: Hiện dòng chữ nhỏ
+        resultTitle.innerText =
+          "Lọc được " + filteredProducts.length + " sản phẩm";
+        resultTitle.classList.remove("hidden");
+      } else {
+        // NẾU BẰNG 0: Ẩn luôn dòng chữ nhỏ
+        resultTitle.classList.add("hidden");
+      }
+    }
+    if (bannerSection) bannerSection.classList.add("hide-banner");
+
+    for (let i = 0; i < items.length; i++) {
+      items[i].classList.remove("active");
+    }
+  } else {
+    // Chỉ đang xem Danh Mục (Bình thường)
+    if (resultTitle) resultTitle.classList.add("hidden");
+
+    if (activeCategory === "all") {
+      if (bannerSection) bannerSection.classList.remove("hide-banner");
+    } else {
+      if (bannerSection) bannerSection.classList.add("hide-banner");
+    }
+  }
+}
+
+// --- Hàm TÌM KIẾM CƠ BẢN (Gõ thanh ngang) ---
 function searchBasic() {
   if (!searchInputHeader) return;
-  let keyword = searchInputHeader.value.toLowerCase().trim();
+  let originalKeyword = searchInputHeader.value.trim();
+  let keyword = originalKeyword.toLowerCase();
 
   filteredProducts = [];
 
   for (let i = 0; i < allProducts.length; i++) {
     let product = allProducts[i];
-    let productInfo =
-      (product.tenSP || "") +
-      " " +
-      (product.tenLoai || "") +
-      " " +
-      (product.color || "");
-    productInfo = productInfo.toLowerCase();
 
-    let compactedInfo = productInfo.replace(/\s+/g, "");
+    // Khai báo rõ ràng từng thuộc tính
+    let tenSP = (product.tenSP || "").toLowerCase();
+    let tenLoai = (product.tenLoai || "").toLowerCase();
+    let mauSac = (product.color || "").toLowerCase();
 
+    // Dùng indexOf cơ bản thay cho includes hay Regex phức tạp
     if (
-      productInfo.includes(keyword) ||
-      compactedInfo.includes(keyword.replace(/\s+/g, ""))
+      tenSP.indexOf(keyword) >= 0 ||
+      tenLoai.indexOf(keyword) >= 0 ||
+      mauSac.indexOf(keyword) >= 0
     ) {
       filteredProducts.push(product);
     }
   }
 
-  let titleElem = document.getElementById("categoryTitle");
-  if (titleElem)
-    titleElem.innerText = 'Kết quả tìm kiếm cho: "' + keyword + '"';
-
-  currentPage = 1;
-  hideDetail();
-  renderProducts(currentPage);
-  renderPagination();
+  // Nếu ô tìm kiếm trống, quay về trang chủ
+  if (keyword === "") {
+    filterByCategory("all");
+  } else {
+    updateBreadcrumbUI(null, originalKeyword, false);
+    currentPage = 1;
+    hideDetail();
+    renderProducts(currentPage);
+    renderPagination();
+  }
 }
 
+// Bắt sự kiện Enter
 if (searchIconHeader) searchIconHeader.addEventListener("click", searchBasic);
 if (searchInputHeader) {
   searchInputHeader.addEventListener("keyup", function (e) {
-    if (e.key === "Enter") searchBasic();
+    if (e.key === "Enter") {
+      if (searchSuggestions) searchSuggestions.classList.add("hidden");
+      searchBasic();
+    }
   });
+
+  // Bắt sự kiện gõ phím để hiện gợi ý
+  if (searchSuggestions) {
+    searchInputHeader.addEventListener("input", function () {
+      let keyword = this.value.toLowerCase().trim();
+      if (keyword === "") {
+        searchSuggestions.classList.add("hidden");
+        return;
+      }
+
+      let matchedProducts = [];
+      for (let i = 0; i < allProducts.length; i++) {
+        let product = allProducts[i];
+        let tenSP = (product.tenSP || "").toLowerCase();
+
+        // Dùng indexOf cơ bản
+        if (tenSP.indexOf(keyword) >= 0) {
+          matchedProducts.push(product);
+        }
+      }
+
+      searchSuggestions.innerHTML = "";
+
+      if (matchedProducts.length > 0) {
+        let limit = matchedProducts.length;
+        if (limit > 5) limit = 5;
+
+        for (let i = 0; i < limit; i++) {
+          let product = matchedProducts[i];
+          let div = document.createElement("div");
+          div.className = "suggestion-item";
+          div.innerHTML = product.tenSP;
+
+          div.addEventListener("click", function () {
+            searchInputHeader.value = product.tenSP;
+            searchSuggestions.classList.add("hidden");
+            searchBasic();
+          });
+
+          searchSuggestions.appendChild(div);
+        }
+        searchSuggestions.classList.remove("hidden");
+      } else {
+        searchSuggestions.classList.add("hidden");
+      }
+    });
+
+    document.addEventListener("click", function (e) {
+      if (
+        !searchInputHeader.contains(e.target) &&
+        !searchSuggestions.contains(e.target)
+      ) {
+        searchSuggestions.classList.add("hidden");
+      }
+    });
+  }
 }
 
-// ---------------------------------------------------------
-// HÀM 4: Lọc theo hãng & tên trên Menu
-// ---------------------------------------------------------
+// --- Hàm LỌC DANH MỤC (Khi bấm chữ APPLE, SAMSUNG trên Breadcrumb) ---
 function filterByCategory(category, event) {
   if (event) event.preventDefault();
   filteredProducts = [];
+
+  if (searchInputHeader) searchInputHeader.value = "";
 
   if (category === "all") {
     for (let i = 0; i < allProducts.length; i++) {
       filteredProducts.push(allProducts[i]);
     }
-    let titleElem = document.getElementById("categoryTitle");
-    if (titleElem) titleElem.innerText = "Tất cả sản phẩm";
   } else {
     for (let i = 0; i < allProducts.length; i++) {
       let product = allProducts[i];
-      if ((product.tenLoai || "").toLowerCase() === category.toLowerCase()) {
+      let tenLoai = (product.tenLoai || "").toLowerCase();
+
+      // Kiểm tra bằng IF cơ bản
+      if (
+        category === "khac" &&
+        tenLoai !== "apple" &&
+        tenLoai !== "samsung" &&
+        tenLoai !== "oppo"
+      ) {
+        filteredProducts.push(product);
+      } else if (tenLoai === category.toLowerCase()) {
         filteredProducts.push(product);
       }
     }
-    let titleElem = document.getElementById("categoryTitle");
-    if (titleElem) titleElem.innerText = "Sản phẩm " + category.toUpperCase();
   }
+
+  updateBreadcrumbUI(category, null, false);
 
   currentPage = 1;
   hideDetail();
@@ -631,6 +783,7 @@ function filterByCategory(category, event) {
   renderPagination();
 }
 
+// --- Hàm LỌC THEO TÊN (Khi bấm vào Menu con xổ xuống VD: iPhone 18) ---
 window.filterByName = function (keyword, event) {
   if (event) event.preventDefault();
 
@@ -638,22 +791,21 @@ window.filterByName = function (keyword, event) {
 
   for (let i = 0; i < allProducts.length; i++) {
     let product = allProducts[i];
-    if (
-      (product.tenSP || "").toLowerCase().includes(keyword.toLowerCase())
-    ) {
+    let tenSP = (product.tenSP || "").toLowerCase();
+
+    // Đổi includes thành indexOf
+    if (tenSP.indexOf(keyword.toLowerCase()) >= 0) {
       filteredProducts.push(product);
     }
   }
 
-  let titleElem = document.getElementById("categoryTitle");
-  if (titleElem) titleElem.innerText = "Dòng máy: " + keyword;
+  updateBreadcrumbUI(null, keyword, false);
 
   currentPage = 1;
   hideDetail();
   renderProducts(currentPage);
   renderPagination();
 };
-
 // ---------------------------------------------------------
 // HÀM 5: Hiển thị giao diện Chi tiết 1 sản phẩm
 // ---------------------------------------------------------
@@ -779,4 +931,119 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCartBadge();
   renderProducts(currentPage);
   renderPagination();
+});
+
+// =========================================================
+// TÌM KIẾM NÂNG CAO: Kết hợp Tên + Phân Loại + Khoảng giá
+// =========================================================
+let filterBtn = document.getElementById("filterBtn");
+let filterDropdown = document.getElementById("filterDropdown");
+let applyFilterBtn = document.getElementById("applyFilterBtn");
+
+// 1. Tắt/Bật bảng lọc khi bấm vào icon cái Phễu
+if (filterBtn && filterDropdown) {
+  filterBtn.addEventListener("click", function () {
+    filterDropdown.classList.toggle("hidden");
+
+    // Nếu đang mở bảng gợi ý chữ thì ẩn nó đi
+    let suggestions = document.getElementById("searchSuggestions");
+    if (suggestions) suggestions.classList.add("hidden");
+  });
+}
+
+// 2. Hàm chạy Lọc Nâng Cao khi bấm nút "Áp dụng lọc"
+function searchAdvanced() {
+  // Dùng biến trung gian để lấy giá trị an toàn, không bị lỗi khi chưa tải trang
+  let searchInputObj = document.getElementById("searchInputHeader");
+  let keyword = "";
+  if (searchInputObj) {
+    keyword = searchInputObj.value.toLowerCase().trim();
+  }
+
+  let categoryObj = document.getElementById("filterCategory");
+  let selectedCategory = "all";
+  if (categoryObj) {
+    selectedCategory = categoryObj.value.toLowerCase();
+  }
+
+  let priceObj = document.getElementById("filterPrice");
+  let selectedPrice = "all";
+  if (priceObj) {
+    selectedPrice = priceObj.value;
+  }
+
+  filteredProducts = []; // Xóa mảng cũ để đựng kết quả mới
+
+  // Dùng vòng lặp for duyệt qua kho hàng
+  for (let i = 0; i < allProducts.length; i++) {
+    let product = allProducts[i];
+
+    // ĐIỀU KIỆN 1: Kiểm tra Tên sản phẩm
+    let tenSP = (product.tenSP || "").toLowerCase();
+    let matchName = false;
+    if (keyword === "" || tenSP.indexOf(keyword) >= 0) {
+      matchName = true;
+    }
+
+    // ĐIỀU KIỆN 2: Kiểm tra Hãng
+    let loaiSP = (product.tenLoai || "").toLowerCase();
+    let matchCategory = false;
+    if (selectedCategory === "all" || loaiSP === selectedCategory) {
+      matchCategory = true;
+    }
+
+    // ĐIỀU KIỆN 3: Kiểm tra Giá
+    let giaSP = product.price || 0;
+    let matchPrice = false;
+    if (selectedPrice === "all") {
+      matchPrice = true;
+    } else if (selectedPrice === "under10" && giaSP < 10000000) {
+      matchPrice = true;
+    } else if (
+      selectedPrice === "10to20" &&
+      giaSP >= 10000000 &&
+      giaSP <= 20000000
+    ) {
+      matchPrice = true;
+    } else if (selectedPrice === "over20" && giaSP > 20000000) {
+      matchPrice = true;
+    }
+
+    // GỘP CHUNG: Nếu 1 cái máy thỏa mãn CẢ 3 ĐIỀU KIỆN trên thì mới lấy
+    if (matchName === true && matchCategory === true && matchPrice === true) {
+      filteredProducts.push(product);
+    }
+  }
+
+  // Đổi tiêu đề sau khi xử lý vòng lặp for (Gọi hàm updateBreadcrumbUI)
+  if (keyword === "" && selectedCategory === "all" && selectedPrice === "all") {
+    filterByCategory("all"); // Không lọc gì thì về trang chủ
+  } else {
+    updateBreadcrumbUI(null, null, true); // Gọi hàm UI, báo là đang dùng Lọc Nâng Cao
+
+    currentPage = 1;
+    hideDetail();
+    renderProducts(currentPage);
+    renderPagination();
+  }
+
+  // Ẩn bảng lọc
+  let filterDropdownObj = document.getElementById("filterDropdown");
+  if (filterDropdownObj) {
+    filterDropdownObj.classList.add("hidden");
+  }
+}
+
+// Bắt sự kiện click cho nút Áp dụng
+if (applyFilterBtn) {
+  applyFilterBtn.addEventListener("click", searchAdvanced);
+}
+
+// 3. Tự động ẩn bảng lọc nếu click ra ngoài khoảng trống
+document.addEventListener("click", function (e) {
+  if (filterBtn && filterDropdown) {
+    if (!filterBtn.contains(e.target) && !filterDropdown.contains(e.target)) {
+      filterDropdown.classList.add("hidden");
+    }
+  }
 });
