@@ -1,365 +1,312 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>Cửa Hàng Điện Thoại</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="assets/css/index.css" />
-    <link rel="stylesheet" href="assets/css/auth.css" />
-    
-  </head>
-  <body>
 
-    <!-- HEADER -->
-    <header>
-      <div class="header-top">
-        <div class="logo">
-          <a href="index.html" title="Về trang chủ">
-            <img src="logo.jpg"  class="header-logo"/>
-          </a>
+<head>
+  <title>Cửa Hàng Điện Thoại</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="assets/css/index.css" />
+  <link rel="stylesheet" href="assets/css/auth.css" />
+
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-top">
+      <div class="logo">
+        <a href="index.html" title="Về trang chủ">
+          <img src="logo.jpg" class="header-logo" />
+        </a>
+      </div>
+
+
+
+      <div class="search-and-filter-wrapper">
+        <div class="search-container">
+          <input type="text" placeholder="Tìm kiếm..." id="searchInputHeader" />
+          <i class="fas fa-search" id="searchIconHeader"></i>
+          <div id="searchSuggestions" class="search-suggestions hidden"></div>
         </div>
+        <button id="filterBtn" class="filter-toggle-btn">
+          <i class="fas fa-filter"></i> Bộ lọc
+        </button>
 
-
-
-        <div class="search-and-filter-wrapper">
-          <div class="search-container">
-            <input type="text" placeholder="Tìm kiếm..." id="searchInputHeader" />
-            <i class="fas fa-search" id="searchIconHeader"></i>
-            <div id="searchSuggestions" class="search-suggestions hidden"></div>
+        <div id="filterDropdown" class="filter-dropdown hidden">
+          <div class="filter-group">
+            <label>Thương hiệu:</label>
+            <select id="filterCategory">
+              <option value="all">Tất cả hãng</option>
+              <option value="apple">Apple</option>
+              <option value="samsung">Samsung</option>
+              <option value="oppo">Oppo</option>
+              <option value="xiaomi">Xiaomi</option>
+              <option value="realme">Realme</option>
+            </select>
           </div>
-          <button id="filterBtn" class="filter-toggle-btn">
-            <i class="fas fa-filter"></i> Bộ lọc
-          </button>
 
-          <div id="filterDropdown" class="filter-dropdown hidden">
-            <div class="filter-group">
-              <label>Thương hiệu:</label>
-              <select id="filterCategory">
-                <option value="all">Tất cả hãng</option>
-                <option value="apple">Apple</option>
-                <option value="samsung">Samsung</option>
-                <option value="oppo">Oppo</option>
-                <option value="xiaomi">Xiaomi</option>
-                <option value="realme">Realme</option>
-              </select>
-            </div>
-
-            <div class="filter-group">
-              <label>Khoảng giá:</label>
-              <select id="filterPrice">
-                <option value="all">Tất cả mức giá</option>
-                <option value="under10">Dưới 10 triệu</option>
-                <option value="10to20">Từ 10 - 20 triệu</option>
-                <option value="over20">Trên 20 triệu</option>
-              </select>
-            </div>
-
-            <button id="applyFilterBtn" class="apply-filter-btn">Áp dụng</button>
+          <div class="filter-group">
+            <label>Khoảng giá:</label>
+            <select id="filterPrice">
+              <option value="all">Tất cả mức giá</option>
+              <option value="under10">Dưới 10 triệu</option>
+              <option value="10to20">Từ 10 - 20 triệu</option>
+              <option value="over20">Trên 20 triệu</option>
+            </select>
           </div>
-        </div>
 
-        <ul class="others">
-          <li><a class="fa fa-paw" href=""></a></li>
-          <li class="user-item">
-            <a class="fa fa-user" href="javascript:void(0)" id="userBtn"></a>
-            <!-- Menu 2 dòng chỉ xuất hiện khi hover NẾU đã đăng nhập -->
-            <ul class="user-menu" id="userMenu">
-              <li><a href="profile.html">Thông tin cá nhân</a></li>
-              <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
-            </ul>
-          </li>
-          <!-- BIỂU TƯỢNG GIỎ HÀNG -->
-          <li style="position: relative;">
-            <a class="fa fa-shopping-bag" href="javascript:void(0)" id="cartBtn"></a>
-            <span id="cartBadge" class="cart-badge hidden">0</span>
-          </li>
-        </ul>
-      </div>
-      <div class="header-bottom">
-        <ul class="menu">
-          <li>
-            <a href="#" onclick="filterByCategory('apple', event)">APPLE</a>
-            <ul class="submenu">
-              <li><a href="#" onclick="filterByName('iPhone 18', event)">iPhone 18</a></li>
-              <li><a href="#" onclick="filterByName('iPhone Duo', event)">iPhone Duo</a></li>
-              <li><a href="#" onclick="filterByName('iPhone 17', event)">iPhone 17</a></li>
-              <li><a href="#" onclick="filterByName('iPhone 16', event)">iPhone 16</a></li>
-              <li><a href="#" onclick="filterByName('iPhone 15', event)">iPhone 15</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#" onclick="filterByCategory('samsung', event)">SAMSUNG</a>
-            <ul class="submenu">
-              <li><a href="#" onclick="filterByName('Galaxy S26', event)">Galaxy S26</a></li>
-              <li><a href="#" onclick="filterByName('Galaxy Z', event)">Galaxy Z Fold</a></li>
-              <li><a href="#" onclick="filterByName('Galaxy A', event)">Galaxy A</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#" onclick="filterByCategory('oppo', event)">OPPO</a>
-            <ul class="submenu">
-              <li><a href="#" onclick="filterByName('OPPO Find', event)">OPPO Find</a></li>
-              <li><a href="#" onclick="filterByName('OPPO Reno', event)">OPPO Reno</a></li>
-              <li><a href="#" onclick="filterByName('OPPO A', event)">OPPO A</a></li>
-            </ul>
-          </li>
-          <li><a href="#" onclick="filterByCategory('all', event)">KHÁC</a>
-            <ul class="submenu">
-              <li><a href="#" onclick="filterByName('Honor', event)">Honor</a></li>
-              <li><a href="#" onclick="filterByName('Xiaomi', event)">Xiaomi</a></li>
-              <li><a href="#" onclick="filterByName('realme', event)">Realme</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </header>
-
-
-
-    <!-- MAIN -->
-    <main>
-      <div id="mainView">
-        <!-- PHẦN BANNER -->
-        <section class="banner-slider">
-          <div class="slideshow-container">
-            <div class="slides">
-              <img src="slide1.jpg" alt="Banner Điện Thoại 1" style="width:100%">
-            </div>
-            <div class="slides">
-              <img src="slide22.jpg" alt="Banner Điện Thoại 2" style="width:100%">
-            </div>
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-            <div class="dot-container">
-              <span class="dot" onclick="currentSlide(1)"></span> 
-              <span class="dot" onclick="currentSlide(2)"></span> 
-            </div>
-          </div>
-        </section>
-
-        <section class="product-section">  
-          <div class="product-list-container">
-            <!-- THANH ĐIỀU HƯỚNG -->
-            <div id="categoryBreadcrumb" class="category-breadcrumb">
-              <div class="breadcrumb-nav">
-                <!-- Vạch đứng đầu -->
-                <div class="breadcrumb-indicator"></div>
-                <span class="breadcrumb-item active" onclick="filterByCategory('all', event)">TẤT CẢ</span> 
-                <span class="breadcrumb-sep">/</span>
-                <span class="breadcrumb-item" onclick="filterByCategory('apple', event)">APPLE</span> 
-                <span class="breadcrumb-sep">/</span>
-                <span class="breadcrumb-item" onclick="filterByCategory('samsung', event)">SAMSUNG</span> 
-                <span class="breadcrumb-sep">/</span>
-                <span class="breadcrumb-item" onclick="filterByCategory('oppo', event)">OPPO</span>
-                <span class="breadcrumb-sep">/</span>
-                <span class="breadcrumb-item" onclick="filterByCategory('khac', event)">KHÁC</span>
-              </div>
-              
-              <div id="searchResultTitle" class="search-result-title hidden"></div>
-            </div>
-
-            <div id="productGrid" class="product-grid"></div> 
-            <div id="pagination" class="pagination"></div>
-          </div>
-        </section>
-      </div>
-
-      <!-- MÀN HÌNH CHI TIẾT SẢN PHẨM -->
-      <div id="detailView" class="hidden"></div>
-    </main>
-
-    
-
-    <!-- FOOTER -->
-    <footer>
-      <div class="topfooter">
-        <div class="content">
-          <div>
-            <h3 class="Foot-footer-title">INTRODUCE</h3>
-            <ul>
-              <li><button class="Foot-footer-list">Về Chúng Tôi</button></li>
-              <li>
-                <button class="Foot-footer-list">Thoả Thuận Sử Dụng</button>
-              </li>
-              <li>
-                <button class="Foot-footer-list">Quy Chế Hoạt Động</button>
-              </li>
-              <li>
-                <button class="Foot-footer-list">Chính Sách Bảo Mật</button>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="Foot-footer-title">SUPPORT</h3>
-            <ul>
-              <li><button class="Foot-footer-list">Góp Ý</button></li>
-              <li><button class="Foot-footer-list">Tuyển Dụng</button></li>
-              <li><button class="Foot-footer-list">FAQ</button></li>
-            </ul>
-          </div>
+          <button id="applyFilterBtn" class="apply-filter-btn">Áp dụng</button>
         </div>
       </div>
-      <div class="footer-bottom">
-        <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
-      </div>
-      </div>
-    </footer>
+
+      <ul class="others">
+        <li><a class="fa fa-paw" href=""></a></li>
+        <li class="user-item">
+          <a class="fa fa-user" href="javascript:void(0)" id="userBtn"></a>
+          <!-- Menu 2 dòng chỉ xuất hiện khi hover NẾU đã đăng nhập -->
+          <ul class="user-menu" id="userMenu">
+            <li><a href="profile.html">Thông tin cá nhân</a></li>
+            <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
+          </ul>
+        </li>
+        <!-- BIỂU TƯỢNG GIỎ HÀNG -->
+        <li style="position: relative;">
+          <a class="fa fa-shopping-bag" href="javascript:void(0)" id="cartBtn"></a>
+          <span id="cartBadge" class="cart-badge hidden">0</span>
+        </li>
+      </ul>
+    </div>
+    <div class="header-bottom">
+      <ul class="menu">
+        <li>
+          <a href="#" onclick="filterByCategory('apple', event)">APPLE</a>
+          <ul class="submenu">
+            <li><a href="#" onclick="filterByName('iPhone 18', event)">iPhone 18</a></li>
+            <li><a href="#" onclick="filterByName('iPhone Duo', event)">iPhone Duo</a></li>
+            <li><a href="#" onclick="filterByName('iPhone 17', event)">iPhone 17</a></li>
+            <li><a href="#" onclick="filterByName('iPhone 16', event)">iPhone 16</a></li>
+            <li><a href="#" onclick="filterByName('iPhone 15', event)">iPhone 15</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" onclick="filterByCategory('samsung', event)">SAMSUNG</a>
+          <ul class="submenu">
+            <li><a href="#" onclick="filterByName('Galaxy S26', event)">Galaxy S26</a></li>
+            <li><a href="#" onclick="filterByName('Galaxy Z', event)">Galaxy Z Fold</a></li>
+            <li><a href="#" onclick="filterByName('Galaxy A', event)">Galaxy A</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" onclick="filterByCategory('oppo', event)">OPPO</a>
+          <ul class="submenu">
+            <li><a href="#" onclick="filterByName('OPPO Find', event)">OPPO Find</a></li>
+            <li><a href="#" onclick="filterByName('OPPO Reno', event)">OPPO Reno</a></li>
+            <li><a href="#" onclick="filterByName('OPPO A', event)">OPPO A</a></li>
+          </ul>
+        </li>
+        <li><a href="#" onclick="filterByCategory('all', event)">KHÁC</a>
+          <ul class="submenu">
+            <li><a href="#" onclick="filterByName('Honor', event)">Honor</a></li>
+            <li><a href="#" onclick="filterByName('Xiaomi', event)">Xiaomi</a></li>
+            <li><a href="#" onclick="filterByName('realme', event)">Realme</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </header>
 
 
-    
-        <!-- POPUP MODAL ĐĂNG NHẬP / ĐĂNG KÝ TRỰC TIẾP -->
-    <div id="authModal" class="modal-overlay hidden">
-      <div class="modal-content">
-        <span class="close-modal" id="closeAuthModal">&times;</span>
 
-        <section class="auth-card">
-          <h1>Đăng nhập / Đăng ký</h1>
-          <p class="sub">Mua sắm nhanh chóng và quản lý đơn hàng của bạn</p>
-
-          <div class="tabs">
-            <button id="loginTab" class="tab active">Đăng nhập</button>
-            <button id="registerTab" class="tab">Đăng ký</button>
+  <!-- MAIN -->
+  <main>
+    <div id="mainView">
+      <!-- PHẦN BANNER -->
+      <section class="banner-slider">
+        <div class="slideshow-container">
+          <div class="slides">
+            <video src="ip18vid-banner.mp4" loop playsinline controls poster="slide1.jpg"></video>
           </div>
+          <div class="slides">
+            <img src="slide1.jpg" alt="Banner Điện Thoại 1" style="width:100%">
+          </div>
+          <div class="slides">
+            <img src="slide22.jpg" alt="Banner Điện Thoại 2" style="width:100%">
+          </div>
+          <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+          <a class="next" onclick="plusSlides(1)">&#10095;</a>
+          <div class="dot-container">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+          </div>
+        </div>
+      </section>
 
-          <!-- TAB ĐĂNG NHẬP -->
-          <form id="loginForm">
-            <label>Số điện thoại hoặc email</label>
-            <input
-              id="loginAccount"
-              type="text"
-              placeholder="Nhập số điện thoại hoặc email"
-              required
-            />
-
-            <label>Mật khẩu</label>
-            <input
-              id="loginPassword"
-              type="password"
-              placeholder="Nhập mật khẩu"
-              required
-            />
-
-            <div class="form-row">
-              <label class="check">
-                <input type="checkbox" id="remember" /> Ghi nhớ đăng nhập
-              </label>
-              <button type="button" id="forgotPassword" class="forgot-btn">
-                Quên mật khẩu?
-              </button>
+      <section class="product-section">
+        <div class="product-list-container">
+          <!-- THANH ĐIỀU HƯỚNG -->
+          <div id="categoryBreadcrumb" class="category-breadcrumb">
+            <div class="breadcrumb-nav">
+              <!-- Vạch đứng đầu -->
+              <div class="breadcrumb-indicator"></div>
+              <span class="breadcrumb-item active" onclick="filterByCategory('all', event)">TẤT CẢ</span>
+              <span class="breadcrumb-sep">/</span>
+              <span class="breadcrumb-item" onclick="filterByCategory('apple', event)">APPLE</span>
+              <span class="breadcrumb-sep">/</span>
+              <span class="breadcrumb-item" onclick="filterByCategory('samsung', event)">SAMSUNG</span>
+              <span class="breadcrumb-sep">/</span>
+              <span class="breadcrumb-item" onclick="filterByCategory('oppo', event)">OPPO</span>
+              <span class="breadcrumb-sep">/</span>
+              <span class="breadcrumb-item" onclick="filterByCategory('khac', event)">KHÁC</span>
             </div>
 
-            <button class="primary" type="submit">Đăng nhập</button>
+            <div id="searchResultTitle" class="search-result-title hidden"></div>
+          </div>
 
-            <p class="switch-text">
-              Chưa có tài khoản?
-              <button type="button" id="goRegister">Đăng ký ngay</button>
-            </p>
-          </form>
-
-          <!-- TAB QUÊN MẬT KHẨU -->
-          <form id="forgotForm" class="hidden">
-            <label>Email</label>
-            <input
-              id="forgotEmail"
-              type="email"
-              placeholder="Nhập email đã đăng ký"
-              required
-            />
-
-            <label>Số điện thoại</label>
-            <input
-              id="forgotPhone"
-              type="tel"
-              placeholder="Nhập số điện thoại đã đăng ký"
-              pattern="0[0-9]{9}"
-              maxlength="10"
-              required
-            />
-
-            <label>Mật khẩu mới</label>
-            <input
-              id="newPassword"
-              type="password"
-              placeholder="Nhập mật khẩu mới"
-              required
-            />
-
-            <label>Xác nhận mật khẩu mới</label>
-            <input
-              id="confirmNewPassword"
-              type="password"
-              placeholder="Nhập lại mật khẩu mới"
-              required
-            />
-
-            <button class="primary" type="submit">Đổi mật khẩu</button>
-
-            <p class="switch-text">
-              <button type="button" id="backToLogin">Quay lại đăng nhập</button>
-            </p>
-          </form>
-
-          <!-- TAB ĐĂNG KÝ -->
-          <form id="registerForm" class="hidden">
-            <label>Họ và tên</label>
-            <input
-              id="registerName"
-              type="text"
-              placeholder="Nhập họ và tên"
-              required
-            />
-
-            <label>Số điện thoại</label>
-            <input
-              id="registerPhone"
-              type="tel"
-              placeholder="Nhập số điện thoại"
-              pattern="0[0-9]{9}"
-              maxlength="10"
-              required
-            />
-
-            <label>Email</label>
-            <input
-              id="registerEmail"
-              type="email"
-              placeholder="Nhập email"
-              required
-            />
-
-            <label>Mật khẩu</label>
-            <input
-              id="registerPassword"
-              type="password"
-              placeholder="Tạo mật khẩu"
-              required
-            />
-
-            <label>Xác nhận mật khẩu</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              placeholder="Nhập lại mật khẩu"
-              required
-            />
-
-            <button class="primary" type="submit">Đăng ký</button>
-
-            <p class="switch-text">
-              Đã có tài khoản?
-              <button type="button" id="goLogin">Đăng nhập</button>
-            </p>
-          </form>
-        </section>
-      </div>
+          <div id="productGrid" class="product-grid"></div>
+          <div id="pagination" class="pagination"></div>
+        </div>
+      </section>
     </div>
 
-    <!-- Nhúng file JS từ assets/js/index.js -->
-    <script src="assets/js/data.js"></script>
-    <script src="assets/js/index.js"></script>
-  </body>
+    <!-- MÀN HÌNH CHI TIẾT SẢN PHẨM -->
+    <div id="detailView" class="hidden"></div>
+  </main>
+
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="topfooter">
+      <div class="content">
+        <div>
+          <h3 class="Foot-footer-title">INTRODUCE</h3>
+          <ul>
+            <li><button class="Foot-footer-list">Về Chúng Tôi</button></li>
+            <li>
+              <button class="Foot-footer-list">Thoả Thuận Sử Dụng</button>
+            </li>
+            <li>
+              <button class="Foot-footer-list">Quy Chế Hoạt Động</button>
+            </li>
+            <li>
+              <button class="Foot-footer-list">Chính Sách Bảo Mật</button>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="Foot-footer-title">SUPPORT</h3>
+          <ul>
+            <li><button class="Foot-footer-list">Góp Ý</button></li>
+            <li><button class="Foot-footer-list">Tuyển Dụng</button></li>
+            <li><button class="Foot-footer-list">FAQ</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
+    </div>
+    </div>
+  </footer>
+
+
+
+  <!-- POPUP MODAL ĐĂNG NHẬP / ĐĂNG KÝ TRỰC TIẾP -->
+  <div id="authModal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <span class="close-modal" id="closeAuthModal">&times;</span>
+
+      <section class="auth-card">
+        <h1>Đăng nhập / Đăng ký</h1>
+        <p class="sub">Mua sắm nhanh chóng và quản lý đơn hàng của bạn</p>
+
+        <div class="tabs">
+          <button id="loginTab" class="tab active">Đăng nhập</button>
+          <button id="registerTab" class="tab">Đăng ký</button>
+        </div>
+
+        <!-- TAB ĐĂNG NHẬP -->
+        <form id="loginForm">
+          <label>Số điện thoại hoặc email</label>
+          <input id="loginAccount" type="text" placeholder="Nhập số điện thoại hoặc email" required />
+
+          <label>Mật khẩu</label>
+          <input id="loginPassword" type="password" placeholder="Nhập mật khẩu" required />
+
+          <div class="form-row">
+            <label class="check">
+              <input type="checkbox" id="remember" /> Ghi nhớ đăng nhập
+            </label>
+            <button type="button" id="forgotPassword" class="forgot-btn">
+              Quên mật khẩu?
+            </button>
+          </div>
+
+          <button class="primary" type="submit">Đăng nhập</button>
+
+          <p class="switch-text">
+            Chưa có tài khoản?
+            <button type="button" id="goRegister">Đăng ký ngay</button>
+          </p>
+        </form>
+
+        <!-- TAB QUÊN MẬT KHẨU -->
+        <form id="forgotForm" class="hidden">
+          <label>Email</label>
+          <input id="forgotEmail" type="email" placeholder="Nhập email đã đăng ký" required />
+
+          <label>Số điện thoại</label>
+          <input id="forgotPhone" type="tel" placeholder="Nhập số điện thoại đã đăng ký" pattern="0[0-9]{9}"
+            maxlength="10" required />
+
+          <label>Mật khẩu mới</label>
+          <input id="newPassword" type="password" placeholder="Nhập mật khẩu mới" required />
+
+          <label>Xác nhận mật khẩu mới</label>
+          <input id="confirmNewPassword" type="password" placeholder="Nhập lại mật khẩu mới" required />
+
+          <button class="primary" type="submit">Đổi mật khẩu</button>
+
+          <p class="switch-text">
+            <button type="button" id="backToLogin">Quay lại đăng nhập</button>
+          </p>
+        </form>
+
+        <!-- TAB ĐĂNG KÝ -->
+        <form id="registerForm" class="hidden">
+          <label>Họ và tên</label>
+          <input id="registerName" type="text" placeholder="Nhập họ và tên" required />
+
+          <label>Số điện thoại</label>
+          <input id="registerPhone" type="tel" placeholder="Nhập số điện thoại" pattern="0[0-9]{9}" maxlength="10"
+            required />
+
+          <label>Email</label>
+          <input id="registerEmail" type="email" placeholder="Nhập email" required />
+
+          <label>Mật khẩu</label>
+          <input id="registerPassword" type="password" placeholder="Tạo mật khẩu" required />
+
+          <label>Xác nhận mật khẩu</label>
+          <input id="confirmPassword" type="password" placeholder="Nhập lại mật khẩu" required />
+
+          <button class="primary" type="submit">Đăng ký</button>
+
+          <p class="switch-text">
+            Đã có tài khoản?
+            <button type="button" id="goLogin">Đăng nhập</button>
+          </p>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <!-- Nhúng file JS từ assets/js/index.js -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/index.js"></script>
+</body>
+
 </html>
