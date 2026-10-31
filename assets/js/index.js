@@ -150,6 +150,15 @@ function showSlides(n) {
   if (dots[slideIndex - 1]) {
     dots[slideIndex - 1].className += " active";
   }
+    // Dừng mọi video, rồi chỉ phát video của slide đang hiện
+  document.querySelectorAll(".slides video").forEach(function (v) {
+    v.pause();
+  });
+  const vid = slides[slideIndex - 1].querySelector("video");
+  if (vid) {
+    vid.currentTime = 0;
+    vid.play().catch(function () {});
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
