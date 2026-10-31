@@ -1124,7 +1124,7 @@ function hienThiDanhMucSanPham() {
         return `
             <tr>
                 <td style="text-align: center;">
-                    ${sp.hinh ? `<img src="${sp.hinh}" alt="Ảnh SP" class="product-thumbnail">` : `<img src="../assets/images/default-image.jpeg" alt="Mặc định" class="product-thumbnail">`}
+                    ${sp.hinh ? `<img src="${sp.hinh}" alt="Ảnh SP" class="product-thumbnail" style="width: 50px; height: 50px; object-fit: contain; background: #fff; border-radius: 4px; border: 1px solid #ddd;">` : `<img src="../assets/images/default-image.jpeg" alt="Mặc định" class="product-thumbnail" style="width: 50px; height: 50px; object-fit: contain; background: #fff; border-radius: 4px; border: 1px solid #ddd;">`}
                 </td>
                 <td><strong>${sp.maSP}</strong></td>
                 <td>${sp.tenSP}</td>
@@ -1872,7 +1872,7 @@ function renderDetailTable(isReadOnly = false) {
         return `
             <tr>
                 <td>${idx + 1}</td>
-                <td style="text-align: center;"><img src="${hinhHienThi}" class="product-thumb" alt="Ảnh"></td>
+                <td style="text-align: center;"><img src="${hinhHienThi}" class="product-thumb" alt="Ảnh" style="object-fit: contain; background: #fff;"></td>
                 <td><strong>${tenHienThi}</strong></td>
                 <td style="text-align: center;">${item.qty}</td>
                 <td style="text-align: right;">${formatMoney(item.price)}</td>
@@ -2147,7 +2147,7 @@ function renderPricingTable() {
         return `
             <tr>
                 <td><strong>${prod.code}</strong></td>
-                <td><img src="${prod.image}" width="40" height="40" style="border-radius: 4px; object-fit: cover; border: 1px solid #ddd;"></td>
+                <td><img src="${prod.image}" style="width: 50px; height: 50px; object-fit: contain; background: #fff; border-radius: 4px; border: 1px solid #ddd;"></td>
                 <td>${prod.name}</td>
                 <td style="text-align: right; color: #6c757d;">${hasImport ? formatMoney(prod.importPrice) : '<i>Chưa nhập hàng</i>'}</td>
                 <td style="text-align: right;">${retailPriceHtml}</td>
@@ -2568,7 +2568,7 @@ function renderInventoryTable(data) {
         <tr>
             <td style="text-align: center;"><strong>${item.code}</strong></td>
             <td style="text-align: center;">
-                <img src="${item.image}" alt="Ảnh SP" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;">
+                <img src="${item.image}" alt="Ảnh SP" style="width: 50px; height: 50px; object-fit: contain; background: #fff; border-radius: 4px; border: 1px solid #ddd;">
             </td>
             <td><strong>${item.name}</strong></td>
             <td style="text-align: center;"><span class="badge" style="background:#e9ecef; color:#333;">${item.category}</span></td>
