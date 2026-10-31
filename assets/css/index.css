@@ -38,14 +38,17 @@ a {
 .header-top {
   display: flex;
   justify-content: space-between;
-  padding: 14px 50px;
+  padding: 14px 4%;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .search-container {
   position: relative;
   width: 250px;
-  border: solid 1px #d70027;
+  max-width: 100%;
+  border: solid 2px #d70027;
   border-radius: 5px;
   padding: 5px 5px;
 }
@@ -164,7 +167,7 @@ a {
 main {
   min-height: 60vh;
   background-color: #f9f9f9;
-  padding: 30px 50px;
+  padding: 30px 4%;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -173,6 +176,12 @@ main {
   width: 100%;
   position: relative;
 }
+
+/* Ẩn hoàn toàn khu vực Banner để tạo màn hình kết quả tìm kiếm riêng */
+.hide-banner {
+  display: none !important;
+}
+
 .slideshow-container {
   max-width: 100%;
   position: relative;
@@ -324,7 +333,8 @@ p {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-columns: repeat(4, 1fr); */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
 
@@ -336,6 +346,9 @@ p {
   text-align: center;
   transition: transform 0.3s;
   cursor: pointer;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:hover {
@@ -359,7 +372,7 @@ p {
   color: #d70027;
   font-weight: bold;
   margin-bottom: 15px;
-  font-size: 13x;
+  font-size: 14x;
 }
 
 .product-card button {
@@ -370,6 +383,7 @@ p {
   cursor: pointer;
   width: 100%;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .product-card button:hover {
@@ -609,13 +623,14 @@ p {
   gap: 6px;
   background-color: #fff;
   color: #000;
-  border: 1px solid #d70027;
+  border: 2px solid #d70027;
   border-radius: 5px;
   padding: 6px 15px;
   cursor: pointer;
   font-size: 14px;
   /* font-weight: bold; */
   transition: all 0.3s;
+  white-space: nowrap; /*cố định chữ luôn nằm 1 dòng */
 }
 
 .filter-toggle-btn:hover {
@@ -687,6 +702,7 @@ p {
   display: flex;
   align-items: center;
   font-size: 15px;
+  flex-wrap: wrap;
 }
 
 .breadcrumb-indicator {
@@ -735,4 +751,93 @@ p {
   font-size: 15px;
   color: #333;
   font-style: Tahoma, Verdana, sans-serif;
+}
+
+/* ================= TỰ ĐỘNG CO GIÃN KHI THU NHỎ WEB ================= */
+/* @media (max-width: 1024px) {
+  .header-top,
+  .header-bottom,
+  main,
+  .topfooter {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+} */
+
+/* 2. Khi kéo nhỏ giống trong ảnh của bạn (Màn hình dưới 768px) -> Chuyển thành 2 sản phẩm 1 hàng
+@media (max-width: 768px) {
+  .header-top {
+    flex-wrap: wrap; /* Cho phép rớt dòng gọn gàng thay vì tràn mất icon giỏ hàng */
+    /* gap: 10px;
+    padding: 10px 15px;
+  }
+
+  .logo {
+    flex: 0 0 auto;
+  }
+
+  .others {
+    flex: 0 0 auto;
+    order: 2; /* Đưa cụm icon User & Giỏ hàng lên góc phải ngang hàng với Logo */
+  /* } */ 
+/* 
+  .others li {
+    padding: 0 8px;
+  }
+
+  .search-and-filter-wrapper {
+    order: 3; Đưa thanh Tìm kiếm & Bộ lọc xuống hàng dưới, rộng full đẹp mắt */
+    /* width: 100%;
+    justify-content: space-between;
+  }
+
+  .search-container {
+    flex: 1; Ô tìm kiếm tự giãn hết khoảng trống còn lại */
+    /* width: auto;
+  }
+
+  .header-bottom {
+    padding: 0 10px;
+  }
+
+  main {
+    padding: 20px 15px;
+  } */
+
+  /* Chuyển danh sách thành 2 cột rộng rãi, hình và chữ rõ ràng */
+  /* .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+  }
+
+  .product-card img {
+    height: 150px;
+  } */
+
+  /* Cho phép thanh điều hướng tự xuống dòng nếu màn hình quá hẹp */
+  /* .breadcrumb-nav {
+    flex-wrap: wrap;
+    row-gap: 8px;
+    font-size: 14px;
+  } */
+
+  /* Trang chi tiết sản phẩm tự xếp dọc khi màn hình hẹp */
+  /* .detail-container {
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .detail-image img {
+    height: 260px;
+  } */
+
+  /* .content {
+    flex-direction: column;
+    gap: 30px;
+  } */
 }
