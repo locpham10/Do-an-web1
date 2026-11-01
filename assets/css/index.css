@@ -73,6 +73,21 @@ a {
   display: flex;
   align-items: center;
 }
+.logo-link {
+  gap: 0px; /* khoảng cách giữa logo và chữ Phonix,*/
+  cursor: pointer;
+}
+.logo-text {
+  font-size: 26px;
+  font-weight: bold;
+  color: #d70027;
+  letter-spacing: 1px;
+}
+/* Chưa điền địa chỉ ảnh thì ẩn ảnh để không hiện icon ảnh lỗi */
+.header-logo[src=""],
+.header-logo:not([src]) {
+  display: none;
+}
 .header-logo {
   height: 40px;
   /* width: auto; */
@@ -271,8 +286,28 @@ footer {
 
 .content {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center; /* canh giữa 3 cột theo chiều ngang */
+  align-items: center; /* canh giữa theo chiều dọc */
+  flex-wrap: wrap;
   gap: 100px;
+  text-align: center;
+}
+
+/* Cột logo lớn ở chân trang */
+.footer-logo-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 180px; /* giữ chỗ cho cột dù chưa có ảnh */
+}
+.footer-logo {
+  height: 140px;
+  max-width: 100%;
+  object-fit: contain;
+}
+.footer-logo[src=""],
+.footer-logo:not([src]) {
+  display: none; /* chưa điền địa chỉ ảnh thì ẩn để khỏi hiện icon lỗi */
 }
 
 .Foot-footer-title {
@@ -747,10 +782,13 @@ p {
 }
 
 .search-result-title {
-  margin-top: 15px;
-  font-size: 15px;
+  margin-top: 0;
+  font-size: 18px;
   color: #333;
-  font-style: Tahoma, Verdana, sans-serif;
+}
+.search-result-title .search-keyword {
+  color: #d70027;
+  font-weight: bold;
 }
 
 /* ================= TỰ ĐỘNG CO GIÃN KHI THU NHỎ WEB ================= */
@@ -840,4 +878,3 @@ p {
     flex-direction: column;
     gap: 30px;
   } */
-}

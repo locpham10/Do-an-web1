@@ -616,6 +616,7 @@ function khoiTaoDuLieuMau() {
 khoiTaoDuLieuMau();
 
 let slideIndex = 1;
+let lastShownSlide = 0; // slide đã hiển thị lần trước, để biết có đang CHUYỂN slide hay không
 showSlides(slideIndex);
 
 function plusSlides(n) {
@@ -656,9 +657,11 @@ function showSlides(n) {
   });
   const vid = slides[slideIndex - 1].querySelector("video");
   if (vid) {
-    vid.currentTime = 0;
+    // Chỉ tua về đầu khi vừa CHUYỂN sang slide video; nếu chỉ hiện lại banner thì phát tiếp từ chỗ đang dừng
+    if (lastShownSlide !== slideIndex) vid.currentTime = 0;
     vid.play().catch(function () {});
   }
+  lastShownSlide = slideIndex;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1001,6 +1004,7 @@ function renderProducts(page) {
   let startIndex = (page - 1) * itemsPerPage;
   let endIndex = startIndex + itemsPerPage;
   let hasProduct = false;
+  let allCardsHTML = "";
 
   for (let i = startIndex; i < endIndex; i++) {
     if (i >= filteredProducts.length) break;
@@ -1023,12 +1027,14 @@ function renderProducts(page) {
         <button onclick="addToCart('${product.maSP}')">Thêm vào giỏ</button>
       </div>
     `;
-    productGrid.innerHTML += cardHTML;
+    allCardsHTML += cardHTML;
   }
+
+  if (hasProduct) productGrid.innerHTML = allCardsHTML;
 
   if (hasProduct === false) {
     productGrid.innerHTML =
-      "<h3 style='grid-column: span 4; text-align:center;'>Không tìm thấy sản phẩm nào!</h3>";
+      "<h3 style='grid-column: 1 / -1; text-align:center; padding: 60px 0; font-size: 22px; color: #555;'>Không tìm thấy sản phẩm nào!</h3>";
   }
 }
 
@@ -1083,6 +1089,16 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
   if (bannerElements.length > 0) bannerSection = bannerElements[0];
 
   let items = document.getElementsByClassName("breadcrumb-item");
+  let navBar = document.getElementsByClassName("breadcrumb-nav")[0];
+
+  // Chống chèn HTML từ từ khóa người dùng gõ
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
 
   // 1. Quản lý trạng thái Active trên các nút danh mục
   if (items.length > 0) {
@@ -1101,18 +1117,24 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
     }
   }
 
+  // Trang kết quả tìm kiếm / lọc: ẩn thanh TẤT CẢ / APPLE / SAMSUNG...
+  if (navBar) {
+    if (searchKeyword || isAdvancedFilter) navBar.classList.add("hidden");
+    else navBar.classList.remove("hidden");
+  }
+
   // 2. Xử lý hiển thị Tiêu đề phụ (Tìm kiếm / Lọc) và Banner
   if (searchKeyword) {
     // Đang Tìm Kiếm
     if (resultTitle) {
       if (filteredProducts.length > 0) {
         // NẾU CÓ SẢN PHẨM: Hiện dòng chữ nhỏ
-        resultTitle.innerText =
+        resultTitle.innerHTML =
           "Tìm thấy " +
           filteredProducts.length +
-          ' sản phẩm cho "' +
-          searchKeyword +
-          '"';
+          ' sản phẩm cho: <span class="search-keyword">' +
+          escHtml(searchKeyword) +
+          "</span>";
         resultTitle.classList.remove("hidden");
       } else {
         // NẾU BẰNG 0: Ẩn luôn dòng chữ nhỏ đi cho đỡ rối
@@ -1141,6 +1163,9 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
       }
     }
     if (bannerSection) bannerSection.classList.add("hide-banner");
+    for (let v = 0; v < videos.length; v++) {
+      videos[v].pause();
+    }
 
     for (let i = 0; i < items.length; i++) {
       items[i].classList.remove("active");
@@ -1150,9 +1175,13 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
     // Chỉ đang xem Danh Mục (Bình thường)
     if (resultTitle) resultTitle.classList.add("hidden");
 
-    // Xem theo hãng (APPLE / SAMSUNG / OPPO / KHÁC / TẤT CẢ): luôn GIỮ banner
-    if (bannerSection) bannerSection.classList.remove("hide-banner");
-    showSlides(slideIndex); // hiện lại banner và phát lại video của slide đang xem
+    // Xem theo hãng (APPLE / SAMSUNG / OPPO / KHÁC / TẤT CẢ): luôn GIỮ banner.
+    // Chỉ khôi phục (và phát lại video) khi banner đang bị ẩn do tìm kiếm/lọc,
+    // nếu không thì mỗi lần bấm video sẽ bị tua về đầu, trông như tải lại trang.
+    if (bannerSection && bannerSection.classList.contains("hide-banner")) {
+      bannerSection.classList.remove("hide-banner");
+      showSlides(slideIndex);
+    }
 
   }
 }
