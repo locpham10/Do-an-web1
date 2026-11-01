@@ -1075,6 +1075,10 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
 
   // Dùng getElementsByClassName thay cho querySelector nâng cao
   let bannerElements = document.getElementsByClassName("banner-slider");
+  // Danh sách video trong banner (trước đây thiếu khai báo -> lỗi "videos is not defined")
+  let videos = document.getElementsByClassName("slides")[0]
+    ? document.querySelectorAll(".slides video")
+    : [];
   let bannerSection = null;
   if (bannerElements.length > 0) bannerSection = bannerElements[0];
 
@@ -1089,6 +1093,7 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
       // Kiểm tra xem chữ trên web có khớp với mục đang chọn không
       if (
         itemText === activeCategory ||
+        (activeCategory === "all" && itemText === "tất cả") ||
         (activeCategory === "khac" && itemText === "khác")
       ) {
         items[i].classList.add("active");
@@ -1145,15 +1150,10 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
     // Chỉ đang xem Danh Mục (Bình thường)
     if (resultTitle) resultTitle.classList.add("hidden");
 
-    if (activeCategory === "all") {
-      if (bannerSection) bannerSection.classList.remove("hide-banner");
-    } else {
-      if (bannerSection) bannerSection.classList.add("hide-banner");
-      for (let v = 0; v < videos.length; v++) {
-        videos[v].pause();
-      }
-      window.scrollTo(0, 0);
-    }
+    // Xem theo hãng (APPLE / SAMSUNG / OPPO / KHÁC / TẤT CẢ): luôn GIỮ banner
+    if (bannerSection) bannerSection.classList.remove("hide-banner");
+    showSlides(slideIndex); // hiện lại banner và phát lại video của slide đang xem
+
   }
 }
 
