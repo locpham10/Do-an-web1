@@ -11,8 +11,8 @@
 */
 .auth-page {
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
+    display: flex; 
+    justify-content: center; 
     align-items: center;
     padding: 45px 15px;
 }
@@ -20,9 +20,11 @@
 .auth-card {
     background: #fff;
     width: 450px;
-    border-radius: 14px;
-    padding: 30px 36px;
+    border-radius: 14px; /*bo góc*/
+    padding: 30px 36px; 
     box-shadow: 0 3px 18px #00000012;
+    max-height: 90vh; /*ép chiều cao tối đa của khung để không bị tràn màn hình*/
+    overflow-y:auto; /* khi chiều cao vượt quá 90vh thì sẽ xuất hiện thanh cuộn dọc*/
 }
 
 .auth-card h1 {
