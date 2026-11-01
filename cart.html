@@ -8,110 +8,112 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="assets/css/index.css" />
     <link rel="stylesheet" href="assets/css/cart.css" />
-  </head>
-  <body>
+</head>
+<body>
     <!-- ================= HEADER ĐỒNG BỘ INDEX ================= -->
-  <header>
-    <div class="header-top">
-      <div class="logo">
-        <a href="index.html">
-          <img src="logo.jpg" class="header-logo" />
-        </a>
-      </div>
+    <header>
+        <div class="header-top">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="logo.jpg" class="header-logo" alt="Logo" />
+                </a>
+            </div>
 
-      <div class="search-and-filter-wrapper">
-        <div class="search-container">
-          <input type="text" placeholder="Tìm kiếm..." id="searchInputHeader" />
-          <i class="fas fa-search" id="searchIconHeader"></i>
-          <div id="searchSuggestions" class="search-suggestions hidden"></div>
+            <div class="search-and-filter-wrapper">
+                <div class="search-container">
+                    <input type="text" placeholder="Tìm kiếm..." id="searchInputHeader" />
+                    <i class="fas fa-search" id="searchIconHeader"></i>
+                    <div id="searchSuggestions" class="search-suggestions hidden"></div>
+                </div>
+                <button id="filterBtn" class="filter-toggle-btn">
+                    <i class="fas fa-filter"></i> Bộ lọc
+                </button>
+
+                <div id="filterDropdown" class="filter-dropdown hidden">
+                    <div class="filter-group">
+                        <label>Thương hiệu:</label>
+                        <select id="filterCategory">
+                            <option value="all">Tất cả hãng</option>
+                            <option value="apple">Apple</option>
+                            <option value="samsung">Samsung</option>
+                            <option value="oppo">Oppo</option>
+                            <option value="xiaomi">Xiaomi</option>
+                            <option value="realme">Realme</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Khoảng giá:</label>
+                        <select id="filterPrice">
+                            <option value="all">Tất cả mức giá</option>
+                            <option value="under10">Dưới 10 triệu</option>
+                            <option value="10to20">Từ 10 - 20 triệu</option>
+                            <option value="over20">Trên 20 triệu</option>
+                        </select>
+                    </div>
+
+                    <button id="applyFilterBtn" class="apply-filter-btn">Áp dụng</button>
+                </div>
+            </div>
+
+            <ul class="others">
+                <!-- Nút Home hoạt động -->
+                <li><a class="fa-solid fa-house" href="index.html" title="Trang chủ"></a></li>
+                
+                <li class="user-item">
+                    <a class="fa fa-user" href="profile.html" id="userBtn"></a>
+                    <ul class="user-menu" id="userMenu">
+                        <li><a href="profile.html">Thông tin cá nhân</a></li>
+                        <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
+                    </ul>
+                </li>
+                
+                <li style="position: relative;">
+                    <a class="fa fa-shopping-bag" href="cart.html" id="cartBtn"></a>
+                    <span id="cartBadge" class="cart-badge hidden">0</span>
+                </li>
+            </ul>
         </div>
-        <button id="filterBtn" class="filter-toggle-btn">
-          <i class="fas fa-filter"></i> Bộ lọc
-        </button>
-
-        <div id="filterDropdown" class="filter-dropdown hidden">
-          <div class="filter-group">
-            <label>Thương hiệu:</label>
-            <select id="filterCategory">
-              <option value="all">Tất cả hãng</option>
-              <option value="apple">Apple</option>
-              <option value="samsung">Samsung</option>
-              <option value="oppo">Oppo</option>
-              <option value="xiaomi">Xiaomi</option>
-              <option value="realme">Realme</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label>Khoảng giá:</label>
-            <select id="filterPrice">
-              <option value="all">Tất cả mức giá</option>
-              <option value="under10">Dưới 10 triệu</option>
-              <option value="10to20">Từ 10 - 20 triệu</option>
-              <option value="over20">Trên 20 triệu</option>
-            </select>
-          </div>
-
-          <button id="applyFilterBtn" class="apply-filter-btn">Áp dụng</button>
+        
+        <div class="header-bottom">
+            <ul class="menu">
+                <li>
+                    <a href="#" onclick="filterByCategory('apple', event)">APPLE</a>
+                    <ul class="submenu">
+                        <li><a href="#" onclick="filterByName('iPhone 18', event)">iPhone 18</a></li>
+                        <li><a href="#" onclick="filterByName('iPhone Duo', event)">iPhone Duo</a></li>
+                        <li><a href="#" onclick="filterByName('iPhone 17', event)">iPhone 17</a></li>
+                        <li><a href="#" onclick="filterByName('iPhone 16', event)">iPhone 16</a></li>
+                        <li><a href="#" onclick="filterByName('iPhone 15', event)">iPhone 15</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" onclick="filterByCategory('samsung', event)">SAMSUNG</a>
+                    <ul class="submenu">
+                        <li><a href="#" onclick="filterByName('Galaxy S26', event)">Galaxy S26</a></li>
+                        <li><a href="#" onclick="filterByName('Galaxy Z', event)">Galaxy Z Fold</a></li>
+                        <li><a href="#" onclick="filterByName('Galaxy A', event)">Galaxy A</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" onclick="filterByCategory('oppo', event)">OPPO</a>
+                    <ul class="submenu">
+                        <li><a href="#" onclick="filterByName('OPPO Find', event)">OPPO Find</a></li>
+                        <li><a href="#" onclick="filterByName('OPPO Reno', event)">OPPO Reno</a></li>
+                        <li><a href="#" onclick="filterByName('OPPO A', event)">OPPO A</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" onclick="filterByCategory('khac', event)">KHÁC</a>
+                    <ul class="submenu">
+                        <li><a href="#" onclick="filterByName('Honor', event)">Honor</a></li>
+                        <li><a href="#" onclick="filterByName('Xiaomi', event)">Xiaomi</a></li>
+                        <li><a href="#" onclick="filterByName('realme', event)">Realme</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-      </div>
-
-      <ul class="others">
-        <!-- Đã thêm index.html vào href để nút Home hoạt động -->
-        <li><a class="fa-solid fa-house" href="index.html" title="Trang chủ"></a></li>
-        
-        <li class="user-item">
-          <a class="fa fa-user" href="profile.html" id="userBtn"></a>
-          <ul class="user-menu" id="userMenu">
-            <li><a href="profile.html">Thông tin cá nhân</a></li>
-            <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
-          </ul>
-        </li>
-        
-        <li style="position: relative;">
-          <a class="fa fa-shopping-bag" href="cart.html" id="cartBtn"></a>
-          <span id="cartBadge" class="cart-badge hidden">0</span>
-        </li>
-      </ul>
-    </div>
-    <div class="header-bottom">
-      <ul class="menu">
-        <li>
-          <a href="#" onclick="filterByCategory('apple', event)">APPLE</a>
-          <ul class="submenu">
-            <li><a href="#" onclick="filterByName('iPhone 18', event)">iPhone 18</a></li>
-            <li><a href="#" onclick="filterByName('iPhone Duo', event)">iPhone Duo</a></li>
-            <li><a href="#" onclick="filterByName('iPhone 17', event)">iPhone 17</a></li>
-            <li><a href="#" onclick="filterByName('iPhone 16', event)">iPhone 16</a></li>
-            <li><a href="#" onclick="filterByName('iPhone 15', event)">iPhone 15</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#" onclick="filterByCategory('samsung', event)">SAMSUNG</a>
-          <ul class="submenu">
-            <li><a href="#" onclick="filterByName('Galaxy S26', event)">Galaxy S26</a></li>
-            <li><a href="#" onclick="filterByName('Galaxy Z', event)">Galaxy Z Fold</a></li>
-            <li><a href="#" onclick="filterByName('Galaxy A', event)">Galaxy A</a></li>
-          </ul>
-        </li>
-        <li>
-          <a href="#" onclick="filterByCategory('oppo', event)">OPPO</a>
-          <ul class="submenu">
-            <li><a href="#" onclick="filterByName('OPPO Find', event)">OPPO Find</a></li>
-            <li><a href="#" onclick="filterByName('OPPO Reno', event)">OPPO Reno</a></li>
-            <li><a href="#" onclick="filterByName('OPPO A', event)">OPPO A</a></li>
-          </ul>
-        </li>
-        <li><a href="#" onclick="filterByCategory('all', event)">KHÁC</a>
-          <ul class="submenu">
-            <li><a href="#" onclick="filterByName('Honor', event)">Honor</a></li>
-            <li><a href="#" onclick="filterByName('Xiaomi', event)">Xiaomi</a></li>
-            <li><a href="#" onclick="filterByName('realme', event)">Realme</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </header>
+    </header>
 
     <!-- ================= MAIN CONTAINER ================= -->
     <main class="container">
@@ -210,39 +212,34 @@
         </div>
     </main>
 
-<!-- ================= FOOTER ĐỒNG BỘ INDEX.HTML ================= -->
+    <!-- ================= FOOTER ĐỒNG BỘ INDEX ================= -->
     <footer>
-      <div class="topfooter">
-        <div class="content">
-          <div>
-            <h3 class="Foot-footer-title">INTRODUCE</h3>
-            <ul>
-              <li><button class="Foot-footer-list">Về Chúng Tôi</button></li>
-              <li>
-                <button class="Foot-footer-list">Thoả Thuận Sử Dụng</button>
-              </li>
-              <li>
-                <button class="Foot-footer-list">Quy Chế Hoạt Động</button>
-              </li>
-              <li>
-                <button class="Foot-footer-list">Chính Sách Bảo Mật</button>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 class="Foot-footer-title">SUPPORT</h3>
-            <ul>
-              <li><button class="Foot-footer-list">Góp Ý</button></li>
-              <li><button class="Foot-footer-list">Tuyển Dụng</button></li>
-              <li><button class="Foot-footer-list">FAQ</button></li>
-            </ul>
-          </div>
+        <div class="topfooter">
+            <div class="content">
+                <div>
+                    <h3 class="Foot-footer-title">INTRODUCE</h3>
+                    <ul>
+                        <li><button class="Foot-footer-list">Về Chúng Tôi</button></li>
+                        <li><button class="Foot-footer-list">Thoả Thuận Sử Dụng</button></li>
+                        <li><button class="Foot-footer-list">Quy Chế Hoạt Động</button></li>
+                        <li><button class="Foot-footer-list">Chính Sách Bảo Mật</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="Foot-footer-title">SUPPORT</h3>
+                    <ul>
+                        <li><button class="Foot-footer-list">Góp Ý</button></li>
+                        <li><button class="Foot-footer-list">Tuyển Dụng</button></li>
+                        <li><button class="Foot-footer-list">FAQ</button></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="footer-bottom">
-        <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
-      </div>
+        <div class="footer-bottom">
+            <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
+        </div>
     </footer>
+    
     <script src="assets/js/cart.js"></script>
     <script src="assets/js/index.js"></script>
 </body>
