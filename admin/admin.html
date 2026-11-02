@@ -18,8 +18,8 @@
             <div class="login-logo">
                 <img src="./logo.jpg" alt="Phonix">
             </div>
-            <h1>ĐĂNG NHẬP ADMIN</h1>
-            <p>Vui lòng đăng nhập vào tài khoản của bạn !</p>
+            <h1>PHONIX</h1>
+            <p>Hệ thống quản trị</p>
 
             <div class="input-box">
                 <i class="fa-solid fa-user"></i>
@@ -75,7 +75,11 @@
             <header class="topbar">
                 <div class="topbar-left">
                     <button id="sidebarToggle" class="btn-toggle-menu">☰</button>
-                    <div class="topbar-title">Hệ thống quản trị [tên web]</div>
+                    
+                    <div class="topbar-brand">
+                        <img src="../Img/logo-shop.png" alt="Phonix Logo" class="topbar-logo">
+                        <div class="topbar-title">Hệ thống quản trị <strong>Phonix</strong></div>
+                    </div>
                 </div>
 
                 <div class="topbar-user">
@@ -92,7 +96,9 @@
 
                     </div>
 
-                    <button class="btn-logout" onclick="handleLogout()">Đăng xuất</button>
+                    <button class="btn-logout" onclick="handleLogout()" title="Đăng xuất">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
 
                 </div>
             </header>
