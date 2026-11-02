@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Giỏ hàng & Thanh toán - Cửa Hàng Điện Thoại</title>
+    <title>Giỏ hàng & Thanh toán - Phonix</title>
     <!-- Thêm Font Awesome và CSS của index để đồng bộ Header -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="assets/css/index.css" />
@@ -14,8 +14,9 @@
     <header>
         <div class="header-top">
             <div class="logo">
-                <a href="index.html">
-                    <img src="logo.jpg" class="header-logo" alt="Logo" />
+                <a href="index.html" class="logo-link" title="Về trang chủ">
+                    <img src="Img/logo-shop.png" class="header-logo" alt="Logo" />
+                    <span class="logo-text">Phonix</span>
                 </a>
             </div>
 
@@ -41,7 +42,6 @@
                             <option value="realme">Realme</option>
                         </select>
                     </div>
-
                     <div class="filter-group">
                         <label>Khoảng giá:</label>
                         <select id="filterPrice">
@@ -51,15 +51,12 @@
                             <option value="over20">Trên 20 triệu</option>
                         </select>
                     </div>
-
                     <button id="applyFilterBtn" class="apply-filter-btn">Áp dụng</button>
                 </div>
             </div>
 
             <ul class="others">
-                <!-- Nút Home hoạt động -->
                 <li><a class="fa-solid fa-house" href="index.html" title="Trang chủ"></a></li>
-                
                 <li class="user-item">
                     <a class="fa fa-user" href="profile.html" id="userBtn"></a>
                     <ul class="user-menu" id="userMenu">
@@ -67,7 +64,6 @@
                         <li><a href="javascript:void(0)" id="logoutBtn">Đăng xuất</a></li>
                     </ul>
                 </li>
-                
                 <li style="position: relative;">
                     <a class="fa fa-shopping-bag" href="cart.html" id="cartBtn"></a>
                     <span id="cartBadge" class="cart-badge hidden">0</span>
@@ -115,7 +111,6 @@
         </div>
     </header>
 
-    <!-- ================= MAIN CONTAINER ================= -->
     <main class="container">
         <!-- ================= BƯỚC 1: GIỎ HÀNG ================= -->
         <div id="cartStep" class="step-section">
@@ -124,7 +119,6 @@
             </div>
             
             <div class="cart-layout">
-                <!-- Cột trái: Danh sách sản phẩm -->
                 <section class="cart-items-section">
                     <div class="card select-all-bar">
                         <label class="custom-checkbox">
@@ -133,12 +127,9 @@
                         </label>
                         <button id="deleteAllBtn" class="btn-icon" title="Xóa tất cả">🗑️ Xóa tất cả</button>
                     </div>
-
-                    <!-- Danh sách sản phẩm render qua JS -->
                     <div id="cartItemsList"></div>
                 </section>
 
-                <!-- Cột phải: Tính tổng & Xác nhận đơn -->
                 <aside class="summary-section">
                     <div class="card summary-card">
                         <h2>Thông tin đơn hàng</h2>
@@ -164,7 +155,6 @@
             </div>
 
             <div class="checkout-layout">
-                <!-- Cột trái: Thông tin nhận hàng & hình thức thanh toán -->
                 <div class="checkout-form-area">
                     <div class="card">
                         <div class="card-title-row">
@@ -194,7 +184,6 @@
                     </div>
                 </div>
 
-                <!-- Cột phải: Chi tiết các sản phẩm đã chọn mua -->
                 <div class="checkout-summary-area">
                     <div class="card">
                         <h3>Chi tiết đơn hàng đã chọn</h3>
@@ -233,10 +222,14 @@
                         <li><button class="Foot-footer-list">FAQ</button></li>
                     </ul>
                 </div>
+                <!-- Khối Logo mới ở chân trang -->
+                <div class="footer-logo-col">
+                    <img src="Img/logo-shop.png" class="footer-logo" alt="Logo" />
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p> © copyright 2026 by The LNTT Group | Công ty TNHH SHOPDienthoai | Design by The LNTT </p>
+            <p> © copyright 2026 by The LNTT Group | Công ty Phonix | Design by The LNTT </p>
         </div>
     </footer>
     
