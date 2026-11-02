@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         }).join('');
     }
+
     // ==========================================================
     // 4. XỬ LÝ MODAL CHỈNH SỬA THÔNG TIN & ĐỊA CHỈ
     // ==========================================================
@@ -107,7 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnCancelEdit = document.getElementById("btnCancelEdit");
     const editProfileForm = document.getElementById("editProfileForm");
 
-    // Mở popup và tự động điền dữ liệu cũ vào form
     if (btnOpenEditModal) {
         btnOpenEditModal.addEventListener("click", function() {
             document.getElementById("editName").value = currentUser.hoTen || "";
@@ -115,32 +115,24 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("editEmail").value = currentUser.email || "";
             document.getElementById("editGender").value = currentUser.gioiTinh || "Nam";
             document.getElementById("editAddress").value = currentUser.diaChi || "";
-            
-            // Hiện Modal
             editProfileModal.classList.remove("hidden");
         });
     }
 
-    // Hàm đóng Modal
-    function closeEdit() {
-        editProfileModal.classList.add("hidden");
-    }
+    function closeEdit() { editProfileModal.classList.add("hidden"); }
     if (closeEditModal) closeEditModal.addEventListener("click", closeEdit);
     if (btnCancelEdit) btnCancelEdit.addEventListener("click", closeEdit);
 
-    // Xử lý khi nhấn "Lưu thay đổi"
     if (editProfileForm) {
         editProfileForm.addEventListener("submit", function(e) {
-            e.preventDefault(); // Chặn tải lại trang mặc định
+            e.preventDefault(); 
             
-            // Lấy dữ liệu người dùng vừa sửa
             const newName = document.getElementById("editName").value.trim();
             const newPhone = document.getElementById("editPhone").value.trim();
             const newEmail = document.getElementById("editEmail").value.trim();
             const newGender = document.getElementById("editGender").value;
             const newAddress = document.getElementById("editAddress").value.trim();
 
-            // Cập nhật vào phiên đăng nhập hiện tại
             currentUser.hoTen = newName;
             currentUser.soDienThoai = newPhone;
             currentUser.email = newEmail;
@@ -148,10 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
             currentUser.diaChi = newAddress;
             localStorage.setItem("nguoiDungDangNhap", JSON.stringify(currentUser));
 
-            // Cập nhật ngược lại vào kho "taiKhoan" tổng để Admin có thể xem được
             let taiKhoan = JSON.parse(localStorage.getItem("taiKhoan")) || [];
-            
-            // Tìm tài khoản này trong mảng tổng (tìm theo SDT cũ hoặc Email cũ phòng khi bị đổi)
             const index = taiKhoan.findIndex(tk => tk.soDienThoai === currentUser.soDienThoai || tk.email === currentUser.email);
             if (index !== -1) {
                 taiKhoan[index].hoTen = newName;
@@ -164,8 +153,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             alert("Cập nhật thông tin và địa chỉ thành công!");
             closeEdit();
-            
-            // Tải lại trang để các thông tin mới được in ra HTML ngay lập tức
             window.location.reload();
         });
     }
@@ -178,7 +165,70 @@ document.addEventListener("DOMContentLoaded", function () {
         btnLogoutProfile.addEventListener("click", function() {
             if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
                 localStorage.removeItem("nguoiDungDangNhap");
-                window.location.href = "index.html"; // Đẩy về trang chủ
+                window.location.href = "index.html"; 
+            }
+        });
+    }
+
+    // =========================================================================
+    // 6. CHUYỂN ĐỔI VIEW [THÔNG TIN & ĐƠN HÀNG] VÀ [XÓA TÀI KHOẢN] (ĐÃ KHÔI PHỤC)
+    // =========================================================================
+    function handleViewRouting() {
+        const hash = window.location.hash;
+        const sectionProfile = document.getElementById("sectionProfile");
+        const sectionDelete = document.getElementById("sectionDelete");
+        const breadcrumbCurrent = document.getElementById("breadcrumbCurrent");
+
+        if (hash === "#delete") {
+            if (sectionProfile) sectionProfile.style.display = "none";
+            if (sectionDelete) sectionDelete.style.display = "block";
+            if (breadcrumbCurrent) breadcrumbCurrent.innerText = "Xóa tài khoản";
+        } else {
+            if (sectionProfile) sectionProfile.style.display = "grid";
+            if (sectionDelete) sectionDelete.style.display = "none";
+            if (breadcrumbCurrent) breadcrumbCurrent.innerText = "Thông tin tài khoản";
+        }
+    }
+    
+    handleViewRouting(); // Chạy ngay khi tải trang
+    window.addEventListener("hashchange", handleViewRouting); // Lắng nghe khi bấm nút trên giao diện
+
+    // =========================================================================
+    // 7. XÓA TÀI KHOẢN VĨNH VIỄN (ĐÃ KHÔI PHỤC)
+    // =========================================================================
+    const formConfirmDelete = document.getElementById("formConfirmDelete");
+    if (formConfirmDelete) {
+        formConfirmDelete.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const inputPassword = document.getElementById("confirmPassword").value;
+
+            if (currentUser && currentUser.matKhau && inputPassword !== currentUser.matKhau) {
+                alert("Mật khẩu không chính xác! Vui lòng thử lại.");
+                return;
+            }
+
+            const confirmAction = confirm("Bạn có chắc chắn 100% muốn xóa tài khoản này không? Toàn bộ thông tin sẽ bị hủy!");
+            if (confirmAction) {
+                let taiKhoan = JSON.parse(localStorage.getItem("taiKhoan")) || [];
+                const accIndex = taiKhoan.findIndex(u => u.email === currentUser.email && u.soDienThoai === currentUser.soDienThoai);
+                
+                if (accIndex !== -1) {
+                    // Cập nhật trạng thái mềm thành 'daXoa'
+                    taiKhoan[accIndex].trangThai = "daXoa";
+                    localStorage.setItem("taiKhoan", JSON.stringify(taiKhoan));
+
+                    // Đưa vào danh sách xóa để Admin nhận diện
+                    let danhSachDaXoa = JSON.parse(localStorage.getItem("daXoa")) || [];
+                    danhSachDaXoa.push({
+                        email: currentUser.email,
+                        soDienThoai: currentUser.soDienThoai
+                    });
+                    localStorage.setItem("daXoa", JSON.stringify(danhSachDaXoa));
+                }
+
+                localStorage.removeItem("nguoiDungDangNhap");
+                alert("Tài khoản của bạn đã được xóa thành công!");
+                window.location.href = "index.html";
             }
         });
     }
