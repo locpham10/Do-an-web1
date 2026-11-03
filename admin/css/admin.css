@@ -1506,3 +1506,6 @@ input[type="number"] {
     font-weight: 900;
     color: #007bff;
 }
+
+#inventoryTableBody tr.row-out { background-color: #fdecea; }
+#inventoryTableBody tr.row-low { background-color: #fff8e1; }
