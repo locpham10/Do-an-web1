@@ -271,54 +271,60 @@ main {
   background-color: #fff;
 }
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 footer {
   background-color: #f8f9fa;
-  border-top: 1px solid #d70027;
+  border-top: 2px solid #d70027;
   margin-top: 50px;
   width: 100%;
   overflow: hidden;
 }
 
 .topfooter {
-  padding: 40px 50px;
+  padding: 45px 6%;
+  max-width: 1200px;
+  margin: 0 auto; /* Căn giữa toàn khối footer trên màn hình lớn */
 }
 
 .content {
   display: flex;
-  justify-content: center; /* canh giữa 3 cột theo chiều ngang */
-  align-items: center; /* canh giữa theo chiều dọc */
+  justify-content: space-between; /* Dàn đều 3 cột */
+  align-items: flex-start; /* QUAN TRỌNG: Căn thẳng hàng tăm tắp từ mép trên xuống, không bị nhấp nhô */
   flex-wrap: wrap;
-  gap: 100px;
-  text-align: center;
+  gap: 40px;
 }
 
-/* Cột logo lớn ở chân trang */
-.footer-logo-col {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 180px; /* giữ chỗ cho cột dù chưa có ảnh */
-}
-.footer-logo {
-  height: 140px;
-  max-width: 100%;
-  object-fit: contain;
-}
-.footer-logo[src=""],
-.footer-logo:not([src]) {
-  display: none; /* chưa điền địa chỉ ảnh thì ẩn để khỏi hiện icon lỗi */
+.footer-col {
+  flex: 1;
+  min-width: 200px;
+  text-align: left; /* Căn trái giúp các dòng chữ và tiêu đề thẳng trục dọc rất gọn */
 }
 
 .Foot-footer-title {
   font-size: 16px;
   font-weight: bold;
   color: #d70027;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  position: relative;
+  padding-bottom: 8px;
+  letter-spacing: 0.5px;
 }
+
+/* Gạch chân đỏ ngắn dưới tiêu đề INTRODUCE và SUPPORT cho đồng bộ với thanh Breadcrumb */
+.Foot-footer-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 35px;
+  height: 2px;
+  background-color: #d70027;
+}
+
 .content ul {
   padding: 0;
 }
+
 .content ul li {
   margin-bottom: 12px;
 }
@@ -334,18 +340,89 @@ footer {
   transition: color 0.3s ease;
 }
 
+.Foot-footer-list i {
+  font-size: 12px;
+  color: #d70027;
+}
+
 .Foot-footer-list:hover {
   color: #d70027;
   text-decoration: underline;
 }
 
-.footer-bottom {
-  color: #fff;
-  text-align: center;
-  padding: 15px 50px;
-  font-size: 13px;
-  border-top: solid 1px #d70027;
+.footer-hotline {
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
 }
+
+.footer-hotline i {
+  color: #d70027;
+}
+
+/* Cột logo */
+.footer-logo-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-logo {
+  height: 95px;
+  max-width: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply; /* Tự động xóa nền trắng logo */
+}
+
+.footer-logo[src=""],
+.footer-logo:not([src]) {
+  display: none;
+}
+
+.footer-slogan {
+  font-size: 13px;
+  color: #555;
+  margin: 8px 0 14px 0;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+}
+
+.footer-socials a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.footer-socials a:hover {
+  background-color: #d70027;
+  color: #fff;
+  border-color: #d70027;
+}
+
+.footer-bottom {
+  background-color: #f1f2f4;
+  text-align: center;
+  padding: 15px 4%;
+  font-size: 13px;
+  border-top: solid 1px #e0e0e0;
+}
+
 p {
   font-size: 13px;
   color: #333;
@@ -368,7 +445,6 @@ p {
 
 .product-grid {
   display: grid;
-  /* grid-template-columns: repeat(4, 1fr); */
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
 }
@@ -407,7 +483,7 @@ p {
   color: #d70027;
   font-weight: bold;
   margin-bottom: 15px;
-  font-size: 14x;
+  font-size: 14px;
 }
 
 .product-card button {
@@ -810,7 +886,7 @@ p {
 @media (max-width: 768px) {
   .header-top {
     flex-wrap: wrap; /* Cho phép rớt dòng gọn gàng thay vì tràn mất icon giỏ hàng */
-    /* gap: 10px;
+/* gap: 10px;
     padding: 10px 15px;
   }
 
@@ -821,7 +897,7 @@ p {
   .others {
     flex: 0 0 auto;
     order: 2; /* Đưa cụm icon User & Giỏ hàng lên góc phải ngang hàng với Logo */
-  /* } */ 
+/* } */
 /* 
   .others li {
     padding: 0 8px;
@@ -829,13 +905,13 @@ p {
 
   .search-and-filter-wrapper {
     order: 3; Đưa thanh Tìm kiếm & Bộ lọc xuống hàng dưới, rộng full đẹp mắt */
-    /* width: 100%;
+/* width: 100%;
     justify-content: space-between;
   }
 
   .search-container {
     flex: 1; Ô tìm kiếm tự giãn hết khoảng trống còn lại */
-    /* width: auto;
+/* width: auto;
   }
 
   .header-bottom {
@@ -846,8 +922,8 @@ p {
     padding: 20px 15px;
   } */
 
-  /* Chuyển danh sách thành 2 cột rộng rãi, hình và chữ rõ ràng */
-  /* .product-grid {
+/* Chuyển danh sách thành 2 cột rộng rãi, hình và chữ rõ ràng */
+/* .product-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
@@ -856,15 +932,15 @@ p {
     height: 150px;
   } */
 
-  /* Cho phép thanh điều hướng tự xuống dòng nếu màn hình quá hẹp */
-  /* .breadcrumb-nav {
+/* Cho phép thanh điều hướng tự xuống dòng nếu màn hình quá hẹp */
+/* .breadcrumb-nav {
     flex-wrap: wrap;
     row-gap: 8px;
     font-size: 14px;
   } */
 
-  /* Trang chi tiết sản phẩm tự xếp dọc khi màn hình hẹp */
-  /* .detail-container {
+/* Trang chi tiết sản phẩm tự xếp dọc khi màn hình hẹp */
+/* .detail-container {
     flex-direction: column;
     padding: 20px;
     gap: 20px;
@@ -874,7 +950,7 @@ p {
     height: 260px;
   } */
 
-  /* .content {
+/* .content {
     flex-direction: column;
     gap: 30px;
   } */
