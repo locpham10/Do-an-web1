@@ -13,10 +13,34 @@ function khoiTaoDuLieuMau() {
   // 1. Tạo loại sản phẩm mẫu
   if (!localStorage.getItem("loaiSanPham")) {
     const loaiMau = [
-      { maLoai: "L01", tenLoai: "Apple", moTa: "Các điện thoại iPhone", trangThai: "hoatdong", hinh: "../Img/Apple/hangApple.png" },
-      { maLoai: "L02", tenLoai: "Samsung", moTa: "Các điện thoại của hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/hangSamsung.png" },
-      { maLoai: "L03", tenLoai: "Oppo", moTa: "Các điện thoại của hãng OPPO", trangThai: "hoatdong", hinh: "../Img/Oppo/hangOppo.png" },
-      { maLoai: "L04", tenLoai: "Xiaomi", moTa: "Các điện thoại của hãng Xiaomi", trangThai: "hoatdong", hinh: "" },
+      {
+        maLoai: "L01",
+        tenLoai: "Apple",
+        moTa: "Các điện thoại iPhone",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/hangApple.png",
+      },
+      {
+        maLoai: "L02",
+        tenLoai: "Samsung",
+        moTa: "Các điện thoại của hãng Samsung",
+        trangThai: "hoatdong",
+        hinh: "../Img/Samsung/hangSamsung.png",
+      },
+      {
+        maLoai: "L03",
+        tenLoai: "Oppo",
+        moTa: "Các điện thoại của hãng OPPO",
+        trangThai: "hoatdong",
+        hinh: "../Img/Oppo/hangOppo.png",
+      },
+      {
+        maLoai: "L04",
+        tenLoai: "Xiaomi",
+        moTa: "Các điện thoại của hãng Xiaomi",
+        trangThai: "hoatdong",
+        hinh: "",
+      },
     ];
     localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
   }
@@ -24,26 +48,226 @@ function khoiTaoDuLieuMau() {
   // 2. Tạo sản phẩm mẫu
   if (!localStorage.getItem("danhMucSanPham")) {
     const spMau = [
-      { maSP: "SP01", maLoai: "L01", tenLoai: "Apple", tenSP: "iPhone 15 Pro Max", price: 29990000, moTa: "Màn hình: 6.7 inch Super Retina XDR OLED, 2796 x 1290, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A17 Pro, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 12MP tele 5x + 12MP siêu rộng; Trước: 12MP\nPin & sạc: Khoảng 4422mAh, sạc nhanh có dây ~27W, sạc không dây MagSafe 15W\nHệ điều hành: iOS 17 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", trangThai: "hoatdong", hinh: "../Img/Apple/iPhone15_den.png", color: "Titan Tự Nhiên" },
-      { maSP: "SP02", maLoai: "L02", tenLoai: "Samsung", tenSP: "Galaxy S24 Ultra", price: 33990000, moTa: "Màn hình: 6.8 inch Dynamic AMOLED 2X, QHD+, 120Hz, kèm bút S Pen\nChip & bộ nhớ: Snapdragon 8 Gen 3 for Galaxy, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 12MP siêu rộng + 10MP tele 3x + 50MP tele 5x; Trước: 12MP\nPin & sạc: 5000mAh, sạc nhanh có dây 45W, sạc không dây 15W\nHệ điều hành: Android 14, One UI 6.1 (nâng cấp 7 năm)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/Samsung-galaxy-s24-ultra.png", color: "Đen Titan" },
-      { maSP: "SP03", maLoai: "L03", tenLoai: "Oppo", tenSP: "OPPO Find N3", price: 24990000, moTa: "Màn hình: Màn hình gập chính 7.82 inch AMOLED LTPO 120Hz + màn hình ngoài 6.31 inch\nChip & bộ nhớ: Snapdragon 8 Gen 2, RAM 16GB, bộ nhớ trong 512GB\nCamera: Sau: 48MP chính + 48MP siêu rộng + 64MP tele periscope 3x; Trước: 32MP\nPin & sạc: 4805mAh, sạc nhanh SUPERVOOC 67W, sạc không dây AIRVOOC 50W\nHệ điều hành: Android 13, ColorOS 13.2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/Oppo-find-N3.png", color: "Xanh lá" },
-      { maSP: "SP04", maLoai: "L01", tenLoai: "Apple", tenSP: "iPhone Duo", price: 69000000, moTa: "Màn hình: Màn hình gập OLED LTPO 120Hz, kích thước mở rộng khoảng 7.8 inch\nChip & bộ nhớ: Chip Apple thế hệ mới, RAM 12GB, bộ nhớ trong 512GB\nCamera: Sau: 48MP chính + 48MP siêu rộng; Trước: 18MP\nPin & sạc: Pin dung lượng lớn dùng cả ngày, sạc nhanh có dây, sạc không dây MagSafe\nHệ điều hành: iOS 26\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", trangThai: "hoatdong", hinh: "../Img/Apple/iphone_duo_night_sky.png", color: "Xanh Dương Sẫm" },
-      { maSP: "SP05", maLoai: "L01", tenLoai: "Apple", tenSP: "iPhone 16 Pro", price: 28990000, moTa: "Màn hình: 6.3 inch Super Retina XDR OLED, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A18 Pro, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 48MP siêu rộng + 12MP tele 5x; Trước: 12MP\nPin & sạc: Khoảng 3582mAh, sạc nhanh có dây ~30W, sạc không dây MagSafe 25W\nHệ điều hành: iOS 18 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", trangThai: "hoatdong", hinh: "../Img/Apple/iphone-16-pro-natural.png", color: "Titan Sa Mạc" },
-      { maSP: "SP06", maLoai: "L01", tenLoai: "Apple", tenSP: "iPhone 17 Pro", price: 24990000, moTa: "Màn hình: 6.3 inch Super Retina XDR OLED, 120Hz ProMotion\nChip & bộ nhớ: Apple A19 Pro, RAM 16GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 48MP siêu rộng; Trước: 18MP Center Stage\nPin & sạc: Pin dùng cả ngày, sạc nhanh có dây, sạc không dây MagSafe/Qi2 25W\nHệ điều hành: iOS 26\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", trangThai: "hoatdong", hinh: "../Img/Apple/iphone-17-pro.png", color: "Cam" },
-      { maSP: "SP07", maLoai: "L01", tenLoai: "Apple", tenSP: "iPhone Air", price: 31990000, moTa: "Màn hình: 6.5 inch Super Retina XDR OLED, 120Hz ProMotion, thiết kế siêu mỏng khoảng 5.6mm\nChip & bộ nhớ: Apple A19 Pro, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính; Trước: 18MP Center Stage\nPin & sạc: Pin dùng cả ngày, sạc nhanh có dây, sạc không dây MagSafe/Qi2\nHệ điều hành: iOS 26\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A, chỉ hỗ trợ eSIM\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", trangThai: "hoatdong", hinh: "../Img/Apple/iphone-air.png", color: "Trắng Ngọc" },
-      { maSP: "SP08", maLoai: "L02", tenLoai: "Samsung", tenSP: "Galaxy S25 Ultra", price: 31990000, moTa: "Màn hình: 6.9 inch Dynamic AMOLED 2X, QHD+, 120Hz, kèm bút S Pen\nChip & bộ nhớ: Snapdragon 8 Elite for Galaxy, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 50MP siêu rộng + 10MP tele 3x + 50MP tele 5x; Trước: 12MP\nPin & sạc: 5000mAh, sạc nhanh có dây 45W, sạc không dây 15W\nHệ điều hành: Android 15, One UI 7\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/Samsung-galaxy-s25-ultra.png", color: "Xám Titan" },
-      { maSP: "SP09", maLoai: "L02", tenLoai: "Samsung", tenSP: "Galaxy S26", price: 24990000, moTa: "Màn hình: 6.3 inch Dynamic AMOLED 2X, 120Hz\nChip & bộ nhớ: Exynos 2600 / Snapdragon 8 Elite Gen 5 for Galaxy (tùy thị trường), RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 12MP siêu rộng + 10MP tele 3x; Trước: 12MP\nPin & sạc: Khoảng 4300mAh, sạc nhanh có dây 25W, sạc không dây 15W\nHệ điều hành: Android 16, One UI 8.5\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/Samsung-galaxy-s26.png", color: "Đen" },
-      { maSP: "SP10", maLoai: "L02", tenLoai: "Samsung", tenSP: "Galaxy Z Fold7", price: 46990000, moTa: "Màn hình: Màn hình trong 8.0 inch Dynamic AMOLED 2X 120Hz + màn hình ngoài 6.5 inch\nChip & bộ nhớ: Snapdragon 8 Elite for Galaxy, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 12MP siêu rộng + 10MP tele 3x; Trước: 10MP (ngoài) + 10MP (trong)\nPin & sạc: 4400mAh, sạc nhanh có dây 25W, sạc không dây 15W\nHệ điều hành: Android 16, One UI 8\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/Samsung-galaxy-zfold7.png", color: "Xanh Bạc" },
-      { maSP: "SP11", maLoai: "L02", tenLoai: "Samsung", tenSP: "Galaxy A56 5G", price: 11990000, moTa: "Màn hình: 6.7 inch Super AMOLED, Full HD+, 120Hz\nChip & bộ nhớ: Exynos 1580, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 12MP siêu rộng + 5MP macro; Trước: 12MP\nPin & sạc: 5000mAh, sạc nhanh có dây 45W\nHệ điều hành: Android 15, One UI 7\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/Samsung-galaxy-a56-5g.png", color: "Xám" },
-      { maSP: "SP12", maLoai: "L03", tenLoai: "Oppo", tenSP: "OPPO Find X8 Pro", price: 29990000, moTa: "Màn hình: 6.78 inch AMOLED LTPO, 2K, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 9400, RAM 16GB, bộ nhớ trong 512GB\nCamera: Sau: 50MP chính + 50MP siêu rộng + 50MP tele 3x + 50MP tele 6x; Trước: 32MP\nPin & sạc: 5910mAh, sạc nhanh có dây 80W, sạc không dây 50W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/Oppo-find-x8-pro.png", color: "Đen Không Gian" },
-      { maSP: "SP13", maLoai: "L03", tenLoai: "Oppo", tenSP: "OPPO Reno14 Pro 5G", price: 19990000, moTa: "Màn hình: 6.83 inch AMOLED, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 8450, RAM 12GB, bộ nhớ trong 512GB\nCamera: Sau: 50MP chính + 50MP tele 3.5x + 8MP siêu rộng; Trước: 50MP\nPin & sạc: 6200mAh, sạc nhanh có dây 80W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/Oppo-reno14-pro.png", color: "Xanh Ngọc" },
-      { maSP: "SP14", maLoai: "L03", tenLoai: "Oppo", tenSP: "OPPO Reno13 5G", price: 12990000, moTa: "Màn hình: 6.59 inch AMOLED, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 8350, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 50MP tele 3x + 8MP siêu rộng; Trước: 50MP\nPin & sạc: 5600mAh, sạc nhanh có dây 80W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/Oppo-reno13-pro.png", color: "Tím" },
-      { maSP: "SP15", maLoai: "L03", tenLoai: "Oppo", tenSP: "OPPO A5 Pro 5G", price: 6990000, moTa: "Màn hình: 6.67 inch LCD, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 6300, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 2MP; Trước: 8MP\nPin & sạc: 5800mAh, sạc nhanh có dây 45W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/Oppo-a5-pro.png", color: "Xanh Dương" },
-      { maSP: "SP16", maLoai: "L04", tenLoai: "Xiaomi", tenSP: "Xiaomi 15 Ultra", price: 31990000, moTa: "Màn hình: 6.73 inch AMOLED LTPO, WQHD+, 120Hz\nChip & bộ nhớ: Snapdragon 8 Elite, RAM 16GB, bộ nhớ trong 512GB\nCamera: Sau (Leica): 50MP chính 1 inch + 50MP siêu rộng + 50MP tele 3x + 200MP tele periscope 4.3x; Trước: 32MP\nPin & sạc: 5410mAh, sạc nhanh có dây 90W, sạc không dây 80W\nHệ điều hành: Android 15, HyperOS 2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi", trangThai: "hoatdong", hinh: "../Img/Xiaomi/Xiaomi-15-ultra.png", color: "Đen" },
-      { maSP: "SP17", maLoai: "L04", tenLoai: "Xiaomi", tenSP: "Xiaomi 15", price: 19990000, moTa: "Màn hình: 6.36 inch AMOLED LTPO, 120Hz\nChip & bộ nhớ: Snapdragon 8 Elite, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau (Leica): 50MP chính + 50MP siêu rộng + 50MP tele 3x; Trước: 32MP\nPin & sạc: 5240mAh, sạc nhanh có dây 90W, sạc không dây 50W\nHệ điều hành: Android 15, HyperOS 2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi", trangThai: "hoatdong", hinh: "../Img/Xiaomi/Xiaomi-15.png", color: "Xanh Lá" },
-      { maSP: "SP18", maLoai: "L04", tenLoai: "Xiaomi", tenSP: "Xiaomi 14T Pro", price: 14990000, moTa: "Màn hình: 6.67 inch AMOLED, 144Hz\nChip & bộ nhớ: MediaTek Dimensity 9300+, RAM 12GB, bộ nhớ trong 512GB\nCamera: Sau (Leica): 50MP chính + 50MP tele 2.6x + 12MP siêu rộng; Trước: 32MP\nPin & sạc: 5000mAh, sạc nhanh có dây 120W\nHệ điều hành: Android 14, HyperOS\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi", trangThai: "hoatdong", hinh: "../Img/Xiaomi/Xiaomi-14t-pro.png", color: "Xám Titan" },
-      { maSP: "SP19", maLoai: "L04", tenLoai: "Xiaomi", tenSP: "Redmi Note 14 Pro+ 5G", price: 9990000, moTa: "Màn hình: 6.67 inch AMOLED, 120Hz\nChip & bộ nhớ: Snapdragon 7s Gen 3, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 8MP siêu rộng + 2MP macro; Trước: 20MP\nPin & sạc: 5110mAh, sạc nhanh có dây 90W\nHệ điều hành: Android 14, HyperOS\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi", trangThai: "hoatdong", hinh: "../Img/Xiaomi/Redmi-note-14prop.png", color: "Tím" },
-      { maSP: "SP20", maLoai: "L04", tenLoai: "Xiaomi", tenSP: "POCO F7", price: 11490000, moTa: "Màn hình: 6.83 inch AMOLED, 120Hz\nChip & bộ nhớ: Snapdragon 8s Gen 4, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 8MP siêu rộng; Trước: 20MP\nPin & sạc: 6500mAh, sạc nhanh có dây 90W\nHệ điều hành: Android 15, HyperOS 2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi", trangThai: "hoatdong", hinh: "../Img/Xiaomi/poco-f7.png", color: "Bạc" },
+      {
+        maSP: "SP01",
+        maLoai: "L01",
+        tenLoai: "Apple",
+        tenSP: "iPhone 15 Pro Max",
+        price: 29990000,
+        moTa: "Màn hình: 6.7 inch Super Retina XDR OLED, 2796 x 1290, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A17 Pro, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 12MP tele 5x + 12MP siêu rộng; Trước: 12MP\nPin & sạc: Khoảng 4422mAh, sạc nhanh có dây ~27W, sạc không dây MagSafe 15W\nHệ điều hành: iOS 17 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/iPhone15_den.png",
+        color: "Titan Tự Nhiên",
+      },
+      {
+        maSP: "SP02",
+        maLoai: "L02",
+        tenLoai: "Samsung",
+        tenSP: "Galaxy S24 Ultra",
+        price: 33990000,
+        moTa: "Màn hình: 6.8 inch Dynamic AMOLED 2X, QHD+, 120Hz, kèm bút S Pen\nChip & bộ nhớ: Snapdragon 8 Gen 3 for Galaxy, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 12MP siêu rộng + 10MP tele 3x + 50MP tele 5x; Trước: 12MP\nPin & sạc: 5000mAh, sạc nhanh có dây 45W, sạc không dây 15W\nHệ điều hành: Android 14, One UI 6.1 (nâng cấp 7 năm)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung",
+        trangThai: "hoatdong",
+        hinh: "../Img/Samsung/Samsung-galaxy-s24-ultra.png",
+        color: "Đen Titan",
+      },
+      {
+        maSP: "SP03",
+        maLoai: "L03",
+        tenLoai: "Oppo",
+        tenSP: "OPPO Find N3",
+        price: 24990000,
+        moTa: "Màn hình: Màn hình gập chính 7.82 inch AMOLED LTPO 120Hz + màn hình ngoài 6.31 inch\nChip & bộ nhớ: Snapdragon 8 Gen 2, RAM 16GB, bộ nhớ trong 512GB\nCamera: Sau: 48MP chính + 48MP siêu rộng + 64MP tele periscope 3x; Trước: 32MP\nPin & sạc: 4805mAh, sạc nhanh SUPERVOOC 67W, sạc không dây AIRVOOC 50W\nHệ điều hành: Android 13, ColorOS 13.2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO",
+        trangThai: "hoatdong",
+        hinh: "../Img/OPPO/Oppo-find-N3.png",
+        color: "Xanh lá",
+      },
+      {
+        maSP: "SP04",
+        maLoai: "L01",
+        tenLoai: "Apple",
+        tenSP: "iPhone Duo",
+        price: 69000000,
+        moTa: "Màn hình: Màn hình gập OLED LTPO 120Hz, kích thước mở rộng khoảng 7.8 inch\nChip & bộ nhớ: Chip Apple thế hệ mới, RAM 12GB, bộ nhớ trong 512GB\nCamera: Sau: 48MP chính + 48MP siêu rộng; Trước: 18MP\nPin & sạc: Pin dung lượng lớn dùng cả ngày, sạc nhanh có dây, sạc không dây MagSafe\nHệ điều hành: iOS 26\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/iphone_duo_night_sky.png",
+        color: "Xanh Dương Sẫm",
+      },
+      {
+        maSP: "SP05",
+        maLoai: "L01",
+        tenLoai: "Apple",
+        tenSP: "iPhone 16 Pro",
+        price: 28990000,
+        moTa: "Màn hình: 6.3 inch Super Retina XDR OLED, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A18 Pro, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 48MP siêu rộng + 12MP tele 5x; Trước: 12MP\nPin & sạc: Khoảng 3582mAh, sạc nhanh có dây ~30W, sạc không dây MagSafe 25W\nHệ điều hành: iOS 18 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/iphone-16-pro-natural.png",
+        color: "Titan Sa Mạc",
+      },
+      {
+        maSP: "SP06",
+        maLoai: "L01",
+        tenLoai: "Apple",
+        tenSP: "iPhone 17 Pro",
+        price: 24990000,
+        moTa: "Màn hình: 6.3 inch Super Retina XDR OLED, 120Hz ProMotion\nChip & bộ nhớ: Apple A19 Pro, RAM 16GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 48MP siêu rộng; Trước: 18MP Center Stage\nPin & sạc: Pin dùng cả ngày, sạc nhanh có dây, sạc không dây MagSafe/Qi2 25W\nHệ điều hành: iOS 26\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/iphone-17-pro.png",
+        color: "Cam",
+      },
+      {
+        maSP: "SP07",
+        maLoai: "L01",
+        tenLoai: "Apple",
+        tenSP: "iPhone Air",
+        price: 31990000,
+        moTa: "Màn hình: 6.5 inch Super Retina XDR OLED, 120Hz ProMotion, thiết kế siêu mỏng khoảng 5.6mm\nChip & bộ nhớ: Apple A19 Pro, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính; Trước: 18MP Center Stage\nPin & sạc: Pin dùng cả ngày, sạc nhanh có dây, sạc không dây MagSafe/Qi2\nHệ điều hành: iOS 26\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A, chỉ hỗ trợ eSIM\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/iphone-air.png",
+        color: "Trắng Ngọc",
+      },
+      {
+        maSP: "SP08",
+        maLoai: "L02",
+        tenLoai: "Samsung",
+        tenSP: "Galaxy S25 Ultra",
+        price: 31990000,
+        moTa: "Màn hình: 6.9 inch Dynamic AMOLED 2X, QHD+, 120Hz, kèm bút S Pen\nChip & bộ nhớ: Snapdragon 8 Elite for Galaxy, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 50MP siêu rộng + 10MP tele 3x + 50MP tele 5x; Trước: 12MP\nPin & sạc: 5000mAh, sạc nhanh có dây 45W, sạc không dây 15W\nHệ điều hành: Android 15, One UI 7\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung",
+        trangThai: "hoatdong",
+        hinh: "../Img/Samsung/Samsung-galaxy-s25-ultra.png",
+        color: "Xám Titan",
+      },
+      {
+        maSP: "SP09",
+        maLoai: "L02",
+        tenLoai: "Samsung",
+        tenSP: "Galaxy S26",
+        price: 24990000,
+        moTa: "Màn hình: 6.3 inch Dynamic AMOLED 2X, 120Hz\nChip & bộ nhớ: Exynos 2600 / Snapdragon 8 Elite Gen 5 for Galaxy (tùy thị trường), RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 12MP siêu rộng + 10MP tele 3x; Trước: 12MP\nPin & sạc: Khoảng 4300mAh, sạc nhanh có dây 25W, sạc không dây 15W\nHệ điều hành: Android 16, One UI 8.5\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung",
+        trangThai: "hoatdong",
+        hinh: "../Img/Samsung/Samsung-galaxy-s26.png",
+        color: "Đen",
+      },
+      {
+        maSP: "SP10",
+        maLoai: "L02",
+        tenLoai: "Samsung",
+        tenSP: "Galaxy Z Fold7",
+        price: 46990000,
+        moTa: "Màn hình: Màn hình trong 8.0 inch Dynamic AMOLED 2X 120Hz + màn hình ngoài 6.5 inch\nChip & bộ nhớ: Snapdragon 8 Elite for Galaxy, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 12MP siêu rộng + 10MP tele 3x; Trước: 10MP (ngoài) + 10MP (trong)\nPin & sạc: 4400mAh, sạc nhanh có dây 25W, sạc không dây 15W\nHệ điều hành: Android 16, One UI 8\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung",
+        trangThai: "hoatdong",
+        hinh: "../Img/Samsung/Samsung-galaxy-zfold7.png",
+        color: "Xanh Bạc",
+      },
+      {
+        maSP: "SP11",
+        maLoai: "L02",
+        tenLoai: "Samsung",
+        tenSP: "Galaxy A56 5G",
+        price: 11990000,
+        moTa: "Màn hình: 6.7 inch Super AMOLED, Full HD+, 120Hz\nChip & bộ nhớ: Exynos 1580, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 12MP siêu rộng + 5MP macro; Trước: 12MP\nPin & sạc: 5000mAh, sạc nhanh có dây 45W\nHệ điều hành: Android 15, One UI 7\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung",
+        trangThai: "hoatdong",
+        hinh: "../Img/Samsung/Samsung-galaxy-a56-5g.png",
+        color: "Xám",
+      },
+      {
+        maSP: "SP12",
+        maLoai: "L03",
+        tenLoai: "Oppo",
+        tenSP: "OPPO Find X8 Pro",
+        price: 29990000,
+        moTa: "Màn hình: 6.78 inch AMOLED LTPO, 2K, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 9400, RAM 16GB, bộ nhớ trong 512GB\nCamera: Sau: 50MP chính + 50MP siêu rộng + 50MP tele 3x + 50MP tele 6x; Trước: 32MP\nPin & sạc: 5910mAh, sạc nhanh có dây 80W, sạc không dây 50W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO",
+        trangThai: "hoatdong",
+        hinh: "../Img/OPPO/Oppo-find-x8-pro.png",
+        color: "Đen Không Gian",
+      },
+      {
+        maSP: "SP13",
+        maLoai: "L03",
+        tenLoai: "Oppo",
+        tenSP: "OPPO Reno14 Pro 5G",
+        price: 19990000,
+        moTa: "Màn hình: 6.83 inch AMOLED, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 8450, RAM 12GB, bộ nhớ trong 512GB\nCamera: Sau: 50MP chính + 50MP tele 3.5x + 8MP siêu rộng; Trước: 50MP\nPin & sạc: 6200mAh, sạc nhanh có dây 80W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO",
+        trangThai: "hoatdong",
+        hinh: "../Img/OPPO/Oppo-reno14-pro.png",
+        color: "Xanh Ngọc",
+      },
+      {
+        maSP: "SP14",
+        maLoai: "L03",
+        tenLoai: "Oppo",
+        tenSP: "OPPO Reno13 5G",
+        price: 12990000,
+        moTa: "Màn hình: 6.59 inch AMOLED, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 8350, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 50MP tele 3x + 8MP siêu rộng; Trước: 50MP\nPin & sạc: 5600mAh, sạc nhanh có dây 80W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO",
+        trangThai: "hoatdong",
+        hinh: "../Img/OPPO/Oppo-reno13-pro.png",
+        color: "Tím",
+      },
+      {
+        maSP: "SP15",
+        maLoai: "L03",
+        tenLoai: "Oppo",
+        tenSP: "OPPO A5 Pro 5G",
+        price: 6990000,
+        moTa: "Màn hình: 6.67 inch LCD, 120Hz\nChip & bộ nhớ: MediaTek Dimensity 6300, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 2MP; Trước: 8MP\nPin & sạc: 5800mAh, sạc nhanh có dây 45W\nHệ điều hành: Android 15, ColorOS 15\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO",
+        trangThai: "hoatdong",
+        hinh: "../Img/OPPO/Oppo-a5-pro.png",
+        color: "Xanh Dương",
+      },
+      {
+        maSP: "SP16",
+        maLoai: "L04",
+        tenLoai: "Xiaomi",
+        tenSP: "Xiaomi 15 Ultra",
+        price: 31990000,
+        moTa: "Màn hình: 6.73 inch AMOLED LTPO, WQHD+, 120Hz\nChip & bộ nhớ: Snapdragon 8 Elite, RAM 16GB, bộ nhớ trong 512GB\nCamera: Sau (Leica): 50MP chính 1 inch + 50MP siêu rộng + 50MP tele 3x + 200MP tele periscope 4.3x; Trước: 32MP\nPin & sạc: 5410mAh, sạc nhanh có dây 90W, sạc không dây 80W\nHệ điều hành: Android 15, HyperOS 2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi",
+        trangThai: "hoatdong",
+        hinh: "../Img/Xiaomi/Xiaomi-15-ultra.png",
+        color: "Đen",
+      },
+      {
+        maSP: "SP17",
+        maLoai: "L04",
+        tenLoai: "Xiaomi",
+        tenSP: "Xiaomi 15",
+        price: 19990000,
+        moTa: "Màn hình: 6.36 inch AMOLED LTPO, 120Hz\nChip & bộ nhớ: Snapdragon 8 Elite, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau (Leica): 50MP chính + 50MP siêu rộng + 50MP tele 3x; Trước: 32MP\nPin & sạc: 5240mAh, sạc nhanh có dây 90W, sạc không dây 50W\nHệ điều hành: Android 15, HyperOS 2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi",
+        trangThai: "hoatdong",
+        hinh: "../Img/Xiaomi/Xiaomi-15.png",
+        color: "Xanh Lá",
+      },
+      {
+        maSP: "SP18",
+        maLoai: "L04",
+        tenLoai: "Xiaomi",
+        tenSP: "Xiaomi 14T Pro",
+        price: 14990000,
+        moTa: "Màn hình: 6.67 inch AMOLED, 144Hz\nChip & bộ nhớ: MediaTek Dimensity 9300+, RAM 12GB, bộ nhớ trong 512GB\nCamera: Sau (Leica): 50MP chính + 50MP tele 2.6x + 12MP siêu rộng; Trước: 32MP\nPin & sạc: 5000mAh, sạc nhanh có dây 120W\nHệ điều hành: Android 14, HyperOS\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi",
+        trangThai: "hoatdong",
+        hinh: "../Img/Xiaomi/Xiaomi-14t-pro.png",
+        color: "Xám Titan",
+      },
+      {
+        maSP: "SP19",
+        maLoai: "L04",
+        tenLoai: "Xiaomi",
+        tenSP: "Redmi Note 14 Pro+ 5G",
+        price: 9990000,
+        moTa: "Màn hình: 6.67 inch AMOLED, 120Hz\nChip & bộ nhớ: Snapdragon 7s Gen 3, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 8MP siêu rộng + 2MP macro; Trước: 20MP\nPin & sạc: 5110mAh, sạc nhanh có dây 90W\nHệ điều hành: Android 14, HyperOS\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi",
+        trangThai: "hoatdong",
+        hinh: "../Img/Xiaomi/Redmi-note-14prop.png",
+        color: "Tím",
+      },
+      {
+        maSP: "SP20",
+        maLoai: "L04",
+        tenLoai: "Xiaomi",
+        tenSP: "POCO F7",
+        price: 11490000,
+        moTa: "Màn hình: 6.83 inch AMOLED, 120Hz\nChip & bộ nhớ: Snapdragon 8s Gen 4, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 50MP chính + 8MP siêu rộng; Trước: 20MP\nPin & sạc: 6500mAh, sạc nhanh có dây 90W\nHệ điều hành: Android 15, HyperOS 2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 18 tháng chính hãng Xiaomi",
+        trangThai: "hoatdong",
+        hinh: "../Img/Xiaomi/poco-f7.png",
+        color: "Bạc",
+      },
     ];
     localStorage.setItem("danhMucSanPham", JSON.stringify(spMau));
   }
@@ -52,27 +276,144 @@ function khoiTaoDuLieuMau() {
   if (!localStorage.getItem("saved_imports")) {
     const phieuNhapMau = [
       {
-        code: "PN001", date: "2026-10-25", status: "completed", totalAmount: 4405400000,
+        code: "PN001",
+        date: "2026-10-25",
+        status: "completed",
+        totalAmount: 4405400000,
         items: [
-          { maSP: "SP01", tenSP: "iPhone 15 Pro Max", hinh: "../Img/Apple/iPhone15_den.png", qty: 10, price: 25490000 },
-          { maSP: "SP02", tenSP: "Galaxy S24 Ultra", hinh: "../Img/Samsung/Samsung-galaxy-s24-ultra.png", qty: 10, price: 28890000 },
-          { maSP: "SP03", tenSP: "OPPO Find N3", hinh: "../Img/Oppo/Oppo-find-N3.png", qty: 10, price: 21240000 },
-          { maSP: "SP04", tenSP: "iPhone Duo", hinh: "../Img/Apple/iphone_duo_night_sky.png", qty: 10, price: 58650000 },
-          { maSP: "SP05", tenSP: "iPhone 16 Pro", hinh: "", qty: 10, price: 24640000 },
-          { maSP: "SP06", tenSP: "iPhone 17", hinh: "", qty: 10, price: 21240000 },
-          { maSP: "SP07", tenSP: "iPhone Air", hinh: "", qty: 10, price: 27190000 },
-          { maSP: "SP08", tenSP: "Galaxy S25 Ultra", hinh: "", qty: 10, price: 27190000 },
-          { maSP: "SP09", tenSP: "Galaxy S26", hinh: "", qty: 10, price: 21240000 },
-          { maSP: "SP10", tenSP: "Galaxy Z Fold7", hinh: "", qty: 10, price: 39940000 },
-          { maSP: "SP11", tenSP: "Galaxy A56 5G", hinh: "", qty: 10, price: 10190000 },
-          { maSP: "SP12", tenSP: "OPPO Find X8 Pro", hinh: "", qty: 10, price: 25490000 },
-          { maSP: "SP13", tenSP: "OPPO Reno14 Pro 5G", hinh: "", qty: 10, price: 16990000 },
-          { maSP: "SP14", tenSP: "OPPO Reno13 5G", hinh: "", qty: 10, price: 11040000 },
-          { maSP: "SP15", tenSP: "OPPO A5 Pro 5G", hinh: "", qty: 10, price: 5940000 },
-          { maSP: "SP16", tenSP: "Xiaomi 15 Ultra", hinh: "", qty: 10, price: 27190000 },
-          { maSP: "SP17", tenSP: "Xiaomi 15", hinh: "", qty: 10, price: 16990000 },
-          { maSP: "SP18", tenSP: "Xiaomi 14T Pro", hinh: "", qty: 10, price: 12740000 },
-          { maSP: "SP19", tenSP: "Redmi Note 14 Pro+ 5G", hinh: "", qty: 10, price: 8490000 },
+          {
+            maSP: "SP01",
+            tenSP: "iPhone 15 Pro Max",
+            hinh: "../Img/Apple/iPhone15_den.png",
+            qty: 10,
+            price: 25490000,
+          },
+          {
+            maSP: "SP02",
+            tenSP: "Galaxy S24 Ultra",
+            hinh: "../Img/Samsung/Samsung-galaxy-s24-ultra.png",
+            qty: 10,
+            price: 28890000,
+          },
+          {
+            maSP: "SP03",
+            tenSP: "OPPO Find N3",
+            hinh: "../Img/Oppo/Oppo-find-N3.png",
+            qty: 10,
+            price: 21240000,
+          },
+          {
+            maSP: "SP04",
+            tenSP: "iPhone Duo",
+            hinh: "../Img/Apple/iphone_duo_night_sky.png",
+            qty: 10,
+            price: 58650000,
+          },
+          {
+            maSP: "SP05",
+            tenSP: "iPhone 16 Pro",
+            hinh: "",
+            qty: 10,
+            price: 24640000,
+          },
+          {
+            maSP: "SP06",
+            tenSP: "iPhone 17",
+            hinh: "",
+            qty: 10,
+            price: 21240000,
+          },
+          {
+            maSP: "SP07",
+            tenSP: "iPhone Air",
+            hinh: "",
+            qty: 10,
+            price: 27190000,
+          },
+          {
+            maSP: "SP08",
+            tenSP: "Galaxy S25 Ultra",
+            hinh: "",
+            qty: 10,
+            price: 27190000,
+          },
+          {
+            maSP: "SP09",
+            tenSP: "Galaxy S26",
+            hinh: "",
+            qty: 10,
+            price: 21240000,
+          },
+          {
+            maSP: "SP10",
+            tenSP: "Galaxy Z Fold7",
+            hinh: "",
+            qty: 10,
+            price: 39940000,
+          },
+          {
+            maSP: "SP11",
+            tenSP: "Galaxy A56 5G",
+            hinh: "",
+            qty: 10,
+            price: 10190000,
+          },
+          {
+            maSP: "SP12",
+            tenSP: "OPPO Find X8 Pro",
+            hinh: "",
+            qty: 10,
+            price: 25490000,
+          },
+          {
+            maSP: "SP13",
+            tenSP: "OPPO Reno14 Pro 5G",
+            hinh: "",
+            qty: 10,
+            price: 16990000,
+          },
+          {
+            maSP: "SP14",
+            tenSP: "OPPO Reno13 5G",
+            hinh: "",
+            qty: 10,
+            price: 11040000,
+          },
+          {
+            maSP: "SP15",
+            tenSP: "OPPO A5 Pro 5G",
+            hinh: "",
+            qty: 10,
+            price: 5940000,
+          },
+          {
+            maSP: "SP16",
+            tenSP: "Xiaomi 15 Ultra",
+            hinh: "",
+            qty: 10,
+            price: 27190000,
+          },
+          {
+            maSP: "SP17",
+            tenSP: "Xiaomi 15",
+            hinh: "",
+            qty: 10,
+            price: 16990000,
+          },
+          {
+            maSP: "SP18",
+            tenSP: "Xiaomi 14T Pro",
+            hinh: "",
+            qty: 10,
+            price: 12740000,
+          },
+          {
+            maSP: "SP19",
+            tenSP: "Redmi Note 14 Pro+ 5G",
+            hinh: "",
+            qty: 10,
+            price: 8490000,
+          },
           { maSP: "SP20", tenSP: "POCO F7", hinh: "", qty: 10, price: 9770000 },
         ],
       },
@@ -83,26 +424,186 @@ function khoiTaoDuLieuMau() {
   // 4. Tạo bảng giá bán mẫu
   if (!localStorage.getItem("saved_pricing")) {
     const giaMau = [
-      { maSP: "SP01", tenSP: "iPhone 15 Pro Max", hinh: "../Img/Apple/iPhone15_den.png", totalQty: 10, totalCost: 254900000, importPrice: 25490000, retailPrice: 29990000 },
-      { maSP: "SP02", tenSP: "Galaxy S24 Ultra", hinh: "../Img/Samsung/Samsung-galaxy-s24-ultra.png", totalQty: 10, totalCost: 288900000, importPrice: 28890000, retailPrice: 33990000 },
-      { maSP: "SP03", tenSP: "OPPO Find N3", hinh: "../Img/Oppo/Oppo-find-N3.png", totalQty: 10, totalCost: 212400000, importPrice: 21240000, retailPrice: 24990000 },
-      { maSP: "SP04", tenSP: "iPhone Duo", hinh: "../Img/Apple/iphone_duo_night_sky.png", totalQty: 10, totalCost: 586500000, importPrice: 58650000, retailPrice: 69000000 },
-      { maSP: "SP05", tenSP: "iPhone 16 Pro", hinh: "", totalQty: 10, totalCost: 246400000, importPrice: 24640000, retailPrice: 28990000 },
-      { maSP: "SP06", tenSP: "iPhone 17", hinh: "", totalQty: 10, totalCost: 212400000, importPrice: 21240000, retailPrice: 24990000 },
-      { maSP: "SP07", tenSP: "iPhone Air", hinh: "", totalQty: 10, totalCost: 271900000, importPrice: 27190000, retailPrice: 31990000 },
-      { maSP: "SP08", tenSP: "Galaxy S25 Ultra", hinh: "", totalQty: 10, totalCost: 271900000, importPrice: 27190000, retailPrice: 31990000 },
-      { maSP: "SP09", tenSP: "Galaxy S26", hinh: "", totalQty: 10, totalCost: 212400000, importPrice: 21240000, retailPrice: 24990000 },
-      { maSP: "SP10", tenSP: "Galaxy Z Fold7", hinh: "", totalQty: 10, totalCost: 399400000, importPrice: 39940000, retailPrice: 46990000 },
-      { maSP: "SP11", tenSP: "Galaxy A56 5G", hinh: "", totalQty: 10, totalCost: 101900000, importPrice: 10190000, retailPrice: 11990000 },
-      { maSP: "SP12", tenSP: "OPPO Find X8 Pro", hinh: "", totalQty: 10, totalCost: 254900000, importPrice: 25490000, retailPrice: 29990000 },
-      { maSP: "SP13", tenSP: "OPPO Reno14 Pro 5G", hinh: "", totalQty: 10, totalCost: 169900000, importPrice: 16990000, retailPrice: 19990000 },
-      { maSP: "SP14", tenSP: "OPPO Reno13 5G", hinh: "", totalQty: 10, totalCost: 110400000, importPrice: 11040000, retailPrice: 12990000 },
-      { maSP: "SP15", tenSP: "OPPO A5 Pro 5G", hinh: "", totalQty: 10, totalCost: 59400000, importPrice: 5940000, retailPrice: 6990000 },
-      { maSP: "SP16", tenSP: "Xiaomi 15 Ultra", hinh: "", totalQty: 10, totalCost: 271900000, importPrice: 27190000, retailPrice: 31990000 },
-      { maSP: "SP17", tenSP: "Xiaomi 15", hinh: "", totalQty: 10, totalCost: 169900000, importPrice: 16990000, retailPrice: 19990000 },
-      { maSP: "SP18", tenSP: "Xiaomi 14T Pro", hinh: "", totalQty: 10, totalCost: 127400000, importPrice: 12740000, retailPrice: 14990000 },
-      { maSP: "SP19", tenSP: "Redmi Note 14 Pro+ 5G", hinh: "", totalQty: 10, totalCost: 84900000, importPrice: 8490000, retailPrice: 9990000 },
-      { maSP: "SP20", tenSP: "POCO F7", hinh: "", totalQty: 10, totalCost: 97700000, importPrice: 9770000, retailPrice: 11490000 },
+      {
+        maSP: "SP01",
+        tenSP: "iPhone 15 Pro Max",
+        hinh: "../Img/Apple/iPhone15_den.png",
+        totalQty: 10,
+        totalCost: 254900000,
+        importPrice: 25490000,
+        retailPrice: 29990000,
+      },
+      {
+        maSP: "SP02",
+        tenSP: "Galaxy S24 Ultra",
+        hinh: "../Img/Samsung/Samsung-galaxy-s24-ultra.png",
+        totalQty: 10,
+        totalCost: 288900000,
+        importPrice: 28890000,
+        retailPrice: 33990000,
+      },
+      {
+        maSP: "SP03",
+        tenSP: "OPPO Find N3",
+        hinh: "../Img/Oppo/Oppo-find-N3.png",
+        totalQty: 10,
+        totalCost: 212400000,
+        importPrice: 21240000,
+        retailPrice: 24990000,
+      },
+      {
+        maSP: "SP04",
+        tenSP: "iPhone Duo",
+        hinh: "../Img/Apple/iphone_duo_night_sky.png",
+        totalQty: 10,
+        totalCost: 586500000,
+        importPrice: 58650000,
+        retailPrice: 69000000,
+      },
+      {
+        maSP: "SP05",
+        tenSP: "iPhone 16 Pro",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 246400000,
+        importPrice: 24640000,
+        retailPrice: 28990000,
+      },
+      {
+        maSP: "SP06",
+        tenSP: "iPhone 17",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 212400000,
+        importPrice: 21240000,
+        retailPrice: 24990000,
+      },
+      {
+        maSP: "SP07",
+        tenSP: "iPhone Air",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 271900000,
+        importPrice: 27190000,
+        retailPrice: 31990000,
+      },
+      {
+        maSP: "SP08",
+        tenSP: "Galaxy S25 Ultra",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 271900000,
+        importPrice: 27190000,
+        retailPrice: 31990000,
+      },
+      {
+        maSP: "SP09",
+        tenSP: "Galaxy S26",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 212400000,
+        importPrice: 21240000,
+        retailPrice: 24990000,
+      },
+      {
+        maSP: "SP10",
+        tenSP: "Galaxy Z Fold7",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 399400000,
+        importPrice: 39940000,
+        retailPrice: 46990000,
+      },
+      {
+        maSP: "SP11",
+        tenSP: "Galaxy A56 5G",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 101900000,
+        importPrice: 10190000,
+        retailPrice: 11990000,
+      },
+      {
+        maSP: "SP12",
+        tenSP: "OPPO Find X8 Pro",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 254900000,
+        importPrice: 25490000,
+        retailPrice: 29990000,
+      },
+      {
+        maSP: "SP13",
+        tenSP: "OPPO Reno14 Pro 5G",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 169900000,
+        importPrice: 16990000,
+        retailPrice: 19990000,
+      },
+      {
+        maSP: "SP14",
+        tenSP: "OPPO Reno13 5G",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 110400000,
+        importPrice: 11040000,
+        retailPrice: 12990000,
+      },
+      {
+        maSP: "SP15",
+        tenSP: "OPPO A5 Pro 5G",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 59400000,
+        importPrice: 5940000,
+        retailPrice: 6990000,
+      },
+      {
+        maSP: "SP16",
+        tenSP: "Xiaomi 15 Ultra",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 271900000,
+        importPrice: 27190000,
+        retailPrice: 31990000,
+      },
+      {
+        maSP: "SP17",
+        tenSP: "Xiaomi 15",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 169900000,
+        importPrice: 16990000,
+        retailPrice: 19990000,
+      },
+      {
+        maSP: "SP18",
+        tenSP: "Xiaomi 14T Pro",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 127400000,
+        importPrice: 12740000,
+        retailPrice: 14990000,
+      },
+      {
+        maSP: "SP19",
+        tenSP: "Redmi Note 14 Pro+ 5G",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 84900000,
+        importPrice: 8490000,
+        retailPrice: 9990000,
+      },
+      {
+        maSP: "SP20",
+        tenSP: "POCO F7",
+        hinh: "",
+        totalQty: 10,
+        totalCost: 97700000,
+        importPrice: 9770000,
+        retailPrice: 11490000,
+      },
     ];
     localStorage.setItem("saved_pricing", JSON.stringify(giaMau));
   }
@@ -160,7 +661,7 @@ function showSlides(n) {
 
 function isIndexPage() {
   const path = window.location.pathname;
-  return path.endsWith('index.html') || path.endsWith('/') || path === '';
+  return path.endsWith("index.html") || path.endsWith("/") || path === "";
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -282,8 +783,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loginTab.addEventListener("click", window.showLogin);
     registerTab.addEventListener("click", showRegister);
-    document.getElementById("goRegister").addEventListener("click", showRegister);
-    document.getElementById("goLogin").addEventListener("click", window.showLogin);
+    document
+      .getElementById("goRegister")
+      .addEventListener("click", showRegister);
+    document
+      .getElementById("goLogin")
+      .addEventListener("click", window.showLogin);
     forgotPassword.addEventListener("click", showForgot);
     backToLogin.addEventListener("click", window.showLogin);
 
@@ -302,7 +807,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       let taiKhoan = JSON.parse(localStorage.getItem("taiKhoan")) || [];
       const daTonTai = taiKhoan.some(function (account) {
-        return (account.email.toLowerCase() === email || account.soDienThoai === soDienThoai);
+        return (
+          account.email.toLowerCase() === email ||
+          account.soDienThoai === soDienThoai
+        );
       });
 
       if (daTonTai) {
@@ -310,7 +818,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const nguoiDung = { hoTen: hoTen, soDienThoai: soDienThoai, email: email, matKhau: matKhau };
+      const nguoiDung = {
+        hoTen: hoTen,
+        soDienThoai: soDienThoai,
+        email: email,
+        matKhau: matKhau,
+      };
       taiKhoan.push(nguoiDung);
       localStorage.setItem("taiKhoan", JSON.stringify(taiKhoan));
       alert("Đăng ký thành công!");
@@ -325,7 +838,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const taiKhoan = JSON.parse(localStorage.getItem("taiKhoan")) || [];
 
       const nguoiDung = taiKhoan.find(function (account) {
-        return ((account.email.toLowerCase() === taiKhoanNhap.toLowerCase() || account.soDienThoai === taiKhoanNhap) && account.matKhau === matKhauNhap);
+        return (
+          (account.email.toLowerCase() === taiKhoanNhap.toLowerCase() ||
+            account.soDienThoai === taiKhoanNhap) &&
+          account.matKhau === matKhauNhap
+        );
       });
 
       if (!nguoiDung) {
@@ -333,18 +850,28 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const danhSachNgungHoatDong = JSON.parse(localStorage.getItem("ngunghoatdong")) || [];
+      const danhSachNgungHoatDong =
+        JSON.parse(localStorage.getItem("ngunghoatdong")) || [];
       const isLocked = danhSachNgungHoatDong.some(function (item) {
         if (typeof item === "string") {
-          return (item.toLowerCase() === nguoiDung.email.toLowerCase() || item === nguoiDung.soDienThoai);
+          return (
+            item.toLowerCase() === nguoiDung.email.toLowerCase() ||
+            item === nguoiDung.soDienThoai
+          );
         } else if (typeof item === "object" && item !== null) {
-          return ((item.email && item.email.toLowerCase() === nguoiDung.email.toLowerCase()) || (item.soDienThoai && item.soDienThoai === nguoiDung.soDienThoai));
+          return (
+            (item.email &&
+              item.email.toLowerCase() === nguoiDung.email.toLowerCase()) ||
+            (item.soDienThoai && item.soDienThoai === nguoiDung.soDienThoai)
+          );
         }
         return false;
       });
 
       if (isLocked) {
-        alert("Tài khoản của bạn đã bị ngừng hoạt động bởi quản trị viên! Không thể đăng nhập.");
+        alert(
+          "Tài khoản của bạn đã bị ngừng hoạt động bởi quản trị viên! Không thể đăng nhập.",
+        );
         return;
       }
 
@@ -358,10 +885,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     forgotForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      const email = document.getElementById("forgotEmail").value.trim().toLowerCase();
+      const email = document
+        .getElementById("forgotEmail")
+        .value.trim()
+        .toLowerCase();
       const soDienThoai = document.getElementById("forgotPhone").value.trim();
       const matKhauMoi = document.getElementById("newPassword").value;
-      const xacNhanMatKhau = document.getElementById("confirmNewPassword").value;
+      const xacNhanMatKhau =
+        document.getElementById("confirmNewPassword").value;
 
       if (matKhauMoi !== xacNhanMatKhau) {
         alert("Mật khẩu xác nhận không trùng khớp!");
@@ -370,7 +901,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
       let taiKhoan = JSON.parse(localStorage.getItem("taiKhoan")) || [];
       const nguoiDung = taiKhoan.find(function (account) {
-        return (account.email.toLowerCase() === email && account.soDienThoai === soDienThoai);
+        return (
+          account.email.toLowerCase() === email &&
+          account.soDienThoai === soDienThoai
+        );
       });
 
       if (!nguoiDung) {
@@ -378,14 +912,18 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const danhSachNgungHoatDong = JSON.parse(localStorage.getItem("ngunghoatdong")) || [];
+      const danhSachNgungHoatDong =
+        JSON.parse(localStorage.getItem("ngunghoatdong")) || [];
       const isLocked = danhSachNgungHoatDong.some(function (item) {
-        const val = typeof item === "string" ? item : item.email || item.soDienThoai;
+        const val =
+          typeof item === "string" ? item : item.email || item.soDienThoai;
         return val && (val.toLowerCase() === email || val === soDienThoai);
       });
 
       if (isLocked) {
-        alert("Tài khoản này đã bị ngừng hoạt động, không thể thực hiện thao tác này!");
+        alert(
+          "Tài khoản này đã bị ngừng hoạt động, không thể thực hiện thao tác này!",
+        );
         return;
       }
 
@@ -419,8 +957,13 @@ let allProducts = [];
 for (let i = 0; i < rawProducts.length; i++) {
   let sp = rawProducts[i];
   if (sp.trangThai !== "an") {
-    let giaBanObj = pricingData.find((p) => (p.maSP || p.code) === sp.maSP) || pricingData.find((p) => (p.tenSP || p.name) === sp.tenSP);
-    let giaHienThi = giaBanObj && giaBanObj.retailPrice > 0 ? giaBanObj.retailPrice : sp.price || 0;
+    let giaBanObj =
+      pricingData.find((p) => (p.maSP || p.code) === sp.maSP) ||
+      pricingData.find((p) => (p.tenSP || p.name) === sp.tenSP);
+    let giaHienThi =
+      giaBanObj && giaBanObj.retailPrice > 0
+        ? giaBanObj.retailPrice
+        : sp.price || 0;
     if (giaHienThi > 0) {
       allProducts.push({
         maSP: sp.maSP,
@@ -512,7 +1055,9 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
   if (!isIndexPage()) return;
   let resultTitle = document.getElementById("searchResultTitle");
   let bannerElements = document.getElementsByClassName("banner-slider");
-  let videos = document.getElementsByClassName("slides")[0] ? document.querySelectorAll(".slides video") : [];
+  let videos = document.getElementsByClassName("slides")[0]
+    ? document.querySelectorAll(".slides video")
+    : [];
   let bannerSection = null;
   if (bannerElements.length > 0) bannerSection = bannerElements[0];
   let items = document.getElementsByClassName("breadcrumb-item");
@@ -570,7 +1115,8 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
   } else if (isAdvancedFilter) {
     if (resultTitle) {
       if (filteredProducts.length > 0) {
-        resultTitle.innerText = "Lọc được " + filteredProducts.length + " sản phẩm";
+        resultTitle.innerText =
+          "Lọc được " + filteredProducts.length + " sản phẩm";
         resultTitle.classList.remove("hidden");
       } else {
         resultTitle.classList.add("hidden");
@@ -595,7 +1141,6 @@ function updateBreadcrumbUI(activeCategory, searchKeyword, isAdvancedFilter) {
       bannerSection.classList.remove("hide-banner");
       showSlides(slideIndex);
     }
-
   }
 }
 
@@ -604,7 +1149,7 @@ function searchBasic() {
   let searchInputHeader = document.getElementById("searchInputHeader");
   if (!searchInputHeader) return;
   let originalKeyword = searchInputHeader.value.trim();
-  
+
   if (!isIndexPage()) {
     window.location.href = `index.html?search=${encodeURIComponent(originalKeyword)}`;
     return;
@@ -618,7 +1163,11 @@ function searchBasic() {
     let tenSP = (product.tenSP || "").toLowerCase();
     let tenLoai = (product.tenLoai || "").toLowerCase();
     let mauSac = (product.color || "").toLowerCase();
-    if (tenSP.indexOf(keyword) >= 0 || tenLoai.indexOf(keyword) >= 0 || mauSac.indexOf(keyword) >= 0) {
+    if (
+      tenSP.indexOf(keyword) >= 0 ||
+      tenLoai.indexOf(keyword) >= 0 ||
+      mauSac.indexOf(keyword) >= 0
+    ) {
       filteredProducts.push(product);
     }
   }
@@ -637,7 +1186,7 @@ function searchBasic() {
 // --- Hàm LỌC DANH MỤC ---
 window.filterByCategory = function (category, event) {
   if (event) event.preventDefault();
-  
+
   if (!isIndexPage()) {
     window.location.href = `index.html?cat=${category}`;
     return;
@@ -648,12 +1197,18 @@ window.filterByCategory = function (category, event) {
   if (searchInputHeader) searchInputHeader.value = "";
 
   if (category === "all") {
-    for (let i = 0; i < allProducts.length; i++) filteredProducts.push(allProducts[i]);
+    for (let i = 0; i < allProducts.length; i++)
+      filteredProducts.push(allProducts[i]);
   } else {
     for (let i = 0; i < allProducts.length; i++) {
       let product = allProducts[i];
       let tenLoai = (product.tenLoai || "").toLowerCase();
-      if (category === "khac" && tenLoai !== "apple" && tenLoai !== "samsung" && tenLoai !== "oppo") {
+      if (
+        category === "khac" &&
+        tenLoai !== "apple" &&
+        tenLoai !== "samsung" &&
+        tenLoai !== "oppo"
+      ) {
         filteredProducts.push(product);
       } else if (tenLoai === category.toLowerCase()) {
         filteredProducts.push(product);
@@ -666,6 +1221,13 @@ window.filterByCategory = function (category, event) {
   hideDetail();
   renderProducts(currentPage);
   renderPagination();
+
+  // Chỉ cuộn khi bấm từ thanh đỏ trên header
+  if (event && event.target.closest(".header-bottom")) {
+    let breadcrumb = document.getElementById("categoryBreadcrumb");
+    if (breadcrumb)
+      breadcrumb.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 };
 
 // --- Hàm LỌC THEO TÊN (Menu thả xuống) ---
@@ -824,13 +1386,19 @@ function searchAdvanced() {
 
     let loaiSP = (product.tenLoai || "").toLowerCase();
     let matchCategory = false;
-    if (selectedCategory === "all" || loaiSP === selectedCategory) matchCategory = true;
+    if (selectedCategory === "all" || loaiSP === selectedCategory)
+      matchCategory = true;
 
     let giaSP = product.price || 0;
     let matchPrice = false;
     if (selectedPrice === "all") matchPrice = true;
     else if (selectedPrice === "under10" && giaSP < 10000000) matchPrice = true;
-    else if (selectedPrice === "10to20" && giaSP >= 10000000 && giaSP <= 20000000) matchPrice = true;
+    else if (
+      selectedPrice === "10to20" &&
+      giaSP >= 10000000 &&
+      giaSP <= 20000000
+    )
+      matchPrice = true;
     else if (selectedPrice === "over20" && giaSP > 20000000) matchPrice = true;
 
     if (matchName === true && matchCategory === true && matchPrice === true) {
@@ -862,7 +1430,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let applyFilterBtn = document.getElementById("applyFilterBtn");
 
   if (searchIconHeader) searchIconHeader.addEventListener("click", searchBasic);
-  
+
   if (searchInputHeader) {
     searchInputHeader.addEventListener("keyup", function (e) {
       if (e.key === "Enter") {
@@ -911,7 +1479,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.addEventListener("click", function (e) {
     if (searchInputHeader && searchSuggestions) {
-      if (!searchInputHeader.contains(e.target) && !searchSuggestions.contains(e.target)) {
+      if (
+        !searchInputHeader.contains(e.target) &&
+        !searchSuggestions.contains(e.target)
+      ) {
         searchSuggestions.classList.add("hidden");
       }
     }
@@ -936,19 +1507,29 @@ document.addEventListener("DOMContentLoaded", function () {
   // Tự động đọc URL để thực hiện lọc nếu vừa bị chuyển từ trang khác sang
   if (isIndexPage()) {
     const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('cat')) {
-      filterByCategory(urlParams.get('cat'));
-    } else if(urlParams.has('name')) {
-      filterByName(urlParams.get('name'));
-    } else if(urlParams.has('search')) {
-      if(searchInputHeader) searchInputHeader.value = urlParams.get('search');
+    if (urlParams.has("cat")) {
+      filterByCategory(urlParams.get("cat"));
+
+      // Đến từ trang khác (profile, giỏ hàng...) thì cuộn xuống thanh điều hướng
+      setTimeout(function () {
+        let breadcrumb = document.getElementById("categoryBreadcrumb");
+        if (breadcrumb)
+          breadcrumb.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 300);
+
+      // Xóa ?cat=... khỏi địa chỉ để reload lại hiện trang chủ bình thường
+      history.replaceState(null, "", window.location.pathname);
+    } else if (urlParams.has("name")) {
+      filterByName(urlParams.get("name"));
+    } else if (urlParams.has("search")) {
+      if (searchInputHeader) searchInputHeader.value = urlParams.get("search");
       searchBasic();
-    } else if(urlParams.has('adv')) {
-      if(searchInputHeader) searchInputHeader.value = urlParams.get('k');
+    } else if (urlParams.has("adv")) {
+      if (searchInputHeader) searchInputHeader.value = urlParams.get("k");
       let cat = document.getElementById("filterCategory");
-      if(cat) cat.value = urlParams.get('c');
+      if (cat) cat.value = urlParams.get("c");
       let pri = document.getElementById("filterPrice");
-      if(pri) pri.value = urlParams.get('p');
+      if (pri) pri.value = urlParams.get("p");
       searchAdvanced();
     } else {
       updateCartBadge();
@@ -956,13 +1537,13 @@ document.addEventListener("DOMContentLoaded", function () {
       renderPagination();
     }
 
-    if(window.location.hash === "#login") {
+    if (window.location.hash === "#login") {
       let m = document.getElementById("authModal");
-      if(m) { 
-        m.classList.remove("hidden"); 
-        if(typeof window.showLogin === "function") window.showLogin(); 
+      if (m) {
+        m.classList.remove("hidden");
+        if (typeof window.showLogin === "function") window.showLogin();
       }
-      history.replaceState(null, null, ' ');
+      history.replaceState(null, null, " ");
     }
   } else {
     updateCartBadge();

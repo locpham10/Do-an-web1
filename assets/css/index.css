@@ -807,6 +807,7 @@ p {
 /* ================= THANH BREADCRUMB DANH MỤC ================= */
 .category-breadcrumb {
   margin-bottom: 25px;
+  scroll-margin-top: 160px;
 }
 
 .breadcrumb-nav {
