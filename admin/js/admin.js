@@ -455,6 +455,7 @@ function initCustomersPage() {
                                 <th>Họ tên</th>
                                 <th>Email</th>
                                 <th>Số điện thoại</th>
+                                <th>Địa chỉ</th> 
                                 <th>Trạng thái</th>
                             </tr>
                         </thead>
@@ -476,6 +477,7 @@ function initCustomersPage() {
                                 <th>Họ tên</th>
                                 <th>Email</th>
                                 <th>Số điện thoại</th>
+                                <th>Địa chỉ</th> 
                                 <th>Trạng thái</th>
                             </tr>
                         </thead>
@@ -503,6 +505,7 @@ function initCustomersPage() {
                                 <th>Họ tên</th>
                                 <th>Email</th>
                                 <th>Số điện thoại</th>
+                                <th>Địa chỉ</th> 
                                 <th>Trạng thái</th>
                             </tr>
                         </thead>
@@ -608,7 +611,8 @@ function layKHTheoTuKhoa() {
             tk.maKH,
             tk.hoTen,
             tk.soDienThoai,
-            tk.email
+            tk.email,
+            tk.diaChi
         ].join(" "));
 
         return noiDung.includes(tuKhoa);
@@ -649,6 +653,8 @@ function renderCustomers() {
                 <td>${anToanKH(tk.hoTen)}</td>
                 <td>${anToanKH(tk.email)}</td>
                 <td>${anToanKH(tk.soDienThoai)}</td>
+                <td>${anToanKH(tk.diaChi || "Chưa cập nhật")}</td>
+
                 <td>
                     <span class="customer-status ${status}">
                         ${tenTrangThai}
@@ -661,13 +667,13 @@ function renderCustomers() {
     // Bảng danh sách có 5 cột, hai bảng còn lại có 6 cột
     const emptyList = `
         <tr>
-            <td colspan="5">Không có khách hàng phù hợp.</td>
+            <td colspan="6">Không có khách hàng phù hợp.</td>
         </tr>
     `;
 
     const emptyCheckbox = `
         <tr>
-            <td colspan="6">Không có khách hàng phù hợp.</td>
+            <td colspan="7">Không có khách hàng phù hợp.</td>
         </tr>
     `;
 
