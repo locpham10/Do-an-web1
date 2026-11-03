@@ -649,7 +649,7 @@ td {
 }
 
 .btn-complete {
-    background-color: #007bff;
+    background-color: #ff001e;
     color: white;
     margin-left: 8px;
 }
@@ -964,14 +964,17 @@ input[type="number"] {
     border-radius: 5px;
 }
 
-.customer-search button,
+.customer-search button {
+    background: #757372ee;
+    color: white;
+}
 #resetSelectedCustomers {
-    background: #007bff;
+    background: #28a745;
     color: white;
 }
 
 #lockSelectedCustomers {
-    background: #dc3545;
+    background: #e57906e0;
     color: white;
 }
 
