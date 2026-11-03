@@ -222,6 +222,9 @@ function closeModal() {
     const orderModal = document.getElementById('orderModal');
     if (orderModal) orderModal.style.display = 'none';
 
+    const invDetailModal = document.getElementById('invDetailModal');
+    if (invDetailModal) invDetailModal.style.display = 'none';
+
     const changePassModal = document.getElementById('changePassModal');
     if (changePassModal) changePassModal.style.display = 'none';
 }
@@ -2413,55 +2416,63 @@ function applyOrderFilters() {
 ======================================================================*/
 let rawImports = [];
 let rawOrders = [];
-let savedProducts = []; // Lấy từ Tab 4 để biết Sản phẩm thuộc Loại nào
+let savedProducts = [];
 
 function loadDataForInventory() {
-    const storedImports = localStorage.getItem('saved_imports');
-    const storedOrders = localStorage.getItem('saved_orders');
-    const storedProducts = localStorage.getItem('danhMucSanPham');
+    try { rawImports = JSON.parse(localStorage.getItem('saved_imports') || '[]'); } catch (e) { rawImports = []; }
+    try { rawOrders = JSON.parse(localStorage.getItem('saved_orders') || '[]'); } catch (e) { rawOrders = []; }
+    try { savedProducts = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]'); } catch (e) { savedProducts = []; }
 
-    rawImports = storedImports ? JSON.parse(storedImports) : [];
-    rawOrders = storedOrders ? JSON.parse(storedOrders) : [];
-    savedProducts = storedProducts ? JSON.parse(storedProducts) : [];
-
-    // Gom nhóm theo tenLoai (tiếng Việt)
     const categorySet = new Set();
     savedProducts.forEach(sp => { if (sp.tenLoai) categorySet.add(sp.tenLoai); });
 
     const catFilterEl = document.getElementById('invCategoryFilter');
     if (catFilterEl) {
+        const cu = catFilterEl.value;
         catFilterEl.innerHTML = '<option value="ALL">-- Tất cả loại --</option>' +
-            Array.from(categorySet).map(loai => `<option value="${loai}">${loai}</option>`).join('');
+            Array.from(categorySet).map(loai => `<option value="${anToanKH(loai)}">${anToanKH(loai)}</option>`).join('');
+        if (cu) catFilterEl.value = cu;
     }
 
     applyInventoryFilters();
 }
 
+// Lấy ngưỡng cảnh báo (mặc định 5)
+function layNguongSapHet() {
+    const el = document.getElementById('invLowThreshold');
+    const v = el ? parseInt(el.value, 10) : 5;
+    return (isNaN(v) || v < 1) ? 5 : v;
+}
+
 function applyInventoryFilters() {
-    const fromDateStr = document.getElementById('invFromDate').value;
-    const toDateStr = document.getElementById('invToDate').value;
+    const fromStr = document.getElementById('invFromDate').value;   // yyyy-mm-dd
+    const toStr = document.getElementById('invToDate').value;
     const catFilter = document.getElementById('invCategoryFilter').value;
-    const searchKeyword = document.getElementById('inventorySearchInput').value.trim().toLowerCase();
+    const keyword = document.getElementById('inventorySearchInput').value.trim().toLowerCase();
+    const onlyLow = document.getElementById('invOnlyLow').checked;
+    const threshold = layNguongSapHet();
 
-    const fromTime = fromDateStr ? new Date(fromDateStr).setHours(0, 0, 0, 0) : 0;
-    const toTime = toDateStr ? new Date(toDateStr).setHours(23, 59, 59, 999) : new Date("2100-01-01").getTime();
+    if (fromStr && toStr && fromStr > toStr) {
+        alert("'Từ ngày' không được lớn hơn 'Đến ngày'!");
+        return;
+    }
+
     const DEFAULT_IMG = '../assets/images/default-image.jpeg';
-
-    let inventoryMap = {};
+    const inventoryMap = {};
     const keyByName = {};
+
     const newRow = (code, name, image, category, inCatalog) => ({
-        code: code, name: name, image: image || DEFAULT_IMG, category: category,
-        inCatalog: inCatalog, importPrice: 0, totalCost: 0, totalImportedQty: 0,
-        importedInRange: 0, soldInRange: 0, currentStock: 0
+        code: code, name: name, image: image || DEFAULT_IMG, category: category, inCatalog: inCatalog,
+        importPrice: 0, totalCost: 0, totalImportedQty: 0,
+        openingStock: 0, importedInRange: 0, soldInRange: 0, currentStock: 0
     });
 
-    // BƯỚC 1: Khởi tạo từ danh mục sản phẩm (khóa theo mã SP)
+    // Khởi tạo từ danh mục sản phẩm
     savedProducts.forEach(sp => {
         inventoryMap[sp.maSP] = newRow(sp.maSP, sp.tenSP, sp.hinh, sp.tenLoai || 'Chưa phân loại', true);
         keyByName[sp.tenSP] = sp.maSP;
     });
 
-    // Hàm tìm đúng dòng của 1 mặt hàng trong phiếu (ưu tiên mã SP, sau đó theo tên)
     const getRow = (item, createIfMissing) => {
         const tenSP = item.tenSP || item.name;
         const maSP = item.maSP || item.code || keyByName[tenSP];
@@ -2473,12 +2484,13 @@ function applyInventoryFilters() {
         return inventoryMap[key] || null;
     };
 
-    // BƯỚC 2: QUÉT HÀNG NHẬP (chỉ phiếu đã hoàn thành)
+    // NHẬP (chỉ phiếu đã hoàn thành)
     let pendingCount = 0;
     rawImports.forEach(ticket => {
         if (ticket.status !== 'completed') { pendingCount++; return; }
-        const ticketTime = new Date(ticket.date).setHours(12, 0, 0, 0);
-        if (ticketTime > toTime || !Array.isArray(ticket.items)) return;
+        if (!Array.isArray(ticket.items)) return;
+        const d = ticket.date;
+        if (toStr && d > toStr) return;               // sau mốc tra cứu: bỏ qua
 
         ticket.items.forEach(item => {
             const row = getRow(item, true);
@@ -2488,7 +2500,8 @@ function applyInventoryFilters() {
             row.currentStock += qty;
             row.totalImportedQty += qty;
             row.totalCost += qty * price;
-            if (ticketTime >= fromTime) row.importedInRange += qty;
+            if (fromStr && d < fromStr) row.openingStock += qty;   // trước kỳ -> tồn đầu
+            else row.importedInRange += qty;                        // trong kỳ -> nhập
         });
     });
 
@@ -2496,49 +2509,161 @@ function applyInventoryFilters() {
         prod.importPrice = prod.totalImportedQty > 0 ? Math.round(prod.totalCost / prod.totalImportedQty) : 0;
     });
 
-    // BƯỚC 3: QUÉT HÀNG XUẤT (ĐƠN HÀNG)
+    // XUẤT (đơn đã xử lý / đã giao)
     rawOrders.forEach(order => {
         if (order.status !== 'processed' && order.status !== 'completed') return;
-        const orderTime = new Date(order.date).setHours(12, 0, 0, 0);
-        if (orderTime > toTime || !Array.isArray(order.items)) return;
+        if (!Array.isArray(order.items)) return;
+        const d = order.date;
+        if (toStr && d > toStr) return;
 
         order.items.forEach(item => {
             const row = getRow(item, false);
             if (!row) return;
             const qty = Number(item.qty) || 0;
             row.currentStock -= qty;
-            if (orderTime >= fromTime) row.soldInRange += qty;
+            if (fromStr && d < fromStr) row.openingStock -= qty;
+            else row.soldInRange += qty;
         });
     });
 
-    // BƯỚC 4: LỌC DỮ LIỆU ĐỂ HIỂN THỊ
-    let finalData = Object.values(inventoryMap).filter(item => {
+    // LỌC theo loại + từ khóa (chưa lọc "chỉ hiện sắp hết" để thống kê đúng)
+    const base = Object.values(inventoryMap).filter(item => {
         if (catFilter !== 'ALL' && item.category !== catFilter) return false;
-        if (searchKeyword && !String(item.name).toLowerCase().includes(searchKeyword) && !String(item.code).toLowerCase().includes(searchKeyword)) return false;
-        // Chỉ ẩn mặt hàng "rác" nằm ngoài danh mục; sản phẩm trong danh mục luôn hiển thị (kể cả tồn = 0)
+        if (keyword && !String(item.name).toLowerCase().includes(keyword)
+            && !String(item.code).toLowerCase().includes(keyword)) return false;
         if (!item.inCatalog && item.currentStock === 0 && item.importedInRange === 0 && item.soldInRange === 0) return false;
         return true;
     });
 
-    let totalItems = 0;
-    let totalValue = 0;
-    let lowStockCount = 0;
-
-    finalData.forEach(prod => {
-        if (prod.currentStock > 0) {
-            totalItems += prod.currentStock;
-            totalValue += (prod.currentStock * prod.importPrice);
+    // THỐNG KÊ
+    let totalItems = 0, totalValue = 0, lowCount = 0, outCount = 0;
+    base.forEach(p => {
+        if (p.currentStock > 0) {
+            totalItems += p.currentStock;
+            totalValue += p.currentStock * p.importPrice;
         }
-        if (prod.currentStock > 0 && prod.currentStock < 5) {
-            lowStockCount++;
-        }
+        if (p.currentStock <= 0) outCount++;
+        else if (p.currentStock < threshold) lowCount++;
     });
 
-    updateInventoryDashboard(totalItems, totalValue, lowStockCount);
-    renderInventoryTable(finalData);
+    const finalData = onlyLow ? base.filter(p => p.currentStock < threshold) : base;
+
+    updateInventoryDashboard(totalItems, totalValue, lowCount, outCount, threshold);
+    renderInventoryTable(finalData, threshold);
     showInventoryPendingNote(pendingCount);
 }
 
+function renderInventoryTable(data, threshold) {
+    const tbody = document.getElementById('inventoryTableBody');
+    if (!tbody) return;
+
+    if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:40px; color:#6c757d;">Không tìm thấy sản phẩm nào phù hợp!</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = data.map(item => {
+        let rowClass = '', warnHtml = `<span class="badge badge-completed">Còn hàng</span>`;
+        if (item.currentStock <= 0) {
+            rowClass = 'row-out';
+            warnHtml = `<span class="badge badge-loss">Hết hàng</span>`;
+        } else if (item.currentStock < threshold) {
+            rowClass = 'row-low';
+            warnHtml = `<span class="badge badge-delivering">Sắp hết</span>`;
+        }
+        const safeCode = String(item.code).replace(/'/g, "\\'");
+
+        return `
+        <tr class="${rowClass}">
+            <td style="text-align:center;"><strong>${anToanKH(item.code)}</strong></td>
+            <td style="text-align:center;">
+                <img src="${item.image}" alt="Ảnh SP" style="width:50px; height:50px; object-fit:contain; background:#fff; border-radius:4px; border:1px solid #ddd;">
+            </td>
+            <td><strong>${anToanKH(item.name)}</strong></td>
+            <td style="text-align:center;"><span class="badge" style="background:#e9ecef; color:#333;">${anToanKH(item.category)}</span></td>
+            <td style="text-align:center; font-size:16px;">${item.openingStock}</td>
+            <td style="text-align:center; font-size:16px; font-weight:bold; color:#28a745;">+ ${item.importedInRange}</td>
+            <td style="text-align:center; font-size:16px; font-weight:bold; color:#dc3545;">- ${item.soldInRange}</td>
+            <td style="text-align:center; font-size:18px; font-weight:900;">= ${item.currentStock}</td>
+            <td style="text-align:center;">${warnHtml}</td>
+            <td style="text-align:center;">
+                <button class="btn-action btn-view-detail" onclick="openInventoryDetail('${safeCode}')">Xem</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function updateInventoryDashboard(totalItems, totalValue, lowCount, outCount, threshold) {
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+    set('invTotalQty', new Intl.NumberFormat('vi-VN').format(totalItems));
+    set('invTotalValue', formatMoney(totalValue));
+    set('invLowStockAlert', lowCount);
+    set('invOutStockAlert', outCount);
+    set('invLowLabel', 'Sắp hết hàng (< ' + threshold + '):');
+}
+
+// CHI TIẾT NHẬP - XUẤT - TỒN CỦA 1 SẢN PHẨM
+function openInventoryDetail(code) {
+    const fromStr = document.getElementById('invFromDate').value;
+    const toStr = document.getElementById('invToDate').value;
+    const sp = savedProducts.find(p => p.maSP === code);
+    const name = sp ? sp.tenSP : code;
+
+    const match = (it) => {
+        const ma = it.maSP || it.code;
+        return ma ? ma === code : (it.tenSP || it.name) === name;
+    };
+
+    const moves = [];
+    rawImports.forEach(t => {
+        if (t.status !== 'completed' || !Array.isArray(t.items)) return;
+        t.items.forEach(it => {
+            if (match(it)) moves.push({ date: t.date, ref: t.code, type: 'in', qty: Number(it.qty) || 0 });
+        });
+    });
+    rawOrders.forEach(o => {
+        if ((o.status !== 'processed' && o.status !== 'completed') || !Array.isArray(o.items)) return;
+        o.items.forEach(it => {
+            if (match(it)) moves.push({ date: o.date, ref: o.id, type: 'out', qty: Number(it.qty) || 0 });
+        });
+    });
+
+    // Cùng ngày: nhập trước, xuất sau
+    moves.sort((a, b) => a.date === b.date ? (a.type === b.type ? 0 : (a.type === 'in' ? -1 : 1)) : (a.date < b.date ? -1 : 1));
+
+    let balance = 0;
+    let opening = 0;
+    const rowsInRange = [];
+    moves.forEach(m => {
+        if (toStr && m.date > toStr) return;
+        balance += (m.type === 'in' ? m.qty : -m.qty);
+        if (fromStr && m.date < fromStr) { opening = balance; return; }
+        rowsInRange.push({ m: m, after: balance });
+    });
+
+    document.getElementById('invDetailTitle').innerText = code + ' - ' + name;
+    document.getElementById('invDetailRange').innerText =
+        'Khoảng thời gian: ' + (fromStr || 'từ đầu') + ' → ' + (toStr || 'hiện tại');
+
+    let html = `<tr style="background:#f8f9fa;"><td colspan="5"><b>Tồn đầu kỳ</b></td><td style="text-align:center;"><b>${opening}</b></td></tr>`;
+    if (rowsInRange.length === 0) {
+        html += `<tr><td colspan="6" style="text-align:center; color:#888; padding:15px;">Không phát sinh nhập/xuất trong kỳ.</td></tr>`;
+    } else {
+        html += rowsInRange.map(r => `
+            <tr>
+                <td>${r.m.date}</td>
+                <td>${anToanKH(r.m.ref)}</td>
+                <td>${r.m.type === 'in' ? 'Phiếu nhập' : 'Đơn hàng'}</td>
+                <td style="text-align:center; color:#28a745; font-weight:bold;">${r.m.type === 'in' ? '+' + r.m.qty : ''}</td>
+                <td style="text-align:center; color:#dc3545; font-weight:bold;">${r.m.type === 'out' ? '-' + r.m.qty : ''}</td>
+                <td style="text-align:center;"><b>${r.after}</b></td>
+            </tr>`).join('');
+    }
+    html += `<tr style="background:#f8f9fa;"><td colspan="5"><b>Tồn cuối kỳ</b></td><td style="text-align:center;"><b>${balance}</b></td></tr>`;
+
+    document.getElementById('invDetailBody').innerHTML = html;
+    document.getElementById('invDetailModal').style.display = 'flex';
+}
 // Nhắc khi còn phiếu nhập "Lưu tạm" (các phiếu này chưa được tính vào tồn kho)
 function showInventoryPendingNote(pendingCount) {
     const section = document.getElementById('tab-inventory');
@@ -2560,41 +2685,6 @@ function showInventoryPendingNote(pendingCount) {
     }
 }
 
-// HÀM VẼ GIAO DIỆN BẢNG
-function renderInventoryTable(data) {
-    const tbody = document.getElementById('inventoryTableBody');
-    if (!tbody) return;
-
-    if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 40px; color: #6c757d;">Không tìm thấy sản phẩm nào phù hợp!</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = data.map(item => `
-        <tr>
-            <td style="text-align: center;"><strong>${item.code}</strong></td>
-            <td style="text-align: center;">
-                <img src="${item.image}" alt="Ảnh SP" style="width: 50px; height: 50px; object-fit: contain; background: #fff; border-radius: 4px; border: 1px solid #ddd;">
-            </td>
-            <td><strong>${item.name}</strong></td>
-            <td style="text-align: center;"><span class="badge" style="background:#e9ecef; color:#333;">${item.category}</span></td>
-            
-            <td style="text-align: center; font-size: 16px; font-weight: bold;">+ ${item.importedInRange}</td>
-            <td style="text-align: center; font-size: 16px; font-weight: bold;">- ${item.soldInRange}</td>
-            <td style="text-align: center; font-size: 18px; font-weight: 900;">= ${item.currentStock}</td>
-        </tr>
-    `).join('');
-}
-
-function updateInventoryDashboard(totalItems, totalValue, lowStockCount) {
-    const elQty = document.getElementById('invTotalQty');
-    const elValue = document.getElementById('invTotalValue');
-    const elAlert = document.getElementById('invLowStockAlert');
-
-    if (elQty) elQty.innerText = new Intl.NumberFormat('vi-VN').format(totalItems);
-    if (elValue) elValue.innerText = formatMoney(totalValue);
-    if (elAlert) elAlert.innerText = lowStockCount;
-}
 /*======================================================================
     HÀM CHUYỂN ĐỔI TAB (MÔ HÌNH SINGLE PAGE APPLICATION)
 ======================================================================*/

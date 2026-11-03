@@ -75,7 +75,7 @@
             <header class="topbar">
                 <div class="topbar-left">
                     <button id="sidebarToggle" class="btn-toggle-menu">☰</button>
-                    
+
                     <div class="topbar-brand">
                         <img src="../Img/logo-shop.png" alt="Phonix Logo" class="topbar-logo">
                         <div class="topbar-title">Hệ thống quản trị <strong>Phonix</strong></div>
@@ -345,7 +345,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th colspan="2">Bảng thống kê tồn kho tại thời điểm tra cứu</th>
+                                    <th colspan="2">Thống kê tồn kho theo bộ lọc hiện tại</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -358,41 +358,47 @@
                                     <td><strong id="invTotalValue" style="color: #007bff;">0 đ</strong></td>
                                 </tr>
                                 <tr>
-                                    <td>Cảnh báo sắp hết (&lt; 5):</td>
-                                    <td><strong id="invLowStockAlert" style="color: #dc3545;">0</strong> mặt hàng
-                                    </td>
+                                    <td id="invLowLabel">Sắp hết hàng (&lt; 5):</td>
+                                    <td><strong id="invLowStockAlert" style="color: #e0a800;">0</strong> mặt hàng</td>
+                                </tr>
+                                <tr>
+                                    <td>Đã hết hàng:</td>
+                                    <td><strong id="invOutStockAlert" style="color: #dc3545;">0</strong> mặt hàng</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <!-- BỘ LỌC TÌM KIẾM -->
+                    <!-- BỘ LỌC -->
                     <div class="header-actions" style="flex-wrap: wrap;">
                         <div class="inventory-filter-group"
-                            style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
-
-                            <!-- Chức năng 8.1: Lọc theo Loại sản phẩm -->
+                            style="display:flex; gap:15px; align-items:flex-end; flex-wrap:wrap;">
                             <div class="inventory-filter">
                                 <label>Loại sản phẩm:</label>
-                                <select id="invCategoryFilter" class="search-input status-filter" style="width: 150px;">
+                                <select id="invCategoryFilter" class="search-input status-filter" style="width:150px;">
                                     <option value="ALL">-- Tất cả loại --</option>
-                                    <!-- JS sẽ tự đổ dữ liệu danh mục vào đây -->
                                 </select>
                             </div>
-
-                            <!-- Chức năng 8.3: Khoảng thời gian (Nhập-Xuất-Tồn) -->
                             <div class="inventory-filter">
-                                <label>Từ ngày:</label>
-                                <input type="date" id="invFromDate" class="search-input" style="width: auto;">
+                                <label>Từ ngày (đầu kỳ):</label>
+                                <input type="date" id="invFromDate" class="search-input" style="width:auto;">
                             </div>
                             <div class="inventory-filter">
-                                <label>Đến ngày (Mốc tồn kho):</label>
-                                <input type="date" id="invToDate" class="search-input" style="width: auto;">
+                                <label>Đến ngày (cuối kì):</label>
+                                <input type="date" id="invToDate" class="search-input" style="width:auto;">
                             </div>
-
-                            <!-- Nút bấm tra cứu -->
                             <div class="inventory-filter">
-                                <button class="btn-action" style="background-color: #17a2b8; color: white;"
+                                <label>Ngưỡng sắp hết (&lt;):</label>
+                                <input type="number" id="invLowThreshold" class="search-input" value="5" min="1"
+                                    style="width:90px;">
+                            </div>
+                            <div class="inventory-filter">
+                                <label style="font-weight:normal; cursor:pointer;">
+                                    <input type="checkbox" id="invOnlyLow"> Chỉ hiện hàng sắp hết / hết hàng
+                                </label>
+                            </div>
+                            <div class="inventory-filter">
+                                <button class="btn-action" style="background-color:#17a2b8; color:white;"
                                     onclick="applyInventoryFilters()">Tra cứu</button>
                             </div>
                         </div>
@@ -403,26 +409,24 @@
                         </div>
                     </div>
 
-                    <!-- BẢNG BÁO CÁO CHI TIẾT (3 CỘT: NHẬP - XUẤT - TỒN) -->
+                    <!-- BẢNG CHI TIẾT -->
                     <div class="card-table">
                         <table>
                             <thead>
                                 <tr>
-                                    <th style="width: 10%; text-align: center;">Mã SP</th>
-                                    <th style="width: 10%; text-align: center;">Ảnh</th>
-                                    <th style="width: 25%;">Tên sản phẩm</th>
-                                    <th style="text-align: center;">Loại SP</th>
-                                    <th style="text-align: center;">Tổng Nhập<br><small>(Trong
-                                            kỳ)</small></th>
-                                    <th style="text-align: center;">Tổng Xuất<br><small>(Trong
-                                            kỳ)</small></th>
-                                    <th style="text-align: center; ">Tồn Cuối Kỳ<br><small>(Tại mốc thời
-                                            gian)</small></th>
+                                    <th style="text-align:center;">Mã SP</th>
+                                    <th style="text-align:center;">Ảnh</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th style="text-align:center;">Loại SP</th>
+                                    <th style="text-align:center;">Tồn đầu kỳ</th>
+                                    <th style="text-align:center;">Nhập<br><small>(trong kỳ)</small></th>
+                                    <th style="text-align:center;">Xuất<br><small>(trong kỳ)</small></th>
+                                    <th style="text-align:center;">Tồn cuối kỳ</th>
+                                    <th style="text-align:center;">Cảnh báo</th>
+                                    <th style="text-align:center;">Chi tiết</th>
                                 </tr>
                             </thead>
-                            <tbody id="inventoryTableBody">
-                                <!-- JS render dữ liệu vào -->
-                            </tbody>
+                            <tbody id="inventoryTableBody"></tbody>
                         </table>
                     </div>
                 </section>
