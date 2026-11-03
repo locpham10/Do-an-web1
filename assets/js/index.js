@@ -13,34 +13,10 @@ function khoiTaoDuLieuMau() {
   // 1. Tạo loại sản phẩm mẫu
   if (!localStorage.getItem("loaiSanPham")) {
     const loaiMau = [
-      {
-        maLoai: "L01",
-        tenLoai: "Apple",
-        moTa: "Các điện thoại iPhone",
-        trangThai: "hoatdong",
-        hinh: "../Img/Apple/hangApple.png",
-      },
-      {
-        maLoai: "L02",
-        tenLoai: "Samsung",
-        moTa: "Các điện thoại của hãng Samsung",
-        trangThai: "hoatdong",
-        hinh: "../Img/Samsung/hangSamsung.png",
-      },
-      {
-        maLoai: "L03",
-        tenLoai: "Oppo",
-        moTa: "Các điện thoại của hãng OPPO",
-        trangThai: "hoatdong",
-        hinh: "../Img/Oppo/hangOppo.png",
-      },
-      {
-        maLoai: "L04",
-        tenLoai: "Xiaomi",
-        moTa: "Các điện thoại của hãng Xiaomi",
-        trangThai: "hoatdong",
-        hinh: "",
-      },
+      { maLoai: "L01", tenLoai: "Apple", moTa: "Các điện thoại iPhone", trangThai: "hoatdong", hinh: "../Img/Apple/hangApple.png" },
+      { maLoai: "L02", tenLoai: "Samsung", moTa: "Các điện thoại của hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/hangSamsung.png" },
+      { maLoai: "L03", tenLoai: "Oppo", moTa: "Các điện thoại của hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/hangOppo.png" },
+      { maLoai: "L04", tenLoai: "Xiaomi", moTa: "Các điện thoại của hãng Xiaomi", trangThai: "hoatdong", hinh: "" },
     ];
     localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
   }
