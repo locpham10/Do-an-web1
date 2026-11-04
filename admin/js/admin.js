@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", function () {
 ======================================================================*/
 // Hàm định dạng tiền tệ (VD: 150000 -> 150.000 đ)
 function formatMoney(amount) {
-    return new Intl.NumberFormat('vi-VN').format(amount) + ' đ';
+    return new Intl.NumberFormat('vi-VN').format(amount) + '\u00A0đ';
 }
 
 // Hàm ĐÓNG MODAL DÙNG CHUNG (Đã hợp nhất để tránh xung đột)
@@ -222,8 +222,8 @@ function closeModal() {
     const orderModal = document.getElementById('orderModal');
     if (orderModal) orderModal.style.display = 'none';
 
-    const invDetailModal = document.getElementById('invDetailModal');
-    if (invDetailModal) invDetailModal.style.display = 'none';
+    const inventoryDetailModal = document.getElementById('inventoryDetailModal');
+if (inventoryDetailModal) inventoryDetailModal.style.display = 'none';
 
     const changePassModal = document.getElementById('changePassModal');
     if (changePassModal) changePassModal.style.display = 'none';
@@ -2037,44 +2037,80 @@ let pendingTicketsCount = 0; // Biến đếm số phiếu đang bị "Lưu tạ
 
 /* --- 1. TẢI VÀ ĐỒNG BỘ DỮ LIỆU TỪ KHO NHẬP HÀNG --- */
 /* --- CẬP NHẬT TRONG PHẦN GIÁ BÁN --- */
+function getMargins() {
+    try {
+        const m = JSON.parse(localStorage.getItem('saved_margins') || '{}');
+        return { types: m.types || {} };
+    } catch (e) { return { types: {} }; }
+}
+function saveMargins(m) {
+    localStorage.setItem('saved_margins', JSON.stringify(m));
+}
+
+// Giá bán = giá vốn × (1 + %), làm tròn đến nghìn
+function tinhGiaTheoLoi(importPrice, percent) {
+    return Math.round(importPrice * (1 + percent / 100) / 1000) * 1000;
+}
+
+function layMarginSP(p) {
+    if (!(p.retailPrice > 0) || !(p.importPrice > 0)) return null;
+    return ((p.retailPrice - p.importPrice) / p.importPrice) * 100;
+}
+
+// Lưu giá bán của nhiều sản phẩm một lượt (saved_pricing + danhMucSanPham)
+function luuGiaBan(items) {
+    let saved = [], dm = [];
+    try { saved = JSON.parse(localStorage.getItem('saved_pricing') || '[]'); } catch (e) { saved = []; }
+    try { dm = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]'); } catch (e) { dm = []; }
+
+    items.forEach(function (it) {
+        const prod = it.prod;
+        prod.retailPrice = it.retail;
+        const idx = saved.findIndex(p => (p.maSP || p.code) === prod.code);
+        if (idx > -1) saved[idx] = Object.assign({}, saved[idx], prod);
+        else saved.push(Object.assign({}, prod));
+        dm.forEach(sp => { if (sp.maSP === prod.code) sp.price = it.retail; });
+    });
+
+    localStorage.setItem('saved_pricing', JSON.stringify(saved));
+    localStorage.setItem('danhMucSanPham', JSON.stringify(dm));
+}
+
+/* --- 1. TẢI VÀ ĐỒNG BỘ DỮ LIỆU --- */
 function loadDataForPricing() {
     pendingTicketsCount = 0;
     const DEFAULT_IMG = '../assets/images/default-image.jpeg';
 
-    // 1. Đọc danh mục sản phẩm, phiếu nhập, bảng giá đã lưu
     let catalog = [], importList = [], savedPricingList = [];
-    try { catalog = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]'); } catch (e) { console.error("Lỗi JSON Sản phẩm"); }
-    try { importList = JSON.parse(localStorage.getItem('saved_imports') || '[]'); } catch (e) { console.error("Lỗi JSON Nhập hàng"); }
-    try { savedPricingList = JSON.parse(localStorage.getItem('saved_pricing') || '[]'); } catch (e) { console.error("Lỗi JSON Giá bán"); }
+    try { catalog = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]'); } catch (e) { }
+    try { importList = JSON.parse(localStorage.getItem('saved_imports') || '[]'); } catch (e) { }
+    try { savedPricingList = JSON.parse(localStorage.getItem('saved_pricing') || '[]'); } catch (e) { }
 
-    // 2. Khởi tạo từ TOÀN BỘ sản phẩm trong danh mục (kể cả chưa nhập hàng)
     let productMap = {};
     const keyByName = {};
     catalog.forEach(sp => {
         productMap[sp.maSP] = {
             maSP: sp.maSP, tenSP: sp.tenSP, code: sp.maSP, name: sp.tenSP,
+            maLoai: sp.maLoai || "", tenLoai: sp.tenLoai || "Khác",
             image: sp.hinh || DEFAULT_IMG,
             totalQty: 0, totalCost: 0, importPrice: 0,
-            retailPrice: 0,
-            catalogPrice: Number(sp.price) || 0
+            retailPrice: 0, catalogPrice: Number(sp.price) || 0
         };
         keyByName[sp.tenSP] = sp.maSP;
     });
 
-    // 3. Cộng dồn số lượng / giá vốn từ các phiếu nhập đã hoàn thành
     importList.forEach(ticket => {
         if (ticket.status !== 'completed') { pendingTicketsCount++; return; }
         if (!Array.isArray(ticket.items)) return;
-
         ticket.items.forEach(item => {
             const tenSP = item.tenSP || item.name;
             const maSP = item.maSP || item.code || keyByName[tenSP];
             if (!tenSP && !maSP) return;
             const key = maSP || tenSP;
-
             if (!productMap[key]) {
                 productMap[key] = {
                     maSP: maSP || "", tenSP: tenSP, code: maSP || "", name: tenSP,
+                    maLoai: "", tenLoai: "Khác",
                     image: item.hinh || item.image || DEFAULT_IMG,
                     totalQty: 0, totalCost: 0, importPrice: 0, retailPrice: 0, catalogPrice: 0
                 };
@@ -2084,84 +2120,177 @@ function loadDataForPricing() {
         });
     });
 
-    // 4. Tính giá nhập bình quân + gắn giá bán đã lưu
     pricingList = Object.values(productMap).map((prod, index) => {
         prod.importPrice = prod.totalQty > 0 ? Math.round(prod.totalCost / prod.totalQty) : 0;
         if (!prod.code) prod.code = "SP" + String(index + 1).padStart(2, '0');
         prod.maSP = prod.code;
 
-        const saved = savedPricingList.find(p =>
-            (p.maSP || p.code) === prod.code || (p.tenSP || p.name) === prod.tenSP);
+        const saved = savedPricingList.find(p => (p.maSP || p.code) === prod.code);
         if (saved && saved.retailPrice > 0) prod.retailPrice = saved.retailPrice;
         else if (prod.catalogPrice > 0) prod.retailPrice = prod.catalogPrice;
         return prod;
-    })
-    // CHỈ hiển thị sản phẩm đã có nhập hàng (phiếu đã hoàn thành, số lượng > 0)
-    .filter(prod => prod.totalQty > 0);
+    }).filter(prod => prod.totalQty > 0);
 
+    fillPricingCategoryFilter();
+    renderTypeMarginTable();
     renderPricingTable();
 }
 
 /* --- 2. VẼ BẢNG GIÁ BÁN TỰ ĐỘNG CẬP NHẬT MÀU SẮC --- */
+function fillPricingCategoryFilter() {
+    const sel = document.getElementById('pricingCategoryFilter');
+    if (!sel) return;
+    const cur = sel.value || 'ALL';
+    let types = [];
+    try { types = JSON.parse(localStorage.getItem('loaiSanPham') || '[]'); } catch (e) { }
+    sel.innerHTML = '<option value="ALL">-- Tất cả loại --</option>' +
+        types.map(t => `<option value="${t.maLoai}">${t.tenLoai}</option>`).join('');
+    sel.value = cur;
+    if (sel.value !== cur) sel.value = 'ALL';
+}
+
+function resetPricingFilters() {
+    document.getElementById('pricingCategoryFilter').value = 'ALL';
+    document.getElementById('pricingStatusFilter').value = 'ALL';
+    document.getElementById('pricingSearch').value = '';
+    renderPricingTable();
+}
+
+/* --- 2. BẢNG % LỢI NHUẬN THEO LOẠI --- */
+function renderTypeMarginTable() {
+    const tbody = document.getElementById('typeMarginBody');
+    if (!tbody) return;
+
+    let types = [];
+    try { types = JSON.parse(localStorage.getItem('loaiSanPham') || '[]'); } catch (e) { }
+    const margins = getMargins();
+
+    if (types.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:25px;color:#888;">Chưa có loại sản phẩm nào.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = types.map(t => {
+        const list = pricingList.filter(p => p.maLoai === t.maLoai);
+        const ms = list.map(layMarginSP).filter(m => m !== null);
+        const avg = ms.length ? (ms.reduce((a, b) => a + b, 0) / ms.length).toFixed(1) + '%' : '--';
+        const saved = margins.types[t.maLoai];
+
+        return `
+            <tr data-ma="${t.maLoai}">
+                <td><strong>${t.maLoai}</strong></td>
+                <td>${t.tenLoai}</td>
+                <td style="text-align:center;">${list.length}</td>
+                <td style="text-align:center;">${avg}</td>
+                <td style="text-align:center;">
+                    <input type="number" class="search-input" step="0.1"
+                        style="width:100px;text-align:center;" placeholder="VD: 15"
+                        value="${saved !== undefined ? saved : ''}"> %
+                </td>
+                <td style="text-align:center;">
+                    <button class="btn-action btn-edit-active" onclick="applyTypeMargin(this)">Áp dụng cho cả loại</button>
+                </td>
+            </tr>`;
+    }).join('');
+}
+
+function applyTypeMargin(btn) {
+    const tr = btn.closest('tr');
+    const maLoai = tr.dataset.ma;
+    const pct = parseFloat(tr.querySelector('input').value);
+
+    if (isNaN(pct) || pct <= -100) {
+        alert("Vui lòng nhập % lợi nhuận hợp lệ!");
+        return;
+    }
+
+    const targets = pricingList.filter(p => p.maLoai === maLoai && p.importPrice > 0);
+    if (targets.length === 0) {
+        alert("Loại này chưa có sản phẩm nào đã nhập hàng (chưa có giá vốn) nên chưa thể tính giá bán.");
+        return;
+    }
+    if (pct < 0 && !confirm("CẢNH BÁO: % lợi nhuận âm, giá bán sẽ thấp hơn giá vốn.\nBạn có chắc chắn?")) return;
+    if (!confirm("Áp dụng " + pct + "% lợi nhuận cho " + targets.length +
+        " sản phẩm của loại này?\nGiá bán hiện tại của các sản phẩm đó sẽ bị thay thế.")) return;
+
+    luuGiaBan(targets.map(p => ({ prod: p, retail: tinhGiaTheoLoi(p.importPrice, pct) })));
+
+    const m = getMargins();
+    m.types[maLoai] = pct;
+    saveMargins(m);
+
+    renderTypeMarginTable();
+    renderPricingTable();
+    alert("Đã cập nhật giá bán cho " + targets.length + " sản phẩm.");
+}
+
+/* --- 3. BẢNG GIÁ TỪNG SẢN PHẨM (CÓ LỌC / TRA CỨU) --- */
 function renderPricingTable() {
     const tbody = document.getElementById('pricingTableBody');
     if (!tbody) return;
 
-    // HIỂN THỊ CẢNH BÁO THÔNG MINH NẾU BẢNG TRỐNG
     if (pricingList.length === 0) {
-        if (pendingTicketsCount > 0) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 50px; color: #dc3545;">
+        tbody.innerHTML = pendingTicketsCount > 0
+            ? `<tr><td colspan="8" style="text-align:center;padding:50px;color:#dc3545;">
                 <h3 style="margin-bottom:10px;">⚠️ Dữ liệu đang bị kẹt!</h3>
-                Bạn đang có <b>${pendingTicketsCount} phiếu Nhập hàng</b> ở trạng thái "Lưu tạm".<br>
-                Hãy quay lại trang Nhập hàng, sửa phiếu và bấm <b>Hoàn thành</b> thì sản phẩm mới được chuyển sang đây!
-            </td></tr>`;
-        } else {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 50px; color: #888;">
-                Chưa có sản phẩm nào trong kho để thiết lập giá.<br>Vui lòng sang trang Nhập hàng, tạo phiếu và bấm <b>Hoàn thành</b>.
-            </td></tr>`;
-        }
+                Bạn đang có <b>${pendingTicketsCount} phiếu nhập</b> ở trạng thái "Lưu tạm".<br>
+                Hãy vào trang Nhập hàng, sửa phiếu và bấm <b>Hoàn thành</b>.</td></tr>`
+            : `<tr><td colspan="8" style="text-align:center;padding:50px;color:#888;">
+                Chưa có sản phẩm nào trong kho để thiết lập giá.<br>Vui lòng tạo phiếu nhập và bấm <b>Hoàn thành</b>.</td></tr>`;
         return;
     }
 
-    // VẼ DANH SÁCH SẢN PHẨM (Kèm logic Đổi màu tự động)
-    tbody.innerHTML = pricingList.map(prod => {
-        const hasRetailPrice = prod.retailPrice > 0;
+    const catVal = (document.getElementById('pricingCategoryFilter') || {}).value || 'ALL';
+    const stVal = (document.getElementById('pricingStatusFilter') || {}).value || 'ALL';
+    const kw = chuanHoaChu((document.getElementById('pricingSearch') || {}).value || '');
+
+    const list = pricingList.filter(p => {
+        if (catVal !== 'ALL' && p.maLoai !== catVal) return false;
+        if (kw && !chuanHoaChu(p.code + ' ' + p.name).includes(kw)) return false;
+        const m = layMarginSP(p);
+        if (stVal === 'none' && p.retailPrice > 0) return false;
+        if (stVal === 'profit' && !(m !== null && m > 0)) return false;
+        if (stVal === 'loss' && !(m !== null && m <= 0)) return false;
+        return true;
+    });
+
+    if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#6c757d;">Không tìm thấy sản phẩm phù hợp.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = list.map(prod => {
+        const hasRetail = prod.retailPrice > 0;
         const hasImport = prod.importPrice > 0;
-        const margin = (hasRetailPrice && hasImport) ? Math.round(((prod.retailPrice - prod.importPrice) / prod.importPrice) * 100) : 0;
+        const m = layMarginSP(prod);
+        const margin = m === null ? 0 : Math.round(m);
+        const btnText = hasRetail ? "Cập nhật giá" : "Thiết lập giá";
 
-        let retailPriceHtml, badgeHtml;
-        const btnText = hasRetailPrice ? "Cập nhật giá" : "Thiết lập giá";
-
-        if (hasRetailPrice && !hasImport) {
-            retailPriceHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
-            badgeHtml = `<span class="badge badge-pending" style="background: #e9ecef; color: #6c757d;">--</span>`;
-        } else if (hasRetailPrice) {
-            if (margin > 0) {
-                retailPriceHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
-                badgeHtml = `<span class="badge badge-completed">+${margin}%</span>`;
-            } else if (margin < 0) {
-                retailPriceHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
-                badgeHtml = `<span class="badge badge-loss">${margin}%</span>`;
-            } else {
-                retailPriceHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
-                badgeHtml = `<span class="badge badge-pending">0%</span>`;
-            }
+        let retailHtml, badgeHtml;
+        if (!hasRetail) {
+            retailHtml = `<span style="font-weight:bold;color:#dc3545;">Chưa thiết lập</span>`;
+            badgeHtml = `<span class="badge badge-pending" style="background:#e9ecef;color:#6c757d;">--</span>`;
+        } else if (!hasImport) {
+            retailHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
+            badgeHtml = `<span class="badge badge-pending" style="background:#e9ecef;color:#6c757d;">--</span>`;
         } else {
-            retailPriceHtml = `<span style="font-weight: bold; color: #dc3545;">Chưa thiết lập</span>`;
-            badgeHtml = `<span class="badge badge-pending" style="background: #e9ecef; color: #6c757d;">--</span>`;
+            retailHtml = `<span>${formatMoney(prod.retailPrice)}</span>`;
+            if (margin > 0) badgeHtml = `<span class="badge badge-completed">+${margin}%</span>`;
+            else if (margin < 0) badgeHtml = `<span class="badge badge-loss">${margin}%</span>`;
+            else badgeHtml = `<span class="badge badge-pending">0%</span>`;
         }
 
         const safeName = prod.name.replace(/'/g, "\\'");
-
         return `
             <tr>
                 <td><strong>${prod.code}</strong></td>
-                <td><img src="${prod.image}" style="width: 50px; height: 50px; object-fit: contain; background: #fff; border-radius: 4px; border: 1px solid #ddd;"></td>
+                <td><img src="${prod.image}" style="width:50px;height:50px;object-fit:contain;background:#fff;border-radius:4px;border:1px solid #ddd;"></td>
                 <td>${prod.name}</td>
-                <td style="text-align: right; color: #6c757d;">${hasImport ? formatMoney(prod.importPrice) : '<i>Chưa nhập hàng</i>'}</td>
-                <td style="text-align: right;">${retailPriceHtml}</td>
-                <td style="text-align: center;">${badgeHtml}</td>
-                <td style="text-align: center;">
+                <td><span class="badge" style="background:#e9ecef;color:#333;">${prod.tenLoai}</span></td>
+                <td style="text-align:right;color:#6c757d;">${hasImport ? formatMoney(prod.importPrice) : '<i>Chưa nhập hàng</i>'}</td>
+                <td style="text-align:right;">${retailHtml}</td>
+                <td style="text-align:center;">${badgeHtml}</td>
+                <td style="text-align:center;">
                     <button class="btn-action btn-edit-active" onclick="openPricingModal('${prod.code}', '${safeName}', ${prod.importPrice})">${btnText}</button>
                 </td>
             </tr>`;
@@ -2245,33 +2374,15 @@ function savePricing() {
         document.getElementById('modalRetailPrice').focus();
         return;
     }
-
     if (retailPrice < currentImportPrice) {
         if (!confirm("CẢNH BÁO: Giá bán đang thấp hơn giá nhập.\nBạn có chắc chắn muốn lưu?")) return;
     }
 
-    const prodIndex = pricingList.findIndex(p => p.code === currentProductCode);
-    if (prodIndex > -1) {
-        pricingList[prodIndex].retailPrice = retailPrice;
-
-        // Gộp vào bảng giá đã lưu (không ghi đè giá của các SP chưa hiện trong bảng)
-        let savedAll = [];
-        try { savedAll = JSON.parse(localStorage.getItem('saved_pricing') || '[]'); } catch (e) { savedAll = []; }
-        const cur = pricingList[prodIndex];
-        const sIdx = savedAll.findIndex(p => (p.maSP || p.code) === cur.code || (p.tenSP || p.name) === cur.tenSP);
-        if (sIdx > -1) savedAll[sIdx] = Object.assign({}, savedAll[sIdx], cur);
-        else savedAll.push(cur);
-        localStorage.setItem('saved_pricing', JSON.stringify(savedAll));
-
-        // Đồng bộ giá bán sang danh mục sản phẩm (để tab Sản phẩm / trang bán hàng đọc được)
-        try {
-            const dm = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]');
-            dm.forEach(sp => { if (sp.maSP === currentProductCode) sp.price = retailPrice; });
-            localStorage.setItem('danhMucSanPham', JSON.stringify(dm));
-        } catch (e) { console.error("Lỗi đồng bộ giá", e); }
-    }
+    const prod = pricingList.find(p => p.code === currentProductCode);
+    if (prod) luuGiaBan([{ prod: prod, retail: retailPrice }]);
 
     closeModal();
+    renderTypeMarginTable();
     renderPricingTable();
 }
 
@@ -2348,7 +2459,7 @@ function openOrderModal(orderId) {
     detailBody.innerHTML = order.items.map((item, idx) => `
         <tr>
             <td>${idx + 1}</td>
-            <td><strong>${item.name}</strong></td>
+            <td><strong>${item.name || item.tenSP}</strong></td>
             <td style="text-align: center;">${item.qty}</td>
             <td style="text-align: right;">${formatMoney(item.price)}</td>
             <td style="text-align: right; font-weight: bold;">${formatMoney(item.qty * item.price)}</td>
@@ -2417,45 +2528,63 @@ function applyOrderFilters() {
 let rawImports = [];
 let rawOrders = [];
 let savedProducts = [];
+let inventoryRowsCache = {};
 
 function loadDataForInventory() {
-    try { rawImports = JSON.parse(localStorage.getItem('saved_imports') || '[]'); } catch (e) { rawImports = []; }
-    try { rawOrders = JSON.parse(localStorage.getItem('saved_orders') || '[]'); } catch (e) { rawOrders = []; }
-    try { savedProducts = JSON.parse(localStorage.getItem('danhMucSanPham') || '[]'); } catch (e) { savedProducts = []; }
+    function doc(key) {
+        try { return JSON.parse(localStorage.getItem(key)) || []; } catch (e) { return []; }
+    }
+    rawImports = doc('saved_imports');
+    rawOrders = doc('saved_orders');
+    savedProducts = doc('danhMucSanPham');
 
     const categorySet = new Set();
     savedProducts.forEach(sp => { if (sp.tenLoai) categorySet.add(sp.tenLoai); });
 
     const catFilterEl = document.getElementById('invCategoryFilter');
     if (catFilterEl) {
-        const cu = catFilterEl.value;
+        const cur = catFilterEl.value || 'ALL';
         catFilterEl.innerHTML = '<option value="ALL">-- Tất cả loại --</option>' +
-            Array.from(categorySet).map(loai => `<option value="${anToanKH(loai)}">${anToanKH(loai)}</option>`).join('');
-        if (cu) catFilterEl.value = cu;
+            Array.from(categorySet).map(loai => `<option value="${loai}">${loai}</option>`).join('');
+        catFilterEl.value = cur;
+        if (catFilterEl.value !== cur) catFilterEl.value = 'ALL';
     }
 
     applyInventoryFilters();
 }
 
-// Lấy ngưỡng cảnh báo (mặc định 5)
-function layNguongSapHet() {
-    const el = document.getElementById('invLowThreshold');
-    const v = el ? parseInt(el.value, 10) : 5;
-    return (isNaN(v) || v < 1) ? 5 : v;
+// Nút "Tra cứu": kiểm tra khoảng ngày rồi lọc
+function traCuuTonKho() {
+    const from = document.getElementById('invFromDate').value;
+    const to = document.getElementById('invToDate').value;
+    if (from && to && from > to) {
+        alert("Từ ngày không được lớn hơn Đến ngày!");
+        return;
+    }
+    applyInventoryFilters();
+}
+
+function resetInventoryFilters() {
+    ['invFromDate', 'invToDate', 'inventorySearchInput'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+    document.getElementById('invCategoryFilter').value = 'ALL';
+    document.getElementById('invStatusFilter').value = 'ALL';
+    document.getElementById('invThreshold').value = 5;
+    applyInventoryFilters();
 }
 
 function applyInventoryFilters() {
-    const fromStr = document.getElementById('invFromDate').value;   // yyyy-mm-dd
-    const toStr = document.getElementById('invToDate').value;
-    const catFilter = document.getElementById('invCategoryFilter').value;
-    const keyword = document.getElementById('inventorySearchInput').value.trim().toLowerCase();
-    const onlyLow = document.getElementById('invOnlyLow').checked;
-    const threshold = layNguongSapHet();
+    const g = id => document.getElementById(id);
+    if (!g('invFromDate')) return;
 
-    if (fromStr && toStr && fromStr > toStr) {
-        alert("'Từ ngày' không được lớn hơn 'Đến ngày'!");
-        return;
-    }
+    const fromStr = g('invFromDate').value;       // yyyy-mm-dd
+    const toStr = g('invToDate').value;
+    const catFilter = g('invCategoryFilter').value;
+    const statusFilter = g('invStatusFilter').value;
+    const keyword = g('inventorySearchInput').value.trim().toLowerCase();
+    let threshold = parseInt(g('invThreshold').value, 10);
+    if (isNaN(threshold) || threshold < 1) threshold = 5;
 
     const DEFAULT_IMG = '../assets/images/default-image.jpeg';
     const inventoryMap = {};
@@ -2463,11 +2592,11 @@ function applyInventoryFilters() {
 
     const newRow = (code, name, image, category, inCatalog) => ({
         code: code, name: name, image: image || DEFAULT_IMG, category: category, inCatalog: inCatalog,
-        importPrice: 0, totalCost: 0, totalImportedQty: 0,
-        openingStock: 0, importedInRange: 0, soldInRange: 0, currentStock: 0
+        totalCost: 0, totalImportedQty: 0, importPrice: 0,
+        openingStock: 0, importedInRange: 0, soldInRange: 0, currentStock: 0,
+        moves: []
     });
 
-    // Khởi tạo từ danh mục sản phẩm
     savedProducts.forEach(sp => {
         inventoryMap[sp.maSP] = newRow(sp.maSP, sp.tenSP, sp.hinh, sp.tenLoai || 'Chưa phân loại', true);
         keyByName[sp.tenSP] = sp.maSP;
@@ -2484,110 +2613,116 @@ function applyInventoryFilters() {
         return inventoryMap[key] || null;
     };
 
-    // NHẬP (chỉ phiếu đã hoàn thành)
+    // Ghi nhận 1 giao dịch nhập (kind='in') hoặc xuất (kind='out')
+    function addMove(row, date, ref, kind, qty) {
+        if (toStr && date > toStr) return;                 // sau mốc tra cứu: bỏ qua
+        const signed = kind === 'in' ? qty : -qty;
+        row.currentStock += signed;
+        if (fromStr && date < fromStr) {                   // trước kỳ: cộng vào tồn đầu
+            row.openingStock += signed;
+        } else {                                           // trong kỳ
+            if (kind === 'in') row.importedInRange += qty;
+            else row.soldInRange += qty;
+            row.moves.push({ date: date, ref: ref, kind: kind, qty: qty });
+        }
+    }
+
+    // NHẬP: chỉ phiếu đã hoàn thành
     let pendingCount = 0;
     rawImports.forEach(ticket => {
         if (ticket.status !== 'completed') { pendingCount++; return; }
         if (!Array.isArray(ticket.items)) return;
-        const d = ticket.date;
-        if (toStr && d > toStr) return;               // sau mốc tra cứu: bỏ qua
-
         ticket.items.forEach(item => {
             const row = getRow(item, true);
             if (!row) return;
             const qty = Number(item.qty) || 0;
             const price = Number(item.price) || 0;
-            row.currentStock += qty;
-            row.totalImportedQty += qty;
-            row.totalCost += qty * price;
-            if (fromStr && d < fromStr) row.openingStock += qty;   // trước kỳ -> tồn đầu
-            else row.importedInRange += qty;                        // trong kỳ -> nhập
+            if (!toStr || ticket.date <= toStr) {
+                row.totalImportedQty += qty;
+                row.totalCost += qty * price;
+            }
+            addMove(row, ticket.date, ticket.code, 'in', qty);
         });
     });
 
-    Object.values(inventoryMap).forEach(prod => {
-        prod.importPrice = prod.totalImportedQty > 0 ? Math.round(prod.totalCost / prod.totalImportedQty) : 0;
+    Object.values(inventoryMap).forEach(p => {
+        p.importPrice = p.totalImportedQty > 0 ? Math.round(p.totalCost / p.totalImportedQty) : 0;
     });
 
-    // XUẤT (đơn đã xử lý / đã giao)
+    // XUẤT: đơn đã xử lý hoặc đã giao
     rawOrders.forEach(order => {
         if (order.status !== 'processed' && order.status !== 'completed') return;
         if (!Array.isArray(order.items)) return;
-        const d = order.date;
-        if (toStr && d > toStr) return;
-
         order.items.forEach(item => {
             const row = getRow(item, false);
             if (!row) return;
-            const qty = Number(item.qty) || 0;
-            row.currentStock -= qty;
-            if (fromStr && d < fromStr) row.openingStock -= qty;
-            else row.soldInRange += qty;
+            addMove(row, order.date, order.id, 'out', Number(item.qty) || 0);
         });
     });
 
-    // LỌC theo loại + từ khóa (chưa lọc "chỉ hiện sắp hết" để thống kê đúng)
-    const base = Object.values(inventoryMap).filter(item => {
-        if (catFilter !== 'ALL' && item.category !== catFilter) return false;
-        if (keyword && !String(item.name).toLowerCase().includes(keyword)
-            && !String(item.code).toLowerCase().includes(keyword)) return false;
+    inventoryRowsCache = inventoryMap;
+
+    const trangThaiTon = s => s <= 0 ? 'out' : (s < threshold ? 'low' : 'ok');
+
+    // LỌC
+    const finalData = Object.values(inventoryMap).filter(item => {
         if (!item.inCatalog && item.currentStock === 0 && item.importedInRange === 0 && item.soldInRange === 0) return false;
+        if (catFilter !== 'ALL' && item.category !== catFilter) return false;
+        if (keyword && !String(item.name).toLowerCase().includes(keyword) &&
+            !String(item.code).toLowerCase().includes(keyword)) return false;
+        if (statusFilter !== 'ALL' && trangThaiTon(item.currentStock) !== statusFilter) return false;
         return true;
     });
 
     // THỐNG KÊ
     let totalItems = 0, totalValue = 0, lowCount = 0, outCount = 0;
-    base.forEach(p => {
+    finalData.forEach(p => {
+        const st = trangThaiTon(p.currentStock);
         if (p.currentStock > 0) {
             totalItems += p.currentStock;
             totalValue += p.currentStock * p.importPrice;
         }
-        if (p.currentStock <= 0) outCount++;
-        else if (p.currentStock < threshold) lowCount++;
+        if (st === 'low') lowCount++;
+        if (st === 'out') outCount++;
     });
 
-    const finalData = onlyLow ? base.filter(p => p.currentStock < threshold) : base;
-
     updateInventoryDashboard(totalItems, totalValue, lowCount, outCount, threshold);
-    renderInventoryTable(finalData, threshold);
+    renderInventoryTable(finalData, trangThaiTon);
     showInventoryPendingNote(pendingCount);
 }
 
-function renderInventoryTable(data, threshold) {
+function renderInventoryTable(data, trangThaiTon) {
     const tbody = document.getElementById('inventoryTableBody');
     if (!tbody) return;
 
     if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:40px; color:#6c757d;">Không tìm thấy sản phẩm nào phù hợp!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:40px;color:#6c757d;">Không tìm thấy sản phẩm nào phù hợp!</td></tr>`;
         return;
     }
 
-    tbody.innerHTML = data.map(item => {
-        let rowClass = '', warnHtml = `<span class="badge badge-completed">Còn hàng</span>`;
-        if (item.currentStock <= 0) {
-            rowClass = 'row-out';
-            warnHtml = `<span class="badge badge-loss">Hết hàng</span>`;
-        } else if (item.currentStock < threshold) {
-            rowClass = 'row-low';
-            warnHtml = `<span class="badge badge-delivering">Sắp hết</span>`;
-        }
-        const safeCode = String(item.code).replace(/'/g, "\\'");
+    const nhan = {
+        ok: '<span class="stock-badge stock-ok">Còn hàng</span>',
+        low: '<span class="stock-badge stock-low">⚠ Sắp hết</span>',
+        out: '<span class="stock-badge stock-out">Hết hàng</span>'
+    };
 
+    tbody.innerHTML = data.map(item => {
+        const st = trangThaiTon(item.currentStock);
         return `
-        <tr class="${rowClass}">
-            <td style="text-align:center;"><strong>${anToanKH(item.code)}</strong></td>
+        <tr class="${st === 'out' ? 'row-out' : (st === 'low' ? 'row-low' : '')}">
+            <td style="text-align:center;"><strong>${item.code}</strong></td>
             <td style="text-align:center;">
-                <img src="${item.image}" alt="Ảnh SP" style="width:50px; height:50px; object-fit:contain; background:#fff; border-radius:4px; border:1px solid #ddd;">
+                <img src="${item.image}" alt="Ảnh SP" style="width:50px;height:50px;object-fit:contain;background:#fff;border-radius:4px;border:1px solid #ddd;">
             </td>
-            <td><strong>${anToanKH(item.name)}</strong></td>
-            <td style="text-align:center;"><span class="badge" style="background:#e9ecef; color:#333;">${anToanKH(item.category)}</span></td>
-            <td style="text-align:center; font-size:16px;">${item.openingStock}</td>
-            <td style="text-align:center; font-size:16px; font-weight:bold; color:#28a745;">+ ${item.importedInRange}</td>
-            <td style="text-align:center; font-size:16px; font-weight:bold; color:#dc3545;">- ${item.soldInRange}</td>
-            <td style="text-align:center; font-size:18px; font-weight:900;">= ${item.currentStock}</td>
-            <td style="text-align:center;">${warnHtml}</td>
+            <td><strong>${item.name}</strong></td>
+            <td style="text-align:center;"><span class="badge" style="background:#e9ecef;color:#333;">${item.category}</span></td>
+            <td style="text-align:center;font-size:15px;">${item.openingStock}</td>
+            <td style="text-align:center;font-size:15px;font-weight:bold;color:#28a745;">+ ${item.importedInRange}</td>
+            <td style="text-align:center;font-size:15px;font-weight:bold;color:#dc3545;">- ${item.soldInRange}</td>
+            <td style="text-align:center;font-size:17px;font-weight:900;">= ${item.currentStock}</td>
+            <td style="text-align:center;">${nhan[st]}</td>
             <td style="text-align:center;">
-                <button class="btn-action btn-view-detail" onclick="openInventoryDetail('${safeCode}')">Xem</button>
+                <button class="btn-action btn-view-detail" onclick="openInventoryDetail('${item.code}')">Chi tiết</button>
             </td>
         </tr>`;
     }).join('');
@@ -2599,71 +2734,51 @@ function updateInventoryDashboard(totalItems, totalValue, lowCount, outCount, th
     set('invTotalValue', formatMoney(totalValue));
     set('invLowStockAlert', lowCount);
     set('invOutStockAlert', outCount);
-    set('invLowLabel', 'Sắp hết hàng (< ' + threshold + '):');
+    set('invThresholdText', threshold);
 }
 
-// CHI TIẾT NHẬP - XUẤT - TỒN CỦA 1 SẢN PHẨM
+// MODAL: nhập - xuất - tồn của 1 sản phẩm trong khoảng thời gian
 function openInventoryDetail(code) {
-    const fromStr = document.getElementById('invFromDate').value;
-    const toStr = document.getElementById('invToDate').value;
-    const sp = savedProducts.find(p => p.maSP === code);
-    const name = sp ? sp.tenSP : code;
+    const row = inventoryRowsCache[code];
+    if (!row) return;
 
-    const match = (it) => {
-        const ma = it.maSP || it.code;
-        return ma ? ma === code : (it.tenSP || it.name) === name;
-    };
+    const from = document.getElementById('invFromDate').value;
+    const to = document.getElementById('invToDate').value;
+    const khoang = (from || to)
+        ? 'Từ ' + (from || '...') + ' đến ' + (to || '...')
+        : 'Toàn bộ thời gian';
 
-    const moves = [];
-    rawImports.forEach(t => {
-        if (t.status !== 'completed' || !Array.isArray(t.items)) return;
-        t.items.forEach(it => {
-            if (match(it)) moves.push({ date: t.date, ref: t.code, type: 'in', qty: Number(it.qty) || 0 });
-        });
-    });
-    rawOrders.forEach(o => {
-        if ((o.status !== 'processed' && o.status !== 'completed') || !Array.isArray(o.items)) return;
-        o.items.forEach(it => {
-            if (match(it)) moves.push({ date: o.date, ref: o.id, type: 'out', qty: Number(it.qty) || 0 });
-        });
-    });
+    document.getElementById('invDetailName').innerText = row.code + ' - ' + row.name;
+    document.getElementById('invDetailSummary').innerHTML = `
+        <div><span>Khoảng thời gian</span><b>${khoang}</b></div>
+        <div><span>Tồn đầu kỳ</span><b>${row.openingStock}</b></div>
+        <div><span>Tổng nhập</span><b style="color:#28a745;">+ ${row.importedInRange}</b></div>
+        <div><span>Tổng xuất</span><b style="color:#dc3545;">- ${row.soldInRange}</b></div>
+        <div><span>Tồn cuối kỳ</span><b style="color:#007bff;">${row.currentStock}</b></div>`;
 
-    // Cùng ngày: nhập trước, xuất sau
-    moves.sort((a, b) => a.date === b.date ? (a.type === b.type ? 0 : (a.type === 'in' ? -1 : 1)) : (a.date < b.date ? -1 : 1));
+    const moves = row.moves.slice().sort((a, b) => a.date.localeCompare(b.date));
+    let balance = row.openingStock;
+    const body = document.getElementById('invDetailBody');
 
-    let balance = 0;
-    let opening = 0;
-    const rowsInRange = [];
-    moves.forEach(m => {
-        if (toStr && m.date > toStr) return;
-        balance += (m.type === 'in' ? m.qty : -m.qty);
-        if (fromStr && m.date < fromStr) { opening = balance; return; }
-        rowsInRange.push({ m: m, after: balance });
-    });
-
-    document.getElementById('invDetailTitle').innerText = code + ' - ' + name;
-    document.getElementById('invDetailRange').innerText =
-        'Khoảng thời gian: ' + (fromStr || 'từ đầu') + ' → ' + (toStr || 'hiện tại');
-
-    let html = `<tr style="background:#f8f9fa;"><td colspan="5"><b>Tồn đầu kỳ</b></td><td style="text-align:center;"><b>${opening}</b></td></tr>`;
-    if (rowsInRange.length === 0) {
-        html += `<tr><td colspan="6" style="text-align:center; color:#888; padding:15px;">Không phát sinh nhập/xuất trong kỳ.</td></tr>`;
+    if (moves.length === 0) {
+        body.innerHTML = `<tr><td colspan="6" style="text-align:center;color:#888;padding:20px;">Không có phát sinh nhập/xuất trong khoảng thời gian này.</td></tr>`;
     } else {
-        html += rowsInRange.map(r => `
+        body.innerHTML = moves.map(m => {
+            balance += m.kind === 'in' ? m.qty : -m.qty;
+            return `
             <tr>
-                <td>${r.m.date}</td>
-                <td>${anToanKH(r.m.ref)}</td>
-                <td>${r.m.type === 'in' ? 'Phiếu nhập' : 'Đơn hàng'}</td>
-                <td style="text-align:center; color:#28a745; font-weight:bold;">${r.m.type === 'in' ? '+' + r.m.qty : ''}</td>
-                <td style="text-align:center; color:#dc3545; font-weight:bold;">${r.m.type === 'out' ? '-' + r.m.qty : ''}</td>
-                <td style="text-align:center;"><b>${r.after}</b></td>
-            </tr>`).join('');
+                <td>${m.date}</td>
+                <td>${m.ref}</td>
+                <td>${m.kind === 'in' ? 'Nhập hàng' : 'Bán hàng'}</td>
+                <td style="text-align:center;color:#28a745;font-weight:bold;">${m.kind === 'in' ? '+ ' + m.qty : ''}</td>
+                <td style="text-align:center;color:#dc3545;font-weight:bold;">${m.kind === 'out' ? '- ' + m.qty : ''}</td>
+                <td style="text-align:center;font-weight:bold;">${balance}</td>
+            </tr>`;
+        }).join('');
     }
-    html += `<tr style="background:#f8f9fa;"><td colspan="5"><b>Tồn cuối kỳ</b></td><td style="text-align:center;"><b>${balance}</b></td></tr>`;
-
-    document.getElementById('invDetailBody').innerHTML = html;
-    document.getElementById('invDetailModal').style.display = 'flex';
+    document.getElementById('inventoryDetailModal').style.display = 'flex';
 }
+
 // Nhắc khi còn phiếu nhập "Lưu tạm" (các phiếu này chưa được tính vào tồn kho)
 function showInventoryPendingNote(pendingCount) {
     const section = document.getElementById('tab-inventory');

@@ -1386,6 +1386,14 @@ input[type="number"] {
 /*====================================================================================
     DÀNH CHO TRANG BÁO CÁO TỒN KHO
 ====================================================================================*/
+
+.sub-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 12px;
+    color: #343a40;
+}
+
 .inventory-stat-table{
     border: 1px solid #d70027;
     border-radius: 3px;
@@ -1509,3 +1517,40 @@ input[type="number"] {
 
 #inventoryTableBody tr.row-out { background-color: #fdecea; }
 #inventoryTableBody tr.row-low { background-color: #fff8e1; }
+
+.stock-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.stock-ok  { background: #d4edda; color: #155724; }
+.stock-low { background: #ffe5b4; color: #b35900; }
+.stock-out { background: #f8d7da; color: #721c24; }
+
+#tab-inventory tr.row-low td { background-color: #fff8ec; }
+#tab-inventory tr.row-out td { background-color: #fff0f0; }
+
+.inv-detail-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+.inv-detail-summary div {
+    flex: 1;
+    min-width: 130px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 10px 14px;
+}
+.inv-detail-summary span {
+    display: block;
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 4px;
+}
+.inv-detail-summary b { font-size: 16px; }
