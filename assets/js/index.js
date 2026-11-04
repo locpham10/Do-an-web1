@@ -279,7 +279,7 @@ function khoiTaoDuLieuMau() {
         code: "PN001",
         date: "2026-10-25",
         status: "completed",
-        totalAmount: 4405400000,
+        totalAmount: 4537250000,
         items: [
           {
             maSP: "SP01",
@@ -298,7 +298,7 @@ function khoiTaoDuLieuMau() {
           {
             maSP: "SP03",
             tenSP: "OPPO Find N3",
-            hinh: "../Img/Oppo/Oppo-find-N3.png",
+            hinh: "../Img/OPPO/Oppo-find-N3.png",
             qty: 10,
             price: 21240000,
           },
@@ -312,109 +312,115 @@ function khoiTaoDuLieuMau() {
           {
             maSP: "SP05",
             tenSP: "iPhone 16 Pro",
-            hinh: "",
+            hinh: "../Img/Apple/iphone-16-pro-natural.png",
             qty: 10,
             price: 24640000,
           },
           {
             maSP: "SP06",
-            tenSP: "iPhone 17",
-            hinh: "",
+            tenSP: "iPhone 17 Pro",
+            hinh: "../Img/Apple/iphone-17-pro.png",
             qty: 10,
             price: 21240000,
           },
           {
             maSP: "SP07",
             tenSP: "iPhone Air",
-            hinh: "",
+            hinh: "../Img/Apple/iphone-air.png",
             qty: 10,
             price: 27190000,
           },
           {
             maSP: "SP08",
             tenSP: "Galaxy S25 Ultra",
-            hinh: "",
+            hinh: "../Img/Samsung/Samsung-galaxy-s25-ultra.png",
             qty: 10,
             price: 27190000,
           },
           {
             maSP: "SP09",
             tenSP: "Galaxy S26",
-            hinh: "",
+            hinh: "../Img/Samsung/Samsung-galaxy-s26.png",
             qty: 10,
             price: 21240000,
           },
           {
             maSP: "SP10",
             tenSP: "Galaxy Z Fold7",
-            hinh: "",
+            hinh: "../Img/Samsung/Samsung-galaxy-zfold7.png",
             qty: 10,
             price: 39940000,
           },
           {
             maSP: "SP11",
             tenSP: "Galaxy A56 5G",
-            hinh: "",
+            hinh: "../Img/Samsung/Samsung-galaxy-a56-5g.png",
             qty: 10,
             price: 10190000,
           },
           {
             maSP: "SP12",
             tenSP: "OPPO Find X8 Pro",
-            hinh: "",
+            hinh: "../Img/OPPO/Oppo-find-x8-pro.png",
             qty: 10,
             price: 25490000,
           },
           {
             maSP: "SP13",
             tenSP: "OPPO Reno14 Pro 5G",
-            hinh: "",
+            hinh: "../Img/OPPO/Oppo-reno14-pro.png",
             qty: 10,
             price: 16990000,
           },
           {
             maSP: "SP14",
             tenSP: "OPPO Reno13 5G",
-            hinh: "",
+            hinh: "../Img/OPPO/Oppo-reno13-pro.png",
             qty: 10,
             price: 11040000,
           },
           {
             maSP: "SP15",
             tenSP: "OPPO A5 Pro 5G",
-            hinh: "",
+            hinh: "../Img/OPPO/Oppo-a5-pro.png",
             qty: 10,
             price: 5940000,
           },
           {
             maSP: "SP16",
             tenSP: "Xiaomi 15 Ultra",
-            hinh: "",
+            hinh: "../Img/Xiaomi/Xiaomi-15-ultra.png",
             qty: 10,
             price: 27190000,
           },
           {
             maSP: "SP17",
             tenSP: "Xiaomi 15",
-            hinh: "",
+            hinh: "../Img/Xiaomi/Xiaomi-15.png",
             qty: 10,
             price: 16990000,
           },
           {
             maSP: "SP18",
             tenSP: "Xiaomi 14T Pro",
-            hinh: "",
+            hinh: "../Img/Xiaomi/Xiaomi-14t-pro.png",
             qty: 10,
             price: 12740000,
           },
           {
             maSP: "SP19",
             tenSP: "Redmi Note 14 Pro+ 5G",
-            hinh: "",
+            hinh: "../Img/Xiaomi/Redmi-note-14prop.png",
             qty: 10,
             price: 8490000,
           },
-          { maSP: "SP20", tenSP: "POCO F7", hinh: "", qty: 10, price: 9770000 },
+          {
+            maSP: "SP20",
+            tenSP: "POCO F7",
+            hinh: "../Img/Xiaomi/poco-f7.png",
+            qty: 10,
+            price: 9770000,
+          },
         ],
       },
     ];
@@ -445,7 +451,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP03",
         tenSP: "OPPO Find N3",
-        hinh: "../Img/Oppo/Oppo-find-N3.png",
+        hinh: "../Img/OPPO/Oppo-find-N3.png",
         totalQty: 10,
         totalCost: 212400000,
         importPrice: 21240000,
@@ -463,7 +469,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP05",
         tenSP: "iPhone 16 Pro",
-        hinh: "",
+        hinh: "../Img/Apple/iphone-16-pro-natural.png",
         totalQty: 10,
         totalCost: 246400000,
         importPrice: 24640000,
@@ -471,8 +477,8 @@ function khoiTaoDuLieuMau() {
       },
       {
         maSP: "SP06",
-        tenSP: "iPhone 17",
-        hinh: "",
+        tenSP: "iPhone 17 Pro",
+        hinh: "../Img/Apple/iphone-17-pro.png",
         totalQty: 10,
         totalCost: 212400000,
         importPrice: 21240000,
@@ -481,7 +487,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP07",
         tenSP: "iPhone Air",
-        hinh: "",
+        hinh: "../Img/Apple/iphone-air.png",
         totalQty: 10,
         totalCost: 271900000,
         importPrice: 27190000,
@@ -490,7 +496,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP08",
         tenSP: "Galaxy S25 Ultra",
-        hinh: "",
+        hinh: "../Img/Samsung/Samsung-galaxy-s25-ultra.png",
         totalQty: 10,
         totalCost: 271900000,
         importPrice: 27190000,
@@ -499,7 +505,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP09",
         tenSP: "Galaxy S26",
-        hinh: "",
+        hinh: "../Img/Samsung/Samsung-galaxy-s26.png",
         totalQty: 10,
         totalCost: 212400000,
         importPrice: 21240000,
@@ -508,7 +514,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP10",
         tenSP: "Galaxy Z Fold7",
-        hinh: "",
+        hinh: "../Img/Samsung/Samsung-galaxy-zfold7.png",
         totalQty: 10,
         totalCost: 399400000,
         importPrice: 39940000,
@@ -517,7 +523,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP11",
         tenSP: "Galaxy A56 5G",
-        hinh: "",
+        hinh: "../Img/Samsung/Samsung-galaxy-a56-5g.png",
         totalQty: 10,
         totalCost: 101900000,
         importPrice: 10190000,
@@ -526,7 +532,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP12",
         tenSP: "OPPO Find X8 Pro",
-        hinh: "",
+        hinh: "../Img/OPPO/Oppo-find-x8-pro.png",
         totalQty: 10,
         totalCost: 254900000,
         importPrice: 25490000,
@@ -535,7 +541,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP13",
         tenSP: "OPPO Reno14 Pro 5G",
-        hinh: "",
+        hinh: "../Img/OPPO/Oppo-reno14-pro.png",
         totalQty: 10,
         totalCost: 169900000,
         importPrice: 16990000,
@@ -544,7 +550,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP14",
         tenSP: "OPPO Reno13 5G",
-        hinh: "",
+        hinh: "../Img/OPPO/Oppo-reno13-pro.png",
         totalQty: 10,
         totalCost: 110400000,
         importPrice: 11040000,
@@ -553,7 +559,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP15",
         tenSP: "OPPO A5 Pro 5G",
-        hinh: "",
+        hinh: "../Img/OPPO/Oppo-a5-pro.png",
         totalQty: 10,
         totalCost: 59400000,
         importPrice: 5940000,
@@ -562,7 +568,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP16",
         tenSP: "Xiaomi 15 Ultra",
-        hinh: "",
+        hinh: "../Img/Xiaomi/Xiaomi-15-ultra.png",
         totalQty: 10,
         totalCost: 271900000,
         importPrice: 27190000,
@@ -571,7 +577,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP17",
         tenSP: "Xiaomi 15",
-        hinh: "",
+        hinh: "../Img/Xiaomi/Xiaomi-15.png",
         totalQty: 10,
         totalCost: 169900000,
         importPrice: 16990000,
@@ -580,7 +586,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP18",
         tenSP: "Xiaomi 14T Pro",
-        hinh: "",
+        hinh: "../Img/Xiaomi/Xiaomi-14t-pro.png",
         totalQty: 10,
         totalCost: 127400000,
         importPrice: 12740000,
@@ -589,7 +595,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP19",
         tenSP: "Redmi Note 14 Pro+ 5G",
-        hinh: "",
+        hinh: "../Img/Xiaomi/Redmi-note-14prop.png",
         totalQty: 10,
         totalCost: 84900000,
         importPrice: 8490000,
@@ -598,7 +604,7 @@ function khoiTaoDuLieuMau() {
       {
         maSP: "SP20",
         tenSP: "POCO F7",
-        hinh: "",
+        hinh: "../Img/Xiaomi/poco-f7.png",
         totalQty: 10,
         totalCost: 97700000,
         importPrice: 9770000,
@@ -608,6 +614,8 @@ function khoiTaoDuLieuMau() {
     localStorage.setItem("saved_pricing", JSON.stringify(giaMau));
   }
 }
+
+khoiTaoDuLieuMau()
 
 khoiTaoDuLieuMau();
 
