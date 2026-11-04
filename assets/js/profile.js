@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentUser = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
     if (!currentUser) {
         alert("Vui lòng đăng nhập để xem thông tin!");
-        window.location.href = "index.html"; 
+        window.location.href = "index.html";
         return;
     }
 
@@ -11,18 +11,18 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("profileName").innerText = currentUser.hoTen || "Chưa cập nhật";
     document.getElementById("profileEmail").innerText = currentUser.email || "---";
     document.getElementById("profilePhone").innerText = currentUser.soDienThoai || "---";
-    
+
     // Xử lý địa chỉ và giới tính (nếu có)
     const addressEl = document.getElementById("profileAddress");
     addressEl.innerText = currentUser.diaChi || "Chưa có địa chỉ";
     addressEl.style.color = currentUser.diaChi ? "#333" : "#d70027";
-    
+
     document.getElementById("profileGender").innerText = currentUser.gioiTinh || "Chưa cập nhật";
     document.getElementById("avatarText").innerText = currentUser.hoTen ? currentUser.hoTen.charAt(0).toUpperCase() : "U";
 
     // 3. LẤY VÀ ĐỒNG BỘ TRẠNG THÁI ĐƠN HÀNG TỪ ADMIN
     const allOrders = JSON.parse(localStorage.getItem("saved_orders")) || [];
-    
+
     // Lọc ra các đơn hàng đúng của user này (dựa vào số điện thoại)
     const myOrders = allOrders.filter(order => order.customerPhone === currentUser.soDienThoai);
 
@@ -34,31 +34,31 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         // Đảo ngược mảng để đơn mới nhất (vừa đặt) nhảy lên đầu tiên
         orderListContainer.innerHTML = myOrders.reverse().map(order => {
-            
+
             // MAP TRẠNG THÁI ĐỒNG BỘ VỚI ADMIN
             let statusText = "";
             let statusColor = "";
             let statusBg = "";
-            
-            switch(order.status) {
-                case 'pending': 
-                    statusText = "Chờ xác nhận"; 
-                    statusColor = "#856404"; 
+
+            switch (order.status) {
+                case 'pending':
+                    statusText = "Chờ xác nhận";
+                    statusColor = "#856404";
                     statusBg = "#fff3cd";
                     break;
-                case 'processed': 
-                    statusText = "Đang giao hàng"; 
-                    statusColor = "#004085"; 
+                case 'processed':
+                    statusText = "Đang giao hàng";
+                    statusColor = "#004085";
                     statusBg = "#cce5ff";
                     break;
-                case 'completed': 
-                    statusText = "Đã giao thành công"; 
-                    statusColor = "#155724"; 
+                case 'completed':
+                    statusText = "Đã giao thành công";
+                    statusColor = "#155724";
                     statusBg = "#d4edda";
                     break;
-                case 'cancelled': 
-                    statusText = "Đã hủy"; 
-                    statusColor = "#721c24"; 
+                case 'cancelled':
+                    statusText = "Đã hủy";
+                    statusColor = "#721c24";
                     statusBg = "#f8d7da";
                     break;
                 default:
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const editProfileForm = document.getElementById("editProfileForm");
 
     if (btnOpenEditModal) {
-        btnOpenEditModal.addEventListener("click", function() {
+        btnOpenEditModal.addEventListener("click", function () {
             document.getElementById("editName").value = currentUser.hoTen || "";
             document.getElementById("editPhone").value = currentUser.soDienThoai || "";
             document.getElementById("editEmail").value = currentUser.email || "";
@@ -124,9 +124,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (btnCancelEdit) btnCancelEdit.addEventListener("click", closeEdit);
 
     if (editProfileForm) {
-        editProfileForm.addEventListener("submit", function(e) {
-            e.preventDefault(); 
-            
+        editProfileForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
             const newName = document.getElementById("editName").value.trim();
             const newPhone = document.getElementById("editPhone").value.trim();
             const newEmail = document.getElementById("editEmail").value.trim();
@@ -162,10 +162,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // ==========================================================
     const btnLogoutProfile = document.getElementById("btnLogout");
     if (btnLogoutProfile) {
-        btnLogoutProfile.addEventListener("click", function() {
+        btnLogoutProfile.addEventListener("click", function () {
             if (confirm("Bạn có chắc chắn muốn đăng xuất?")) {
                 localStorage.removeItem("nguoiDungDangNhap");
-                window.location.href = "index.html"; 
+                window.location.href = "index.html";
             }
         });
     }
@@ -189,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (breadcrumbCurrent) breadcrumbCurrent.innerText = "Thông tin tài khoản";
         }
     }
-    
+
     handleViewRouting(); // Chạy ngay khi tải trang
     window.addEventListener("hashchange", handleViewRouting); // Lắng nghe khi bấm nút trên giao diện
 
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (confirmAction) {
                 let taiKhoan = JSON.parse(localStorage.getItem("taiKhoan")) || [];
                 const accIndex = taiKhoan.findIndex(u => u.email === currentUser.email && u.soDienThoai === currentUser.soDienThoai);
-                
+
                 if (accIndex !== -1) {
                     // Cập nhật trạng thái mềm thành 'daXoa'
                     taiKhoan[accIndex].trangThai = "daXoa";
@@ -232,4 +232,21 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    function xuLyHash() {
+        const hash = window.location.hash;
+        const secProfile = document.getElementById("sectionProfile");
+        const secDelete = document.getElementById("sectionDelete");
+
+        const hienXoa = (hash === "#delete");
+        secProfile.style.display = hienXoa ? "none" : "";
+        secDelete.style.display = hienXoa ? "block" : "none";
+
+        if (hash === "#edit" && btnOpenEditModal) {
+            btnOpenEditModal.click();   // mở popup sửa thông tin
+            // Xóa #edit khỏi URL để F5 hoặc bấm lại không mở popup lần nữa
+            history.replaceState(null, "", "profile.html");
+        }
+    }
+    xuLyHash();
+    window.addEventListener("hashchange", xuLyHash);
 });

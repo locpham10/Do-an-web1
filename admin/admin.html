@@ -259,6 +259,49 @@
                     <div class="page-header">
                         <h1 class="page-title">Thiết lập giá bán</h1>
                     </div>
+
+                    <!-- 1. % LỢI NHUẬN THEO LOẠI -->
+                    <h3 class="sub-title">1. Tỉ lệ % lợi nhuận theo loại sản phẩm</h3>
+                    <div class="card-table" style="margin-bottom: 30px;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Mã loại</th>
+                                    <th>Tên loại</th>
+                                    <th style="text-align: center;">Số SP đã nhập hàng</th>
+                                    <th style="text-align: center;">% LN trung bình hiện tại</th>
+                                    <th style="text-align: center;">% LN muốn áp dụng</th>
+                                    <th style="text-align: center;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="typeMarginBody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- 2. TRA CỨU + BẢNG GIÁ TỪNG SẢN PHẨM -->
+                    <h3 class="sub-title">2. Giá vốn, % lợi nhuận và giá bán từng sản phẩm</h3>
+                    <div class="header-actions">
+                        <div class="date-filter" style="gap: 10px;">
+                            <select id="pricingCategoryFilter" class="search-input status-filter"
+                                onchange="renderPricingTable()">
+                                <option value="ALL">-- Tất cả loại --</option>
+                            </select>
+                            <select id="pricingStatusFilter" class="search-input status-filter"
+                                onchange="renderPricingTable()">
+                                <option value="ALL">-- Mọi trạng thái giá --</option>
+                                <option value="none">Chưa thiết lập giá bán</option>
+                                <option value="profit">Đang có lãi</option>
+                                <option value="loss">Đang lỗ / hòa vốn</option>
+                            </select>
+                        </div>
+                        <div class="search-action">
+                            <input type="text" id="pricingSearch" class="search-input"
+                                placeholder="Tìm mã hoặc tên sản phẩm..." onkeyup="renderPricingTable()">
+                            <button class="btn-action" style="background-color: #6c757d; color: white;"
+                                onclick="resetPricingFilters()">Làm mới</button>
+                        </div>
+                    </div>
+
                     <div class="card-table">
                         <table>
                             <thead>
@@ -266,15 +309,14 @@
                                     <th>Mã SP</th>
                                     <th>Ảnh</th>
                                     <th>Tên SP</th>
-                                    <th style="text-align: right;">Giá nhập</th>
-                                    <th style="text-align: right;">Giá bán niêm yết</th>
+                                    <th>Loại</th>
+                                    <th style="text-align: right;">Giá vốn (bình quân)</th>
+                                    <th style="text-align: right;">Giá bán</th>
                                     <th style="text-align: center;">Lợi nhuận (%)</th>
                                     <th style="text-align: center;">Thao tác</th>
                                 </tr>
                             </thead>
-                            <tbody id="pricingTableBody">
-                                <!--JS ghi bảng-->
-                            </tbody>
+                            <tbody id="pricingTableBody"></tbody>
                         </table>
                     </div>
                 </section>
@@ -340,12 +382,12 @@
                         <h1 class="page-title">Báo cáo tồn kho</h1>
                     </div>
 
-                    <!-- BẢNG THỐNG KÊ TỔNG QUAN -->
+                    <!-- THỐNG KÊ TỔNG QUAN -->
                     <div class="inventory-stat-table">
                         <table>
                             <thead>
                                 <tr>
-                                    <th colspan="2">Thống kê tồn kho theo bộ lọc hiện tại</th>
+                                    <th colspan="2">Bảng thống kê tồn kho tại thời điểm tra cứu</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -358,11 +400,11 @@
                                     <td><strong id="invTotalValue" style="color: #007bff;">0 đ</strong></td>
                                 </tr>
                                 <tr>
-                                    <td id="invLowLabel">Sắp hết hàng (&lt; 5):</td>
-                                    <td><strong id="invLowStockAlert" style="color: #e0a800;">0</strong> mặt hàng</td>
+                                    <td>Sắp hết hàng (&lt; <span id="invThresholdText">5</span>):</td>
+                                    <td><strong id="invLowStockAlert" style="color: #e67e22;">0</strong> mặt hàng</td>
                                 </tr>
                                 <tr>
-                                    <td>Đã hết hàng:</td>
+                                    <td>Hết hàng:</td>
                                     <td><strong id="invOutStockAlert" style="color: #dc3545;">0</strong> mặt hàng</td>
                                 </tr>
                             </tbody>
@@ -372,34 +414,44 @@
                     <!-- BỘ LỌC -->
                     <div class="header-actions" style="flex-wrap: wrap;">
                         <div class="inventory-filter-group"
-                            style="display:flex; gap:15px; align-items:flex-end; flex-wrap:wrap;">
+                            style="display:flex;gap:15px;align-items:flex-end;flex-wrap:wrap;">
                             <div class="inventory-filter">
                                 <label>Loại sản phẩm:</label>
-                                <select id="invCategoryFilter" class="search-input status-filter" style="width:150px;">
+                                <select id="invCategoryFilter" class="search-input status-filter" style="width:150px;"
+                                    onchange="applyInventoryFilters()">
                                     <option value="ALL">-- Tất cả loại --</option>
                                 </select>
                             </div>
                             <div class="inventory-filter">
-                                <label>Từ ngày (đầu kỳ):</label>
+                                <label>Từ ngày:</label>
                                 <input type="date" id="invFromDate" class="search-input" style="width:auto;">
                             </div>
                             <div class="inventory-filter">
-                                <label>Đến ngày (cuối kì):</label>
+                                <label>Đến ngày (mốc tồn kho):</label>
                                 <input type="date" id="invToDate" class="search-input" style="width:auto;">
                             </div>
                             <div class="inventory-filter">
-                                <label>Ngưỡng sắp hết (&lt;):</label>
-                                <input type="number" id="invLowThreshold" class="search-input" value="5" min="1"
-                                    style="width:90px;">
+                                <label>Ngưỡng cảnh báo (&lt;):</label>
+                                <input type="number" id="invThreshold" class="search-input" value="5" min="1"
+                                    style="width:90px;" onchange="applyInventoryFilters()">
                             </div>
                             <div class="inventory-filter">
-                                <label style="font-weight:normal; cursor:pointer;">
-                                    <input type="checkbox" id="invOnlyLow"> Chỉ hiện hàng sắp hết / hết hàng
-                                </label>
+                                <label>Tình trạng tồn:</label>
+                                <select id="invStatusFilter" class="search-input status-filter"
+                                    onchange="applyInventoryFilters()">
+                                    <option value="ALL">-- Tất cả --</option>
+                                    <option value="low">Sắp hết hàng</option>
+                                    <option value="out">Hết hàng</option>
+                                    <option value="ok">Còn hàng</option>
+                                </select>
                             </div>
                             <div class="inventory-filter">
-                                <button class="btn-action" style="background-color:#17a2b8; color:white;"
-                                    onclick="applyInventoryFilters()">Tra cứu</button>
+                                <button class="btn-action" style="background-color:#17a2b8;color:white;"
+                                    onclick="traCuuTonKho()">Tra cứu</button>
+                            </div>
+                            <div class="inventory-filter">
+                                <button class="btn-action" style="background-color:#6c757d;color:white;"
+                                    onclick="resetInventoryFilters()">Làm mới</button>
                             </div>
                         </div>
 
@@ -409,7 +461,7 @@
                         </div>
                     </div>
 
-                    <!-- BẢNG CHI TIẾT -->
+                    <!-- BẢNG NHẬP - XUẤT - TỒN -->
                     <div class="card-table">
                         <table>
                             <thead>
@@ -417,12 +469,12 @@
                                     <th style="text-align:center;">Mã SP</th>
                                     <th style="text-align:center;">Ảnh</th>
                                     <th>Tên sản phẩm</th>
-                                    <th style="text-align:center;">Loại SP</th>
+                                    <th style="text-align:center;">Loại</th>
                                     <th style="text-align:center;">Tồn đầu kỳ</th>
                                     <th style="text-align:center;">Nhập<br><small>(trong kỳ)</small></th>
                                     <th style="text-align:center;">Xuất<br><small>(trong kỳ)</small></th>
                                     <th style="text-align:center;">Tồn cuối kỳ</th>
-                                    <th style="text-align:center;">Cảnh báo</th>
+                                    <th style="text-align:center;">Tình trạng</th>
                                     <th style="text-align:center;">Chi tiết</th>
                                 </tr>
                             </thead>
@@ -891,6 +943,38 @@
                             onclick="closeModal()">Đóng</button>
                         <button class="btn-create" onclick="saveOrderStatus()">Cập nhật & Lưu</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- MODAL CHI TIẾT NHẬP - XUẤT - TỒN CỦA 1 SẢN PHẨM -->
+        <div id="inventoryDetailModal" class="modal">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h3 class="modal-title">Nhập – Xuất – Tồn: <span id="invDetailName" style="color:#007bff;"></span>
+                    </h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="invDetailSummary" class="inv-detail-summary"></div>
+                    <div class="detail-table-wrapper">
+                        <table class="detail-table">
+                            <thead>
+                                <tr>
+                                    <th>Ngày</th>
+                                    <th>Chứng từ</th>
+                                    <th>Loại</th>
+                                    <th style="text-align:center;">Nhập</th>
+                                    <th style="text-align:center;">Xuất</th>
+                                    <th style="text-align:center;">Tồn sau</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invDetailBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-action" style="background-color:#6c757d;color:white;"
+                        onclick="closeModal()">Đóng</button>
                 </div>
             </div>
         </div>
