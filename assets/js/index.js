@@ -1,6 +1,6 @@
 // DỮ LIỆU MẪU PHẢI GIỐNG HỆT admin.js (dùng chung localStorage) - trang nào mở trước cũng tạo ra cùng một bộ dữ liệu.
 function khoiTaoDuLieuMau() {
-  const DATA_VERSION = "3";
+  const DATA_VERSION = "4";
   if (localStorage.getItem("dataVersion") !== DATA_VERSION) {
     ["loaiSanPham", "danhMucSanPham", "saved_imports", "saved_pricing"].forEach(
       function (k) {
@@ -16,7 +16,7 @@ function khoiTaoDuLieuMau() {
       { maLoai: "L01", tenLoai: "Apple", moTa: "Các điện thoại iPhone", trangThai: "hoatdong", hinh: "../Img/Apple/hangApple.png" },
       { maLoai: "L02", tenLoai: "Samsung", moTa: "Các điện thoại của hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/hangSamsung.png" },
       { maLoai: "L03", tenLoai: "Oppo", moTa: "Các điện thoại của hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/hangOppo.png" },
-      { maLoai: "L04", tenLoai: "Xiaomi", moTa: "Các điện thoại của hãng Xiaomi", trangThai: "hoatdong", hinh: "" },
+      { maLoai: "L04", tenLoai: "Xiaomi", moTa: "Các điện thoại của hãng Xiaomi", trangThai: "hoatdong", hinh: "../Img/Xiaomi/xiaomi-logo.png" },
     ];
     localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
   }
@@ -25,16 +25,15 @@ function khoiTaoDuLieuMau() {
   if (!localStorage.getItem("danhMucSanPham")) {
     const spMau = [
       {
-        maSP: "SP01",
-        maLoai: "L01",
-        tenLoai: "Apple",
-        tenSP: "iPhone 15 Pro Max",
-        price: 29990000,
-        moTa: "Màn hình: 6.7 inch Super Retina XDR OLED, 2796 x 1290, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A17 Pro, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 12MP tele 5x + 12MP siêu rộng; Trước: 12MP\nPin & sạc: Khoảng 4422mAh, sạc nhanh có dây ~27W, sạc không dây MagSafe 15W\nHệ điều hành: iOS 17 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple",
-        trangThai: "hoatdong",
-        hinh: "../Img/Apple/iPhone15_den.png",
-        color: "Titan Tự Nhiên",
-      },
+        maSP: "SP01", 
+        maLoai: "L01", 
+        tenLoai: "Apple", 
+        tenSP: "iPhone 18 Pro", 
+        price: 45500000, 
+        moTa: "Màn hình: 6.9 inch LTPO Super Retina XDR OLED, 2868 x 1320, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A20 Pro (2nm), RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP Fusion chính (khẩu độ biến thiên) + 48MP tele tiềm vọng (zoom quang 4x/8x) + 48MP siêu rộng; Trước: 18MP Center Stage\nPin & sạc: Khoảng 5391mAh (xem video đến 43 giờ), sạc nhanh có dây 50% trong 15 phút, sạc không dây MagSafe/Qi2 25W\nHệ điều hành: iOS 27 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", 
+        trangThai: "hoatdong", 
+        hinh: "../Img/Apple/iphone-18-pro.png", 
+        color: "Đỏ Burgundy"},
       {
         maSP: "SP02",
         maLoai: "L02",
@@ -258,11 +257,11 @@ function khoiTaoDuLieuMau() {
         totalAmount: 4405400000,
         items: [
           {
-            maSP: "SP01",
-            tenSP: "iPhone 15 Pro Max",
-            hinh: "../Img/Apple/iPhone15_den.png",
-            qty: 10,
-            price: 25490000,
+            maSP: "SP01", 
+            tenSP: "iPhone 18 Pro", 
+            hinh: "../Img/Apple/iphone-18-pro.png", 
+            qty: 10, 
+            price: 38675000
           },
           {
             maSP: "SP02",
@@ -400,14 +399,13 @@ function khoiTaoDuLieuMau() {
   // 4. Tạo bảng giá bán mẫu
   if (!localStorage.getItem("saved_pricing")) {
     const giaMau = [
-      {
-        maSP: "SP01",
-        tenSP: "iPhone 15 Pro Max",
-        hinh: "../Img/Apple/iPhone15_den.png",
-        totalQty: 10,
-        totalCost: 254900000,
-        importPrice: 25490000,
-        retailPrice: 29990000,
+      { maSP: "SP01", 
+        tenSP: "iPhone 18 Pro", 
+        hinh: "../Img/Apple/iphone-18-pro.png", 
+        totalQty: 10, 
+        totalCost: 386750000, 
+        importPrice: 38675000, 
+        retailPrice: 45500000 
       },
       {
         maSP: "SP02",
