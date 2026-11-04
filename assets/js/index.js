@@ -801,7 +801,7 @@ for (let i = 0; i < allProducts.length; i++) {
 }
 
 let currentPage = 1;
-let itemsPerPage = 8;
+let itemsPerPage = 10;
 
 // HÀM 1: Vẽ sản phẩm
 function renderProducts(page) {
