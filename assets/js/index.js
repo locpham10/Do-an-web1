@@ -13,10 +13,34 @@ function khoiTaoDuLieuMau() {
   // 1. Tạo loại sản phẩm mẫu
   if (!localStorage.getItem("loaiSanPham")) {
     const loaiMau = [
-      { maLoai: "L01", tenLoai: "Apple", moTa: "Các điện thoại iPhone", trangThai: "hoatdong", hinh: "../Img/Apple/hangApple.png" },
-      { maLoai: "L02", tenLoai: "Samsung", moTa: "Các điện thoại của hãng Samsung", trangThai: "hoatdong", hinh: "../Img/Samsung/hangSamsung.png" },
-      { maLoai: "L03", tenLoai: "Oppo", moTa: "Các điện thoại của hãng OPPO", trangThai: "hoatdong", hinh: "../Img/OPPO/hangOppo.png" },
-      { maLoai: "L04", tenLoai: "Xiaomi", moTa: "Các điện thoại của hãng Xiaomi", trangThai: "hoatdong", hinh: "../Img/Xiaomi/xiaomi-logo.png" },
+      {
+        maLoai: "L01",
+        tenLoai: "Apple",
+        moTa: "Các điện thoại iPhone",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/hangApple.png",
+      },
+      {
+        maLoai: "L02",
+        tenLoai: "Samsung",
+        moTa: "Các điện thoại của hãng Samsung",
+        trangThai: "hoatdong",
+        hinh: "../Img/Samsung/hangSamsung.png",
+      },
+      {
+        maLoai: "L03",
+        tenLoai: "Oppo",
+        moTa: "Các điện thoại của hãng OPPO",
+        trangThai: "hoatdong",
+        hinh: "../Img/OPPO/hangOppo.png",
+      },
+      {
+        maLoai: "L04",
+        tenLoai: "Xiaomi",
+        moTa: "Các điện thoại của hãng Xiaomi",
+        trangThai: "hoatdong",
+        hinh: "../Img/Xiaomi/xiaomi-logo.png",
+      },
     ];
     localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
   }
@@ -25,15 +49,16 @@ function khoiTaoDuLieuMau() {
   if (!localStorage.getItem("danhMucSanPham")) {
     const spMau = [
       {
-        maSP: "SP01", 
-        maLoai: "L01", 
-        tenLoai: "Apple", 
-        tenSP: "iPhone 18 Pro", 
-        price: 45500000, 
-        moTa: "Màn hình: 6.9 inch LTPO Super Retina XDR OLED, 2868 x 1320, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A20 Pro (2nm), RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP Fusion chính (khẩu độ biến thiên) + 48MP tele tiềm vọng (zoom quang 4x/8x) + 48MP siêu rộng; Trước: 18MP Center Stage\nPin & sạc: Khoảng 5391mAh (xem video đến 43 giờ), sạc nhanh có dây 50% trong 15 phút, sạc không dây MagSafe/Qi2 25W\nHệ điều hành: iOS 27 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", 
-        trangThai: "hoatdong", 
-        hinh: "../Img/Apple/iphone-18-pro.png", 
-        color: "Đỏ Burgundy"},
+        maSP: "SP01",
+        maLoai: "L01",
+        tenLoai: "Apple",
+        tenSP: "iPhone 18 Pro",
+        price: 45500000,
+        moTa: "Màn hình: 6.9 inch LTPO Super Retina XDR OLED, 2868 x 1320, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A20 Pro (2nm), RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP Fusion chính (khẩu độ biến thiên) + 48MP tele tiềm vọng (zoom quang 4x/8x) + 48MP siêu rộng; Trước: 18MP Center Stage\nPin & sạc: Khoảng 5391mAh (xem video đến 43 giờ), sạc nhanh có dây 50% trong 15 phút, sạc không dây MagSafe/Qi2 25W\nHệ điều hành: iOS 27 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple",
+        trangThai: "hoatdong",
+        hinh: "../Img/Apple/iphone-18-pro.png",
+        color: "Đỏ Burgundy",
+      },
       {
         maSP: "SP02",
         maLoai: "L02",
@@ -257,11 +282,11 @@ function khoiTaoDuLieuMau() {
         totalAmount: 4405400000,
         items: [
           {
-            maSP: "SP01", 
-            tenSP: "iPhone 18 Pro", 
-            hinh: "../Img/Apple/iphone-18-pro.png", 
-            qty: 10, 
-            price: 38675000
+            maSP: "SP01",
+            tenSP: "iPhone 18 Pro",
+            hinh: "../Img/Apple/iphone-18-pro.png",
+            qty: 10,
+            price: 38675000,
           },
           {
             maSP: "SP02",
@@ -399,13 +424,14 @@ function khoiTaoDuLieuMau() {
   // 4. Tạo bảng giá bán mẫu
   if (!localStorage.getItem("saved_pricing")) {
     const giaMau = [
-      { maSP: "SP01", 
-        tenSP: "iPhone 18 Pro", 
-        hinh: "../Img/Apple/iphone-18-pro.png", 
-        totalQty: 10, 
-        totalCost: 386750000, 
-        importPrice: 38675000, 
-        retailPrice: 45500000 
+      {
+        maSP: "SP01",
+        tenSP: "iPhone 18 Pro",
+        hinh: "../Img/Apple/iphone-18-pro.png",
+        totalQty: 10,
+        totalCost: 386750000,
+        importPrice: 38675000,
+        retailPrice: 45500000,
       },
       {
         maSP: "SP02",
@@ -648,12 +674,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function checkLoginStatus() {
     const user = JSON.parse(localStorage.getItem("nguoiDungDangNhap"));
-    if (userItem) {
-      if (user) {
-        userItem.classList.add("logged-in");
-      } else {
-        userItem.classList.remove("logged-in");
+    if (!userItem) return;
+
+    let nameLabel = document.getElementById("userNameLabel");
+
+    if (user) {
+      userItem.classList.add("logged-in");
+
+      if (!nameLabel) {
+        nameLabel = document.createElement("a");
+        nameLabel.id = "userNameLabel";
+        nameLabel.className = "user-name-label";
+        nameLabel.href = "profile.html";
+        userItem.insertBefore(nameLabel, userItem.querySelector(".user-menu"));
       }
+      // textContent để tên có ký tự đặc biệt cũng không làm hỏng giao diện
+      nameLabel.textContent = user.hoTen || "Tài khoản";
+    } else {
+      userItem.classList.remove("logged-in");
+      if (nameLabel) nameLabel.remove();
     }
   }
 

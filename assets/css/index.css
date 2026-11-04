@@ -115,9 +115,13 @@ a {
   flex: 1;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 24px;
 }
-.others li {
-  padding: 0 14px;
+.others > li {
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 .others li a {
   font-size: 14px;
@@ -601,10 +605,28 @@ p {
 /* ================== USER MENU (HOVER) ================== */
 .user-item {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-item .user-name-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #d70027;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* tên dài thì sẽ rút thành ... */
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.user-item .user-name-label:hover {
+  text-decoration: underline;
 }
 
 .user-menu {
-  display: none; /* Mặc định khi chưa đăng nhập sẽ ẩn hoàn toàn */
+  display: none;
   position: absolute;
   top: 100%;
   right: 0;
