@@ -2,7 +2,7 @@ function khoiTaoDuLieuMau() {
     // ====== PHIÊN BẢN DỮ LIỆU MẪU ======
     // Đổi số này mỗi khi sửa dữ liệu mẫu để mọi máy tự nạp lại (ở CẢ admin.js và index.js).
     // Chỉ xóa dữ liệu mẫu, giữ nguyên tài khoản, giỏ hàng, đơn hàng.
-    const DATA_VERSION = "3";
+    const DATA_VERSION = "4";
     if (localStorage.getItem("dataVersion") !== DATA_VERSION) {
         ["loaiSanPham", "danhMucSanPham", "saved_imports", "saved_pricing"]
             .forEach(function (k) { localStorage.removeItem(k); });
@@ -20,10 +20,10 @@ function khoiTaoDuLieuMau() {
         localStorage.setItem("loaiSanPham", JSON.stringify(loaiMau));
     }
 
-    // 2. Tạo sản phẩm mẫu (mỗi hãng 5 sản phẩm, hình để trống trừ các máy đã có hình)
+    // 2. Tạo sản phẩm mẫu
     if (!localStorage.getItem("danhMucSanPham")) {
         const spMau = [
-            {"maSP": "SP01", "maLoai": "L01", "tenLoai": "Apple", "tenSP": "iPhone 15 Pro Max", "price": 29990000, "moTa": "Màn hình: 6.7 inch Super Retina XDR OLED, 2796 x 1290, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A17 Pro, RAM 8GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP chính + 12MP tele 5x + 12MP siêu rộng; Trước: 12MP\nPin & sạc: Khoảng 4422mAh, sạc nhanh có dây ~27W, sạc không dây MagSafe 15W\nHệ điều hành: iOS 17 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", "trangThai": "hoatdong", "hinh": "../Img/Apple/iPhone15_den.png", "color": "Titan Tự Nhiên"},
+            {"maSP": "SP01", "maLoai": "L01", "tenLoai": "Apple", "tenSP": "iPhone 18 Pro", "price": 45500000, "moTa": "Màn hình: 6.9 inch LTPO Super Retina XDR OLED, 2868 x 1320, 120Hz ProMotion, Dynamic Island\nChip & bộ nhớ: Apple A20 Pro (2nm), RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 48MP Fusion chính (khẩu độ biến thiên) + 48MP tele tiềm vọng (zoom quang 4x/8x) + 48MP siêu rộng; Trước: 18MP Center Stage\nPin & sạc: Khoảng 5391mAh (xem video đến 43 giờ), sạc nhanh có dây 50% trong 15 phút, sạc không dây MagSafe/Qi2 25W\nHệ điều hành: iOS 27 (nâng cấp được lên phiên bản mới nhất)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", "trangThai": "hoatdong", "hinh": "../Img/Apple/iphone-18-pro.png", "color": "Đỏ Burgundy"},
             {"maSP": "SP02", "maLoai": "L02", "tenLoai": "Samsung", "tenSP": "Galaxy S24 Ultra", "price": 33990000, "moTa": "Màn hình: 6.8 inch Dynamic AMOLED 2X, QHD+, 120Hz, kèm bút S Pen\nChip & bộ nhớ: Snapdragon 8 Gen 3 for Galaxy, RAM 12GB, bộ nhớ trong 256GB\nCamera: Sau: 200MP chính + 12MP siêu rộng + 10MP tele 3x + 50MP tele 5x; Trước: 12MP\nPin & sạc: 5000mAh, sạc nhanh có dây 45W, sạc không dây 15W\nHệ điều hành: Android 14, One UI 6.1 (nâng cấp 7 năm)\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Cáp USB-C, que lấy SIM, sách hướng dẫn (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Samsung", "trangThai": "hoatdong", "hinh": "../Img/Samsung/Samsung-galaxy-s24-ultra.png", "color": "Đen Titan"},
             {"maSP": "SP03", "maLoai": "L03", "tenLoai": "Oppo", "tenSP": "OPPO Find N3", "price": 24990000, "moTa": "Màn hình: Màn hình gập chính 7.82 inch AMOLED LTPO 120Hz + màn hình ngoài 6.31 inch\nChip & bộ nhớ: Snapdragon 8 Gen 2, RAM 16GB, bộ nhớ trong 512GB\nCamera: Sau: 48MP chính + 48MP siêu rộng + 64MP tele periscope 3x; Trước: 32MP\nPin & sạc: 4805mAh, sạc nhanh SUPERVOOC 67W, sạc không dây AIRVOOC 50W\nHệ điều hành: Android 13, ColorOS 13.2\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng\nPhụ kiện: Củ sạc nhanh, cáp USB-C, ốp lưng, que lấy SIM, sách hướng dẫn\nBảo hành: 12 tháng chính hãng OPPO", "trangThai": "hoatdong", "hinh": "../Img/OPPO/Oppo-find-N3.png", "color": "Xanh lá"},
             {"maSP": "SP04", "maLoai": "L01", "tenLoai": "Apple", "tenSP": "iPhone Duo", "price": 69000000, "moTa": "Màn hình: Màn hình gập OLED LTPO 120Hz, kích thước mở rộng khoảng 7.8 inch\nChip & bộ nhớ: Chip Apple thế hệ mới, RAM 12GB, bộ nhớ trong 512GB\nCamera: Sau: 48MP chính + 48MP siêu rộng; Trước: 18MP\nPin & sạc: Pin dung lượng lớn dùng cả ngày, sạc nhanh có dây, sạc không dây MagSafe\nHệ điều hành: iOS 26\nTình trạng máy: Máy mới 100%, nguyên seal, chính hãng VN/A\nPhụ kiện: Cáp USB-C, sách hướng dẫn, que lấy SIM (không kèm củ sạc)\nBảo hành: 12 tháng chính hãng Apple", "trangThai": "hoatdong", "hinh": "../Img/Apple/iphone_duo_night_sky.png", "color": "Xanh Dương Sẫm"},
@@ -56,12 +56,12 @@ function khoiTaoDuLieuMau() {
                 status: "completed",
                 totalAmount: 4405400000,
                 items: [
-                    {"maSP": "SP01", "tenSP": "iPhone 15 Pro Max", "hinh": "../Img/Apple/iPhone15_den.png", "qty": 10, "price": 25490000},
+                    {"maSP": "SP01", "tenSP": "iPhone 18 Pro", "hinh": "../Img/Apple/iphone-18-pro.png", "qty": 10, "price": 38675000},
                     {"maSP": "SP02", "tenSP": "Galaxy S24 Ultra", "hinh": "../Img/Samsung/Samsung-galaxy-s24-ultra.png", "qty": 10, "price": 28890000},
                     {"maSP": "SP03", "tenSP": "OPPO Find N3", "hinh": "../Img/Oppo/Oppo-find-N3.png", "qty": 10, "price": 21240000},
                     {"maSP": "SP04", "tenSP": "iPhone Duo", "hinh": "../Img/Apple/iphone_duo_night_sky.png", "qty": 10, "price": 58650000},
                     {"maSP": "SP05", "tenSP": "iPhone 16 Pro", "hinh": "", "qty": 10, "price": 24640000},
-                    {"maSP": "SP06", "tenSP": "iPhone 17", "hinh": "", "qty": 10, "price": 21240000},
+                    {"maSP": "SP06", "tenSP": "iPhone 17 Pro", "hinh": "", "qty": 10, "price": 21240000},
                     {"maSP": "SP07", "tenSP": "iPhone Air", "hinh": "", "qty": 10, "price": 27190000},
                     {"maSP": "SP08", "tenSP": "Galaxy S25 Ultra", "hinh": "", "qty": 10, "price": 27190000},
                     {"maSP": "SP09", "tenSP": "Galaxy S26", "hinh": "", "qty": 10, "price": 21240000},
@@ -85,12 +85,12 @@ function khoiTaoDuLieuMau() {
     // 4. Tạo bảng giá bán mẫu (giá vốn = giá nhập bình quân, giá bán = giá niêm yết)
     if (!localStorage.getItem("saved_pricing")) {
         const giaMau = [
-            {"maSP": "SP01", "tenSP": "iPhone 15 Pro Max", "hinh": "../Img/Apple/iPhone15_den.png", "totalQty": 10, "totalCost": 254900000, "importPrice": 25490000, "retailPrice": 29990000},
+            {"maSP": "SP01", "tenSP": "iPhone 18 Pro", "hinh": "../Img/Apple/iphone-18-pro.png", "totalQty": 10, "totalCost": 386750000, "importPrice": 38675000, "retailPrice": 45500000},
             {"maSP": "SP02", "tenSP": "Galaxy S24 Ultra", "hinh": "../Img/Samsung/Samsung-galaxy-s24-ultra.png", "totalQty": 10, "totalCost": 288900000, "importPrice": 28890000, "retailPrice": 33990000},
             {"maSP": "SP03", "tenSP": "OPPO Find N3", "hinh": "../Img/Oppo/Oppo-find-N3.png", "totalQty": 10, "totalCost": 212400000, "importPrice": 21240000, "retailPrice": 24990000},
             {"maSP": "SP04", "tenSP": "iPhone Duo", "hinh": "../Img/Apple/iphone_duo_night_sky.png", "totalQty": 10, "totalCost": 586500000, "importPrice": 58650000, "retailPrice": 69000000},
             {"maSP": "SP05", "tenSP": "iPhone 16 Pro", "hinh": "", "totalQty": 10, "totalCost": 246400000, "importPrice": 24640000, "retailPrice": 28990000},
-            {"maSP": "SP06", "tenSP": "iPhone 17", "hinh": "", "totalQty": 10, "totalCost": 212400000, "importPrice": 21240000, "retailPrice": 24990000},
+            {"maSP": "SP06", "tenSP": "iPhone 17 Pro", "hinh": "", "totalQty": 10, "totalCost": 212400000, "importPrice": 21240000, "retailPrice": 24990000},
             {"maSP": "SP07", "tenSP": "iPhone Air", "hinh": "", "totalQty": 10, "totalCost": 271900000, "importPrice": 27190000, "retailPrice": 31990000},
             {"maSP": "SP08", "tenSP": "Galaxy S25 Ultra", "hinh": "", "totalQty": 10, "totalCost": 271900000, "importPrice": 27190000, "retailPrice": 31990000},
             {"maSP": "SP09", "tenSP": "Galaxy S26", "hinh": "", "totalQty": 10, "totalCost": 212400000, "importPrice": 21240000, "retailPrice": 24990000},
