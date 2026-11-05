@@ -48,7 +48,7 @@ function khoiTaoDuLieuMau() {
     }
 
     // 3. Tạo 1 phiếu nhập mẫu: mỗi sản phẩm nhập 10 cái
-   if (!localStorage.getItem("saved_imports")) {
+    if (!localStorage.getItem("saved_imports")) {
         const phieuNhapMau = [
             {
                 code: "PN001",
@@ -281,7 +281,7 @@ function anToanKH(value) {
             "&": "&amp;", //dấu và
             "<": "&lt;", //bé hơn
             ">": "&gt;", //lớn hơn
-            '"': "&quot;", 
+            '"': "&quot;",
             "'": "&#39;"
         }[c];
     });
@@ -1949,10 +1949,10 @@ function applyFilters() {
     for (let i = 0; i < rows.length; i++) {
         if (rows[i].classList.contains('empty-row')) continue;
 
-        const codeCol = rows[i].getElementsByTagName('td')[0]; 
+        const codeCol = rows[i].getElementsByTagName('td')[0];
         const dateCol = rows[i].getElementsByTagName('td')[1];
 
-        if (codeCol && dateCol) { 
+        if (codeCol && dateCol) {
             const codeText = codeCol.textContent.trim().toUpperCase();
             const rowDateStr = dateCol.textContent.trim(); // "YYYY-MM-DD"  
 
@@ -2386,12 +2386,17 @@ function renderOrderTable() {
                 <td style="text-align: right; color: #dc3545; font-weight: bold;">${formatMoney(order.totalAmount)}</td>
                 <td style="text-align: center;">${badgeHtml}</td>
                 <td style="text-align: center;">
-                    <button class="btn-action btn-view-detail" onclick="openOrderModal('${order.id}')">Chi tiết / Duyệt</button>
+                    <button class="btn-action btn-view-detail" onclick="openOrderModal('${order.id}')">
+                        ${(order.status === 'completed' || order.status === 'cancelled') ? 'Xem chi tiết' : 'Chi tiết / Duyệt'}
+                    </button>
                 </td>
             </tr>`;
     }).join('');
 }
 
+function isOrderLocked(status) {
+    return status === 'completed' || status === 'cancelled';
+}
 // 3. MỞ MODAL XEM CHI TIẾT
 function openOrderModal(orderId) {
     const order = orderList.find(o => o.id === orderId);
@@ -2404,7 +2409,19 @@ function openOrderModal(orderId) {
     document.getElementById('modalCustomerPhone').value = order.customerPhone;
     document.getElementById('modalCustomerAddress').value = order.customerAddress;
     document.getElementById('modalOrderTotal').innerText = formatMoney(order.totalAmount);
-    document.getElementById('modalOrderStatusUpdate').value = order.status;
+
+    const statusSelect = document.getElementById('modalOrderStatusUpdate');
+    const saveBtn = document.getElementById('btnSaveOrderStatus');
+    const lockNote = document.getElementById('orderLockedNote');
+    const locked = isOrderLocked(order.status);
+
+    statusSelect.value = order.status;
+    statusSelect.disabled = locked;
+    saveBtn.style.display = locked ? 'none' : 'inline-block';
+    lockNote.style.display = locked ? 'inline' : 'none';
+    lockNote.innerText = order.status === 'completed'
+        ? 'Đơn đã giao thành công, không thể thay đổi trạng thái.'
+        : 'Đơn đã hủy, không thể thay đổi trạng thái.';
 
     const detailBody = document.getElementById('orderDetailBody');
     detailBody.innerHTML = order.items.map((item, idx) => `
@@ -2425,18 +2442,29 @@ function saveOrderStatus() {
     const newStatus = document.getElementById('modalOrderStatusUpdate').value;
     const orderIndex = orderList.findIndex(o => o.id === currentEditingOrderId);
 
-    if (orderIndex > -1) {
+    if (orderIndex === -1) return;
 
-        orderList[orderIndex].status = newStatus;
-        localStorage.setItem('saved_orders', JSON.stringify(orderList));
-
+    // Chặn sửa đơn đã chốt
+    if (isOrderLocked(orderList[orderIndex].status)) {
+        alert("Đơn hàng này đã " +
+            (orderList[orderIndex].status === 'completed' ? "giao thành công" : "hủy") +
+            ", không thể thay đổi trạng thái!");
         closeModal();
-
-        renderOrderTable();
-
-        applyOrderFilters();
-
+        return;
     }
+
+    // Xác nhận trước khi chốt trạng thái cuối
+    if (isOrderLocked(newStatus) &&
+        !confirm("Sau khi chuyển sang trạng thái này, bạn sẽ KHÔNG thể sửa lại. Xác nhận?")) {
+        return;
+    }
+
+    orderList[orderIndex].status = newStatus;
+    localStorage.setItem('saved_orders', JSON.stringify(orderList));
+
+    closeModal();
+    renderOrderTable();
+    applyOrderFilters();
 }
 
 // 5. BỘ LỌC ĐƠN HÀNG 
