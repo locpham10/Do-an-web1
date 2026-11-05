@@ -928,7 +928,7 @@
                 </div>
 
                 <div class="modal-footer" style="justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                         <label style="font-weight: bold; font-size: 14px;">Trạng thái đơn:</label>
                         <select id="modalOrderStatusUpdate" class="search-input order-status-filter"
                             style="border: 2px solid #80bdff; font-weight: bold;">
@@ -937,11 +937,14 @@
                             <option value="completed">Đã giao thành công</option>
                             <option value="cancelled">Hủy đơn hàng</option>
                         </select>
+                        <span id="orderLockedNote"
+                            style="display:none; color:#dc3545; font-size:13px; font-style:italic;"></span>
                     </div>
                     <div>
                         <button class="btn-action" style="background-color: #6c757d; color: white;"
                             onclick="closeModal()">Đóng</button>
-                        <button class="btn-create" onclick="saveOrderStatus()">Cập nhật & Lưu</button>
+                        <button class="btn-create" id="btnSaveOrderStatus" onclick="saveOrderStatus()">Cập nhật &
+                            Lưu</button>
                     </div>
                 </div>
             </div>
