@@ -22,14 +22,16 @@
             <p>Hệ thống quản trị</p>
 
             <div class="input-box">
-                <i class="fa-solid fa-user"></i>
-                <input id="username" type="text" placeholder="Tên đăng nhập / Email">
-            </div>
+    <i class="fa-solid fa-user"></i>
+    <input id="username" type="text" placeholder="Tên đăng nhập / Email">
+</div>
+<div id="usernameError" class="login-error"></div>
 
-            <div class="input-box">
-                <i class="fa-solid fa-lock"></i>
-                <input id="password" type="password" placeholder="Mật khẩu">
-            </div>
+<div class="input-box">
+    <i class="fa-solid fa-lock"></i>
+    <input id="password" type="password" placeholder="Mật khẩu">
+</div>
+<div id="passwordError" class="login-error"></div>
 
             <!-- Đã gắn thêm sự kiện onclick="handleLogin()" -->
             <button id="login" onclick="handleLogin()">

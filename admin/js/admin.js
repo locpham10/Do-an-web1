@@ -125,20 +125,51 @@ function handleLogin() {
     const user = document.getElementById('username').value.trim();
     const pass = document.getElementById('password').value;
 
-    // Đặt sẵn Tài khoản/Mật khẩu cho đồ án (Ví dụ: admin / 123456)
-    if (user === 'admin' && pass === getAdminPassword()) {
-        document.getElementById('loginArea').style.display = 'none'; // Giấu form login
-        document.getElementById('dashboardArea').style.display = 'flex'; // Mở dashboard
+    const usernameError = document.getElementById('usernameError');
+    const passwordError = document.getElementById('passwordError');
 
-        // Lưu trạng thái đăng nhập để xài Live Server không bị out ra ngoài
-        sessionStorage.setItem('isAdminLoggedIn', 'true');
+    // Xóa thông báo cũ
+    usernameError.textContent = '';
+    passwordError.textContent = '';
 
-        const defaultMenu = document.getElementById('menu-customers');
-        if (defaultMenu) {
-            defaultMenu.click();
-        }
-    } else {
-        alert('Sai tài khoản hoặc mật khẩu!\n');
+    usernameError.style.display = 'none';
+    passwordError.style.display = 'none';
+
+    let isValid = true;
+
+    // Kiểm tra tên đăng nhập
+    if (!user) {
+        usernameError.textContent = 'Vui lòng nhập tên đăng nhập!';
+        usernameError.style.display = 'block';
+        isValid = false;
+    } else if (user !== 'admin') {
+        usernameError.textContent = 'Tên đăng nhập không chính xác!';
+        usernameError.style.display = 'block';
+        isValid = false;
+    }
+
+    // Kiểm tra mật khẩu
+    if (!pass) {
+        passwordError.textContent = 'Vui lòng nhập mật khẩu!';
+        passwordError.style.display = 'block';
+        isValid = false;
+    } else if (pass !== getAdminPassword()) {
+        passwordError.textContent = 'Mật khẩu không chính xác!';
+        passwordError.style.display = 'block';
+        isValid = false;
+    }
+
+    if (!isValid) return;
+
+    // Đăng nhập thành công
+    document.getElementById('loginArea').style.display = 'none';
+    document.getElementById('dashboardArea').style.display = 'flex';
+
+    sessionStorage.setItem('isAdminLoggedIn', 'true');
+
+    const defaultMenu = document.getElementById('menu-customers');
+    if (defaultMenu) {
+        defaultMenu.click();
     }
 }
 
