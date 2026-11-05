@@ -159,9 +159,9 @@ a {
 .submenu {
   display: none;
   position: absolute;
-  top: 100%; /* Bám sát ngay đáy vùng chiều cao của chữ APPLE */
+  top: 100%;
   width: 150px;
-  margin: 0; /* Bỏ margin 5px để không bị hở khe */
+  margin: 0;
   border: solid 1px #ccc;
   background-color: #fff;
   padding: 2px 0;
@@ -198,7 +198,6 @@ main {
   position: relative;
 }
 
-/* Ẩn hoàn toàn khu vực Banner để tạo màn hình kết quả tìm kiếm riêng */
 .hide-banner {
   display: none !important;
 }
@@ -289,12 +288,12 @@ footer {
 .topfooter {
   padding: 45px 6%;
   max-width: 1200px;
-  margin: 0 auto; /* Căn giữa toàn khối footer trên màn hình lớn */
+  margin: 0 auto;
 }
 
 .content {
   display: flex;
-  justify-content: space-between; /* Dàn đều 3 cột */
+  justify-content: space-between;
   align-items: flex-start; /* QUAN TRỌNG: Căn thẳng hàng tăm tắp từ mép trên xuống, không bị nhấp nhô */
   flex-wrap: wrap;
   gap: 40px;
@@ -303,7 +302,7 @@ footer {
 .footer-col {
   flex: 1;
   min-width: 200px;
-  text-align: left; /* Căn trái giúp các dòng chữ và tiêu đề thẳng trục dọc rất gọn */
+  text-align: left;
 }
 
 .Foot-footer-title {
@@ -455,13 +454,19 @@ p {
   gap: 20px;
 }
 @media (max-width: 1100px) {
-  .product-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 @media (max-width: 800px) {
-  .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 @media (max-width: 480px) {
-  .product-grid { grid-template-columns: 1fr; }
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .product-card {
