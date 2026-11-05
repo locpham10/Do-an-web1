@@ -76,7 +76,7 @@ a {
   align-items: center;
 }
 .logo-link {
-  gap: 0px; /* khoảng cách giữa logo và chữ Phonix,*/
+  gap: 0px;
   cursor: pointer;
 }
 .logo-text {

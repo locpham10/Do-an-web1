@@ -695,7 +695,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (nameLabel) nameLabel.remove();
     }
   }
-
+  window.checkLoginStatus = checkLoginStatus;
   checkLoginStatus();
 
   function openModal() {
