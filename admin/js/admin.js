@@ -1949,14 +1949,14 @@ function applyFilters() {
     for (let i = 0; i < rows.length; i++) {
         if (rows[i].classList.contains('empty-row')) continue;
 
-        const codeCol = rows[i].getElementsByTagName('td')[0];
+        const codeCol = rows[i].getElementsByTagName('td')[0]; 
         const dateCol = rows[i].getElementsByTagName('td')[1];
 
-        if (codeCol && dateCol) {
+        if (codeCol && dateCol) { 
             const codeText = codeCol.textContent.trim().toUpperCase();
-            const rowDateStr = dateCol.textContent.trim(); // "YYYY-MM-DD"
+            const rowDateStr = dateCol.textContent.trim(); // "YYYY-MM-DD"  
 
-            const matchSearch = codeText.includes(searchFilter);
+            const matchSearch = codeText.includes(searchFilter); //chứa từ khóa trong ô tìm kiếm
 
             let matchDate = true;
             if (rowDateStr) {
@@ -1977,54 +1977,6 @@ function applyFilters() {
     }
 }
 
-// 5. GẮN SỰ KIỆN CHO MODAL NHẬP HÀNG
-// 5. GẮN SỰ KIỆN CHO MODAL NHẬP HÀNG
-function initImportEvents() {
-
-    const itemProduct = document.getElementById('itemProduct');
-    const productSuggestions = document.getElementById('productSuggestions');
-
-    if (itemProduct && productSuggestions) {
-        // Chỉ chạy khi người dùng bắt đầu gõ phím vào ô
-        itemProduct.addEventListener('input', function () {
-            const keyword = this.value.trim().toLowerCase();
-            productSuggestions.innerHTML = '';
-
-            // Nếu chưa gõ gì (hoặc xóa hết chữ) thì ẩn ngay danh sách
-            if (!keyword) {
-                productSuggestions.style.display = 'none';
-                return;
-            }
-
-            const matches = Array.from(productCatalog).filter(name =>
-                name.toLowerCase().includes(keyword)
-            );
-
-            if (matches.length > 0) {
-                matches.forEach(match => {
-                    const li = document.createElement('li');
-                    li.textContent = match;
-                    li.onclick = () => {
-                        itemProduct.value = match;
-                        productSuggestions.style.display = 'none';
-                        document.getElementById('itemQuantity').focus();
-                    };
-                    productSuggestions.appendChild(li);
-                });
-                productSuggestions.style.display = 'block';
-            } else {
-                productSuggestions.style.display = 'none';
-            }
-        });
-
-        // Ẩn danh sách khi click chuột ra ngoài
-        document.addEventListener('click', e => {
-            if (e.target !== itemProduct && !productSuggestions.contains(e.target)) {
-                productSuggestions.style.display = 'none';
-            }
-        });
-    }
-}
 /*======================================================================
     PHẦN DÙNG CHO TRANG QL GIÁ BÁN
 ======================================================================*/
@@ -2834,7 +2786,6 @@ function switchTab(tabName) {
 }
 document.addEventListener("DOMContentLoaded", () => {
     if (typeof loadDataForImports === "function") loadDataForImports();
-    if (typeof initImportEvents === "function") initImportEvents();
     if (typeof loadDataForPricing === "function") loadDataForPricing();
     if (typeof loadDataForOrders === "function") loadDataForOrders();
     if (typeof loadDataForInventory === "function") loadDataForInventory();
