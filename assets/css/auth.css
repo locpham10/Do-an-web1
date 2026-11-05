@@ -162,3 +162,16 @@ input:focus {
     }
 
 }
+
+.field-error {
+    display: block;
+    color: #d70027;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: -4px;
+}
+
+.auth-card input.input-error {
+    border-color: #d70027;
+    background-color: #fff8f9;
+}
