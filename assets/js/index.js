@@ -615,7 +615,7 @@ function khoiTaoDuLieuMau() {
   }
 }
 
-khoiTaoDuLieuMau()
+khoiTaoDuLieuMau();
 
 khoiTaoDuLieuMau();
 

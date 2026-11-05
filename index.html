@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="assets/css/index.css" />
     <link rel="stylesheet" href="assets/css/auth.css" />
   </head>
-
   <body>
     <!-- HEADER -->
     <header>
       <div class="header-top">
         <div class="logo">
-          <!-- Bấm vào logo + tên web để về trang chủ -->
           <a href="index.html" class="logo-link" title="Về trang chủ">
-            <!-- Điền đường dẫn ảnh logo vào thuộc tính src bên dưới -->
             <img src="Img/logo-shop.png" class="header-logo" alt="" />
             <span class="logo-text">Phonix</span>
+            <span class="deco-item"
+              ><i class="fa-solid fa-credit-card"></i> Trả góp 0%</span
+            >
           </a>
         </div>
 
@@ -69,6 +69,13 @@
         </div>
 
         <ul class="others">
+          <li class="deco-item">
+            <i class="fa-solid fa-headset"></i> Hỗ trợ 24/7
+          </li>
+          <li class="deco-item">
+            <i class="fa-solid fa-gift"></i> Quà tặng hấp dẫn
+          </li>
+          <li class="deco-sep"></li>
           <li><a class="fa-solid fa-house" href="index.html"></a></li>
           <li class="user-item">
             <a class="fa fa-user" href="javascript:void(0)" id="userBtn"></a>
@@ -86,6 +93,12 @@
         </ul>
       </div>
       <div class="header-bottom">
+        <div class="bar-info bar-left">
+          <span
+            ><i class="fa-solid fa-phone-volume"></i> Hotline: 1900 6868</span
+          >
+        </div>
+
         <ul class="menu">
           <li>
             <a href="#" onclick="filterByCategory('apple', event)">APPLE</a>
@@ -170,6 +183,12 @@
             </ul>
           </li>
         </ul>
+        <div class="bar-info bar-right">
+          <span
+            ><i class="fa-solid fa-truck-fast"></i> Giao hàng toàn quốc</span
+          >
+          <span><i class="fa-solid fa-award"></i> Bảo hành chính hãng</span>
+        </div>
       </div>
     </header>
 
